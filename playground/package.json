@@ -1,0 +1,19 @@
+{
+  "private": true,
+  "name": "my-module-playground",
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nuxt/icon": "^2.2.1",
+    "@tailwindcss/vite": "^4.2.2",
+    "@vueuse/core": "^14.2.1",
+    "motion-v": "^2.2.0",
+    "my-module": "latest",
+    "nuxt": "^4.4.2",
+    "tailwindcss": "^4.2.2"
+  }
+}
