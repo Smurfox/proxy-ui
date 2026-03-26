@@ -1,84 +1,159 @@
-<!--
-Get your module up and running quickly.
+# ProxyUI
 
-Find and replace all on all files (CMD+SHIFT+F):
-- Name: My Module
-- Package name: my-module
-- Description: My new Nuxt module
--->
-
-# My Module
-
-[![npm version][npm-version-src]][npm-version-href]
-[![npm downloads][npm-downloads-src]][npm-downloads-href]
-[![License][license-src]][license-href]
-[![Nuxt][nuxt-src]][nuxt-href]
-
-My new Nuxt module for doing amazing things.
-
-- [✨ &nbsp;Release Notes](/CHANGELOG.md)
-<!-- - [🏀 Online playground](https://stackblitz.com/github/your-org/my-module?file=playground%2Fapp.vue) -->
-<!-- - [📖 &nbsp;Documentation](https://example.com) -->
+A component library built for **Nuxt 4**, designed with a clean and consistent API. All components are prefixed with `PU`.
 
 ## Features
 
-<!-- Highlight some of the features your module provide here -->
-- ⛰ &nbsp;Foo
-- 🚠 &nbsp;Bar
-- 🌲 &nbsp;Baz
+- 🎨 Built with **Tailwind CSS v4**
+- ✨ Smooth animations powered by **motion-v**
+- 🔷 Icons via **@nuxt/icon** (Iconify)
+- 🔤 **Inter** font loaded automatically
+- 🌙 Dark mode ready
+- 📦 TypeScript support out of the box
 
-## Quick Setup
+---
 
-Install the module to your Nuxt application with one command:
+## Requirements
+
+- Nuxt `^4.0.0`
+- Tailwind CSS `^4.0.0`
+
+---
+
+## Installation
 
 ```bash
-npx nuxt module add my-module
+npm install proxy-ui
 ```
 
-That's it! You can now use My Module in your Nuxt app ✨
+Add the module to your `nuxt.config.ts`:
 
+```ts
+export default defineNuxtConfig({
+  modules: ["proxy-ui"],
+});
+```
 
-## Contribution
+Add Tailwind to your CSS entry file:
 
-<details>
-  <summary>Local development</summary>
-  
-  ```bash
-  # Install dependencies
-  npm install
-  
-  # Generate type stubs
-  npm run dev:prepare
-  
-  # Develop with the playground
-  npm run dev
-  
-  # Build the playground
-  npm run dev:build
-  
-  # Run ESLint
-  npm run lint
-  
-  # Run Vitest
-  npm run test
-  npm run test:watch
-  
-  # Release new version
-  npm run release
-  ```
+```css
+@import "tailwindcss";
+```
 
-</details>
+That's it. All `PU` components are auto-imported and ready to use.
 
+---
 
-<!-- Badges -->
-[npm-version-src]: https://img.shields.io/npm/v/my-module/latest.svg?style=flat&colorA=020420&colorB=00DC82
-[npm-version-href]: https://npmjs.com/package/my-module
+## Theming
 
-[npm-downloads-src]: https://img.shields.io/npm/dm/my-module.svg?style=flat&colorA=020420&colorB=00DC82
-[npm-downloads-href]: https://npm.chart.dev/my-module
+ProxyUI uses CSS variables for colors. Add them to your CSS file to customize:
 
-[license-src]: https://img.shields.io/npm/l/my-module.svg?style=flat&colorA=020420&colorB=00DC82
-[license-href]: https://npmjs.com/package/my-module
+```css
+@import "tailwindcss";
 
-[nuxt-src]: https://img.shields.io/badge/Nuxt-020420?logo=nuxt
-[nuxt-href]: https://nuxt.com
+@theme {
+  --color-primary: #6366f1;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+}
+```
+
+**Default values:**
+
+| Variable          | Default   |
+| ----------------- | --------- |
+| `--color-primary` | `#ff9a00` |
+| `--color-success` | `#2bd994` |
+| `--color-warning` | `#f3a952` |
+| `--color-danger`  | `#fb2c56` |
+
+---
+
+## Components
+
+### PUButton
+
+A button component powered by `motion-v` for smooth press animations.
+
+```vue
+<PUButton label="Click me" />
+```
+
+**Props**
+
+| Prop          | Type                                                                                | Default     | Description                                                      |
+| ------------- | ----------------------------------------------------------------------------------- | ----------- | ---------------------------------------------------------------- |
+| `label`       | `string`                                                                            | —           | Text shown inside the button. If omitted, uses the default slot. |
+| `size`        | `'sm' \| 'md' \| 'lg'`                                                              | `'md'`      | Controls padding and font size.                                  |
+| `variant`     | `'default' \| 'secondary' \| 'outline' \| 'ghost' \| 'flat'`                        | `'default'` | Visual style of the button.                                      |
+| `color`       | `'default' \| 'ios' \| 'primary' \| 'danger' \| 'success' \| 'warning' \| 'custom'` | `'default'` | Color scheme applied on top of the variant.                      |
+| `rounded`     | `'none' \| 'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| 'full'`                 | `'lg'`      | Border radius.                                                   |
+| `disabled`    | `boolean`                                                                           | `false`     | Disables the button.                                             |
+| `loading`     | `boolean`                                                                           | `false`     | Shows a spinner and disables interaction.                        |
+| `startIcon`   | `string`                                                                            | —           | Iconify icon name rendered before the label.                     |
+| `endIcon`     | `string`                                                                            | —           | Iconify icon name rendered after the label.                      |
+| `customClass` | `string`                                                                            | —           | Tailwind classes applied when `color="custom"`.                  |
+
+**Examples**
+
+```vue
+<!-- Variants -->
+<PUButton variant="default" label="Default" />
+<PUButton variant="secondary" label="Secondary" />
+<PUButton variant="outline" label="Outline" />
+<PUButton variant="ghost" label="Ghost" />
+<PUButton variant="flat" label="Flat" />
+
+<!-- Colors -->
+<PUButton color="primary" label="Primary" />
+<PUButton color="danger" label="Danger" />
+<PUButton color="success" label="Success" />
+<PUButton color="warning" label="Warning" />
+
+<!-- Sizes -->
+<PUButton size="sm" label="Small" />
+<PUButton size="md" label="Medium" />
+<PUButton size="lg" label="Large" />
+
+<!-- Icons -->
+<PUButton start-icon="lucide:plus" label="New item" />
+<PUButton end-icon="lucide:arrow-right" label="Continue" />
+
+<!-- States -->
+<PUButton disabled label="Disabled" />
+<PUButton loading label="Saving..." />
+
+<!-- Custom color -->
+<PUButton
+  color="custom"
+  custom-class="bg-purple-500 text-white hover:bg-purple-600"
+  label="Custom"
+/>
+
+<!-- Slot -->
+<PUButton>
+  <span>Custom content</span>
+</PUButton>
+```
+
+---
+
+## TypeScript
+
+ProxyUI exports all component types:
+
+```ts
+import type {
+  ButtonProps,
+  ButtonColor,
+  ButtonVariant,
+  ButtonSize,
+} from "proxy-ui";
+```
+
+---
+
+## License
+
+[MIT](./LICENSE)
