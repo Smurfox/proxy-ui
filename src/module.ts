@@ -26,6 +26,19 @@ export default defineNuxtModule<ModuleOptions>({
       ];
     }
 
+    // CSS Variables globales
+    nuxt.options.app.head = nuxt.options.app.head ?? {};
+    nuxt.options.app.head.style = [
+      ...(nuxt.options.app.head.style ?? []),
+      {
+        innerHTML: `
+          :root {
+            --shadow-ios: 0 10px 30px rgba(0, 0, 0, 0.05);
+          }
+        `,
+      },
+    ];
+
     // Componentes
     addComponentsDir({
       path: resolver.resolve("./runtime/components"),

@@ -52,7 +52,7 @@ ProxyUI uses CSS variables for colors. Add them to your CSS file to customize:
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #6366f1;
+  --color-primary: #376fff;
   --color-success: #22c55e;
   --color-warning: #f59e0b;
   --color-danger: #ef4444;
@@ -63,7 +63,7 @@ ProxyUI uses CSS variables for colors. Add them to your CSS file to customize:
 
 | Variable          | Default   |
 | ----------------- | --------- |
-| `--color-primary` | `#ff9a00` |
+| `--color-primary` | `#376fff` |
 | `--color-success` | `#2bd994` |
 | `--color-warning` | `#f3a952` |
 | `--color-danger`  | `#fb2c56` |

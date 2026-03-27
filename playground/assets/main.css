@@ -5,9 +5,8 @@
 
 @theme {
   --font-sans: "Inter", sans-serif;
-  --color-primary: #6366f1;
+  --color-primary: #376fff;
   --color-success: #2bd994;
   --color-warning: #f3a952;
   --color-danger: #fb2c56;
-  --shadow-apple: 0 10px 30px rgba(0, 0, 0, 0.05);
 }

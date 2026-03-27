@@ -9,7 +9,7 @@ export default defineNuxtConfig({
   css: ["~/assets/main.css"],
   proxyUI: {
     colors: {
-      primary: "#6366f1",
+      primary: "#376fff",
     },
   },
   vite: {

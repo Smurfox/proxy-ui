@@ -83,7 +83,7 @@ const defaultColorClasses = {
   default:
     "bg-gray-200/80 dark:bg-white/10 text-black dark:text-white hover:bg-gray-300/80 dark:hover:bg-white/20",
   ios: "bg-blue-500 text-white hover:brightness-110",
-  primary: "bg-primary text-black hover:brightness-110",
+  primary: "bg-primary text-white hover:brightness-110",
   danger: "bg-danger text-black hover:brightness-110",
   success: "bg-success text-black hover:brightness-110",
   warning: "bg-warning text-black hover:brightness-110",
