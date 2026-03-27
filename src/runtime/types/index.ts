@@ -61,15 +61,9 @@ export interface ChipProps {
   customClass?: string;
 }
 
-export type CardRounded =
-  | "none"
-  | "xs"
-  | "sm"
-  | "md"
-  | "lg"
-  | "xl"
-  | "2xl"
-  | "3xl"
-  | "full";
-
-export type CardShadow = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "ios";
+export type CardVariant = "default" | "liquidGlass";
+export interface CardProps {
+  variant?: CardVariant;
+  customClass?: string;
+  isBordered?: boolean;
+}

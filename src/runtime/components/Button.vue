@@ -3,7 +3,7 @@
     :class="[
       isIconOnly ? iconOnlySizes[size] : sizes[size],
       variantClasses[variant],
-      getColorBtn(variant, color),
+      isIconOnly && customClass ? customClass : getColorBtn(variant, color),
       roundedClasses[rounded],
       {
         'opacity-50': disabled || loading,
@@ -171,3 +171,11 @@ function getColorBtn(variant: ButtonVariant, color: ButtonColor) {
     case "ghost":
       return ghostColorClasses[color];
     case "flat":
+      return flatColorClasses[color];
+    default:
+      return defaultColorClasses[color];
+  }
+}
+// #endregion
+</script>
+<style scoped></style>
