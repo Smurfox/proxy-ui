@@ -1,7 +1,7 @@
 <template>
   <motion.button
     :class="[
-      sizes[size],
+      isIconOnly ? iconOnlySizes[size] : sizes[size],
       variantClasses[variant],
       getColorBtn(variant, color),
       roundedClasses[rounded],
@@ -15,11 +15,22 @@
     class="flex items-center justify-center select-none transition-[color,background-color,opacity,filter] duration-200"
     @click="$emit('click')"
   >
-    <Icon v-if="loading" name="svg-spinners:ring-resize" class="mr-2" />
-    <Icon v-if="startIcon" :name="startIcon" class="mr-2" />
-    <slot v-if="!label" />
-    <span v-else class="font-medium">{{ label }}</span>
-    <Icon v-if="endIcon" :name="endIcon" class="ml-2" />
+    <template v-if="isIconOnly">
+      <Icon v-if="loading" name="svg-spinners:ring-resize" />
+      <Icon
+        v-else-if="icon"
+        :name="icon"
+        :size="iconSize"
+        :class="iconColor ? `text-${iconColor}` : ''"
+      />
+    </template>
+    <template v-else>
+      <Icon v-if="loading" name="svg-spinners:ring-resize" class="mr-2" />
+      <Icon v-if="startIcon" :name="startIcon" class="mr-2" />
+      <slot v-if="!label" />
+      <span v-else class="font-medium">{{ label }}</span>
+      <Icon v-if="endIcon" :name="endIcon" class="ml-2" />
+    </template>
   </motion.button>
 </template>
 
@@ -36,6 +47,12 @@ const sizes = {
   sm: "text-xs min-w-20 py-1.5 px-2",
   md: "text-sm min-w-24 py-2 px-4",
   lg: "text-base min-w-32 py-3 px-6",
+} as const;
+
+const iconOnlySizes = {
+  sm: "size-7 text-xs",
+  md: "size-9 text-sm",
+  lg: "size-11 text-base",
 } as const;
 
 const variantClasses = {
@@ -66,8 +83,12 @@ const props = withDefaults(
     rounded?: ButtonRounded;
     disabled?: boolean;
     loading?: boolean;
+    isIconOnly?: boolean;
+    icon?: string;
     startIcon?: string;
     endIcon?: string;
+    iconSize?: string;
+    iconColor?: string;
     customClass?: string;
   }>(),
   {
@@ -150,11 +171,3 @@ function getColorBtn(variant: ButtonVariant, color: ButtonColor) {
     case "ghost":
       return ghostColorClasses[color];
     case "flat":
-      return flatColorClasses[color];
-    default:
-      return defaultColorClasses[color];
-  }
-}
-// #endregion
-</script>
-<style scoped></style>

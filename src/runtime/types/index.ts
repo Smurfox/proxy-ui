@@ -31,6 +31,8 @@ export interface ButtonProps {
   rounded?: ButtonRounded;
   disabled?: boolean;
   loading?: boolean;
+  isIconOnly?: boolean;
+  icon?: string;
   startIcon?: string;
   endIcon?: string;
   customClass?: string;
