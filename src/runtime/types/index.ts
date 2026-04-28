@@ -67,3 +67,6 @@ export interface CardProps {
   customClass?: string;
   isBordered?: boolean;
 }
+
+export type AvatarSize = "sm" | "md" | "lg" | "full";
+export type AvatarRounded = "none" | "sm" | "md" | "lg" | "xl" | "2xl" | "full";
