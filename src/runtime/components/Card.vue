@@ -3,7 +3,7 @@
     :class="[
       !hasBg ? 'bg-white dark:bg-white/5' : '',
       !hasPadding ? 'p-4' : '',
-      !hasShadow ? 'shadow-(--shadow-ios)' : '',
+      !hasShadow ? 'pu-shadow-ios' : '',
       !hasRounded ? 'rounded-2xl' : '',
       customClass,
       isBordered ? 'border border-gray-200 dark:border-white/5' : '',
@@ -42,4 +42,8 @@ const hasRounded = computed(() =>
 );
 </script>
 
-<style scoped></style>
+<style scoped>
+.pu-shadow-ios {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+</style>

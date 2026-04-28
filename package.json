@@ -1,5 +1,5 @@
 {
-  "name": "proxy-ui",
+  "name": "@smurfox/proxy-ui",
   "version": "0.1.0",
   "description": "A UI component library built for Nuxt 4",
   "repository": {
