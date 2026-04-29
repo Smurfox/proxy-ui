@@ -13,7 +13,7 @@
     ]"
     :while-press="disabled || loading ? {} : { scale: 0.95 }"
     class="flex items-center justify-center select-none transition-[color,background-color,opacity,filter] duration-200"
-    @click="$emit('click')"
+    @click="emit('click', $event)"
   >
     <template v-if="isIconOnly">
       <Icon v-if="loading" name="svg-spinners:ring-resize" />
@@ -73,6 +73,10 @@ const roundedClasses = {
   "2xl": "rounded-2xl",
   full: "rounded-full",
 } as const;
+
+const emit = defineEmits<{
+  click: [event: MouseEvent];
+}>();
 
 const props = withDefaults(
   defineProps<{
