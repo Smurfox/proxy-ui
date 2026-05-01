@@ -70,3 +70,32 @@ export interface CardProps {
 
 export type AvatarSize = "sm" | "md" | "lg" | "full";
 export type AvatarRounded = "none" | "sm" | "md" | "lg" | "xl" | "2xl" | "full";
+
+export type TabsRounded =
+  | "none"
+  | "xs"
+  | "sm"
+  | "md"
+  | "lg"
+  | "xl"
+  | "2xl"
+  | "full";
+
+export interface TabItem {
+  label: string;
+  value: string;
+  icon?: string;
+  disabled?: boolean;
+}
+
+export interface TabsProps {
+  modelValue: string;
+  tabs: TabItem[];
+  iconSize?: number;
+  rounded?: TabsRounded;
+  bgColor?: string;
+  btnColor?: string;
+  activeTextColor?: string;
+  inactiveTextColor?: string;
+  disabledTabs?: string[];
+}

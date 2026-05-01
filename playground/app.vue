@@ -19,6 +19,18 @@
         </p>
       </div>
 
+      <div class="flex flex-col gap-3 py-10 items-start">
+        <PUTabs
+          v-model="activeTab"
+          :tabs="demoTabs"
+          rounded="lg"
+          btnColor="bg-primary"
+          activeTextColor="text-white"
+          :disabledTabs="['docs']"
+          d
+        />
+      </div>
+
       <div class="grid grid-cols-4 gap-6">
         <PUCard
           v-for="group in componentGroups"
@@ -233,6 +245,13 @@
 import { ref, onMounted } from "vue";
 
 const isDark = ref(false);
+
+const activeTab = ref("overview");
+const demoTabs = [
+  { label: "Overview", value: "overview", icon: "ion:home" },
+  { label: "Components", value: "components", icon: "ion:home" },
+  { label: "Docs", value: "docs", icon: "ion:home" },
+];
 
 function toggleDark() {
   isDark.value = !isDark.value;
