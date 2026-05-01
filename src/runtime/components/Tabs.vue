@@ -1,6 +1,6 @@
 <template>
   <div
-    class="inline-flex gap-1 p-1"
+    class="inline-flex w-fit gap-1 p-1"
     :class="[bgColor, roundedClasses[rounded]]"
   >
     <button

@@ -27,7 +27,6 @@
           btnColor="bg-primary"
           activeTextColor="text-white"
           :disabledTabs="['docs']"
-          d
         />
       </div>
 
