@@ -71,6 +71,22 @@ export interface CardProps {
 export type AvatarSize = "sm" | "md" | "lg" | "full";
 export type AvatarRounded = "none" | "sm" | "md" | "lg" | "xl" | "2xl" | "full";
 
+export type InputVariant = "default" | "secondary";
+export type InputRounded = "none" | "sm" | "md" | "lg" | "xl" | "2xl" | "full";
+
+export interface InputProps {
+  type?: string;
+  label?: string;
+  labelClass?: string;
+  placeholder?: string;
+  description?: string;
+  rounded?: InputRounded;
+  variant?: InputVariant;
+  required?: boolean;
+  error?: string;
+  disabled?: boolean;
+}
+
 export type TabsRounded =
   | "none"
   | "xs"

@@ -48,6 +48,8 @@
 </template>
 
 <script setup lang="ts">
+import type { InputVariant, InputRounded } from "../types";
+
 const rounded = {
   none: "rounded-none",
   sm: "rounded-sm",
@@ -57,7 +59,6 @@ const rounded = {
   "2xl": "rounded-2xl",
   full: "rounded-full",
 } as const;
-type Rounded = keyof typeof rounded;
 
 const variants = {
   default:
@@ -71,7 +72,6 @@ const errorVariants = {
   secondary:
     "border border-danger bg-[#EBEBEC] dark:bg-white/20 dark:text-white enabled:hover:bg-[#E0E0E1] dark:enabled:hover:bg-white/30 focus:bg-[#EBEBEC] dark:focus:bg-white/20 focus:ring-2 focus:ring-danger focus:outline-none",
 } as const;
-type Variant = keyof typeof variants;
 
 const props = withDefaults(
   defineProps<{
@@ -80,8 +80,8 @@ const props = withDefaults(
     labelClass?: string;
     placeholder?: string;
     description?: string;
-    rounded?: Rounded;
-    variant?: Variant;
+    rounded?: InputRounded;
+    variant?: InputVariant;
     required?: boolean;
     error?: string;
     disabled?: boolean;
