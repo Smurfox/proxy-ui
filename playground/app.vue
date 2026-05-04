@@ -61,7 +61,12 @@ function toggleDark() {
 // Keyboard shortcut — presiona D para toggle
 onMounted(() => {
   window.addEventListener("keydown", (e) => {
-    if (e.key === "d" && !e.metaKey && !e.ctrlKey) {
+    const tag = (e.target as HTMLElement)?.tagName;
+    const isEditable =
+      tag === "INPUT" ||
+      tag === "TEXTAREA" ||
+      (e.target as HTMLElement)?.isContentEditable;
+    if (e.key === "d" && !e.metaKey && !e.ctrlKey && !isEditable) {
       toggleDark();
     }
   });
