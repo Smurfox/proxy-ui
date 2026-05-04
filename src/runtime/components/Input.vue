@@ -24,7 +24,11 @@
           props.error ? errorVariants[props.variant] : variants[props.variant],
           props.disabled ? 'opacity-70' : '',
         ]"
+        :value="modelValue"
         :disabled="props.disabled"
+        @input="
+          emit('update:modelValue', ($event.target as HTMLInputElement).value)
+        "
       />
       <!-- endContent -->
       <div
@@ -68,13 +72,14 @@ const variants = {
 } as const;
 const errorVariants = {
   default:
-    "border border-danger bg-white dark:bg-white/10 dark:text-white enabled:hover:bg-white/20 dark:enabled:hover:bg-white/20 focus:bg-white dark:focus:bg-white/10 focus:ring-2 focus:ring-danger focus:outline-none",
+    "border border-danger bg-danger/10 dark:bg-danger/20 text-black dark:text-white enabled:hover:bg-white/20 dark:enabled:hover:bg-white/20 focus:bg-white dark:focus:bg-white/10 focus:ring-2 focus:ring-danger focus:outline-none",
   secondary:
-    "border border-danger bg-[#EBEBEC] dark:bg-white/20 dark:text-white enabled:hover:bg-[#E0E0E1] dark:enabled:hover:bg-white/30 focus:bg-[#EBEBEC] dark:focus:bg-white/20 focus:ring-2 focus:ring-danger focus:outline-none",
+    "border border-danger bg-danger/22 dark:bg-danger/10 text-black dark:text-white enabled:hover:bg-[#E0E0E1] dark:enabled:hover:bg-white/30 focus:bg-[#EBEBEC] dark:focus:bg-white/20 focus:ring-2 focus:ring-danger focus:outline-none",
 } as const;
 
 const props = withDefaults(
   defineProps<{
+    modelValue?: string | number;
     type?: string;
     label?: string;
     labelClass?: string;
@@ -95,6 +100,10 @@ const props = withDefaults(
     disabled: false,
   },
 );
+
+const emit = defineEmits<{
+  "update:modelValue": [value: string | number];
+}>();
 </script>
 
 <style scoped>
