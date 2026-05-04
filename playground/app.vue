@@ -34,6 +34,7 @@
           <DemoAvatars v-else-if="activeTab === 'avatars'" />
           <DemoCards v-else-if="activeTab === 'cards'" />
           <DemoInputs v-else-if="activeTab === 'inputs'" />
+          <DemoSelect v-else-if="activeTab === 'select'" />
         </div>
       </div>
     </div>
@@ -52,6 +53,7 @@ const demoTabs = [
   { label: "Avatars", value: "avatars" },
   { label: "Cards", value: "cards" },
   { label: "Inputs", value: "inputs" },
+  { label: "Select", value: "select" },
 ];
 
 function toggleDark() {

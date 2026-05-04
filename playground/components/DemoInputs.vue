@@ -28,6 +28,12 @@
             <PUButton color="primary" variant="ghost" size="sm" label="Show" />
           </template>
         </PUInput>
+        <PUTextArea
+          label="Message"
+          placeholder="Write your message"
+          description="This is a description for the message textarea field."
+          required
+        />
       </div>
     </div>
     <div class="w-200 mx-auto flex flex-col gap-3">
@@ -60,6 +66,16 @@
             <PUButton color="danger" variant="ghost" size="sm" label="Show" />
           </template>
         </PUInput>
+        <PUTextArea
+          label="Message"
+          placeholder="Write your message"
+          error="This is an error message for the message textarea field."
+          required
+        >
+          <template #startContent>
+            <Icon name="ion:chatbox" />
+          </template>
+        </PUTextArea>
       </div>
     </div>
     <div class="w-200 mx-auto flex flex-col gap-3">
@@ -82,6 +98,19 @@
             <Icon name="ion:person" class="dark:text-white" />
           </template>
         </PUInput>
+        <PUTextArea
+          label="Message"
+          placeholder="Write your message"
+          variant="secondary"
+          disabled
+        >
+          <template #startContent>
+            <Icon
+              name="ion:chatbox"
+              class="dark:text-white"
+            />
+          </template>
+        </PUTextArea>
       </div>
     </div>
   </div>
