@@ -1,7 +1,11 @@
 <template>
   <div
-    class="inline-flex w-fit gap-1 p-1"
-    :class="[bgColor, roundedClasses[rounded]]"
+    class="inline-flex gap-1 p-1"
+    :class="[
+      bgColor,
+      roundedClasses[rounded],
+      isVertical ? 'flex-col w-fit' : 'flex-row w-fit',
+    ]"
   >
     <button
       v-for="tab in tabs"
@@ -65,6 +69,7 @@ const props = withDefaults(defineProps<TabsProps>(), {
   inactiveTextColor:
     "text-black/70 dark:text-white/70 hover:text-black dark:hover:text-white",
   disabledTabs: () => [],
+  isVertical: false,
 });
 
 const emit = defineEmits<{

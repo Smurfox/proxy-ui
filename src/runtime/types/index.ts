@@ -98,4 +98,5 @@ export interface TabsProps {
   activeTextColor?: string;
   inactiveTextColor?: string;
   disabledTabs?: string[];
+  isVertical?: boolean;
 }

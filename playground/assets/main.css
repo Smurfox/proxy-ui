@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @source "../../src/runtime/components";
+@source inline("flex-col flex-row");
 
 @custom-variant dark (&:where(.dark, .dark *));
 
