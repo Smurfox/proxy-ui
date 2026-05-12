@@ -631,10 +631,17 @@ A responsive data table that renders as a normal `<table>` on `md+` viewports an
 | `items`       | `Array<{ id: string \| number, [key: string]: unknown }>`                    | `[]`                                                                | Row data. Each item must have an `id` used as the Vue key.                              |
 | `columns`     | `{ name: string, id: string, width?: string }[]`                             | `[]`                                                                | Column definitions. `id` is the row key to read, `width` is CSS width.                  |
 | `rounded`     | `'none' \| 'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| '3xl' \| 'full'` | `'lg'`                                                              | Border radius of the outer container.                                                   |
-| `isBordered`  | `boolean`                                                                    | `false`                                                             | Adds an outer border around the table.                                                  |
-| `itemsSize`   | `'sm' \| 'md' \| 'lg'`                                                       | `'md'`                                                              | Vertical padding of body rows. `sm` → `py-2`, `md` → `py-4`, `lg` → `py-6`.             |
-| `headerColor` | `string`                                                                     | `bg-[#F4F4F5] text-[#71717A] dark:bg-[#27272A] dark:text-[#A1A1AA]` | Tailwind classes applied to `<thead>`.                                                  |
-| `bodyColor`   | `string`                                                                     | `''`                                                                | Tailwind classes applied to `<tbody>`.                                                  |
+| `isBordered`   | `boolean`                                                                    | `false`                                                             | Adds an outer border around the table.                                                  |
+| `isSelectable` | `boolean`                                                                    | `false`                                                             | Enables row click + hover effects (cursor, bg highlight, motion-v lift). Emits `row-click`. |
+| `itemsSize`    | `'sm' \| 'md' \| 'lg'`                                                       | `'md'`                                                              | Vertical padding of body rows. `sm` → `py-2`, `md` → `py-4`, `lg` → `py-6`.             |
+| `headerColor`  | `string`                                                                     | `bg-[#F4F4F5] text-[#71717A] dark:bg-[#27272A] dark:text-[#A1A1AA]` | Tailwind classes applied to `<thead>`.                                                  |
+| `bodyColor`    | `string`                                                                     | `''`                                                                | Tailwind classes applied to `<tbody>`.                                                  |
+
+**Events**
+
+| Event       | Payload                                                  | Description                                                              |
+| ----------- | -------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `row-click` | `item: { id: string \| number, [key: string]: unknown }` | Emitted when a row is clicked (only when `isSelectable` is `true`).      |
 
 **Slots**
 
@@ -657,11 +664,19 @@ A responsive data table that renders as a normal `<table>` on `md+` viewports an
     </template>
     <template #cell-actions="{ item }">
       <div class="flex gap-2 justify-end">
-        <PUButton is-icon-only icon="lucide:pencil" variant="ghost" size="sm" @click="edit(item)" />
-        <PUButton is-icon-only icon="lucide:trash-2" variant="ghost" color="danger" size="sm" @click="remove(item)" />
+        <PUButton is-icon-only icon="lucide:pencil" variant="ghost" size="sm" @click.stop="edit(item)" />
+        <PUButton is-icon-only icon="lucide:trash-2" variant="ghost" color="danger" size="sm" @click.stop="remove(item)" />
       </div>
     </template>
   </PUTable>
+
+  <!-- Selectable rows with row-click -->
+  <PUTable
+    :columns="columns"
+    :items="items"
+    is-selectable
+    @row-click="onRowClick"
+  />
 </template>
 
 <script setup>
@@ -674,7 +689,13 @@ const items = [
   { id: 1, name: "Ada Lovelace", status: "Active" },
   { id: 2, name: "Alan Turing", status: "Inactive" },
 ];
+
+function onRowClick(item) {
+  console.log("clicked row:", item);
+}
 </script>
+
+> When `isSelectable` is enabled, clicks on interactive children (buttons, links) propagate to the row. Use `@click.stop` on those children if you don't want them to fire `row-click`.
 ```
 
 ---
