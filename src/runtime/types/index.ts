@@ -1,3 +1,14 @@
+export type GlobalRounded =
+  | "none"
+  | "xs"
+  | "sm"
+  | "md"
+  | "lg"
+  | "xl"
+  | "2xl"
+  | "3xl"
+  | "full";
+
 export type ButtonSize = "sm" | "md" | "lg";
 export type ButtonVariant =
   | "default"
