@@ -2,7 +2,7 @@
   <div class="relative w-full">
     <!-- Vista de tabla para pantallas medianas y grandes -->
     <div
-      class="hidden md:block overflow-x-auto"
+      class="hidden md:block overflow-x-clip"
       :class="[
         roundedClasses[props.rounded],
         isBordered ? 'border border-gray-200 dark:border-white/10 ' : '',
@@ -37,9 +37,13 @@
 
         <tbody :class="props.bodyColor">
           <template v-if="items.length > 0">
-            <tr
+            <motion.tr
               v-for="item in items"
               :key="item.id"
+              :while-hover="props.isSelectable ? { scale: 1.01 } : {}"
+              :transition="{ type: 'spring', stiffness: 400, damping: 30 }"
+              :class="props.isSelectable ? 'cursor-pointer hover:bg-gray-100 dark:hover:bg-white/5' : ''"
+              @click="props.isSelectable && emit('row-click', item)"
             >
               <td
                 v-for="column in columns"
@@ -56,7 +60,7 @@
                   {{ item[column.id] }}
                 </slot>
               </td>
-            </tr>
+            </motion.tr>
           </template>
 
           <tr v-else>
@@ -73,10 +77,14 @@
 
     <!-- Vista de tarjetas para dispositivos móviles -->
     <div class="block md:hidden space-y-4 p-1">
-      <div
+      <motion.div
         v-for="item in items"
         :key="item.id"
+        :while-hover="props.isSelectable ? { y: -3 } : {}"
+        :transition="{ type: 'spring', stiffness: 400, damping: 25 }"
         class="bg-white dark:bg-[#18181B] border border-gray-200 dark:border-white/10 rounded-lg p-4 shadow-sm"
+        :class="props.isSelectable ? 'cursor-pointer hover:bg-gray-50 dark:hover:bg-white/5 hover:shadow-md' : ''"
+        @click="props.isSelectable && emit('row-click', item)"
       >
         <slot
           name="mobile-card"
@@ -107,7 +115,7 @@
             </div>
           </div>
         </slot>
-      </div>
+      </motion.div>
 
       <!-- Mensaje cuando no hay items -->
       <div
@@ -121,6 +129,8 @@
 </template>
 
 <script setup lang="ts">
+import { motion } from 'motion-v'
+
 const roundedClasses = {
   'none': 'rounded-none',
   'xs': 'rounded-xs',
@@ -193,6 +203,7 @@ const props = withDefaults(
     columns?: { name: string, id: string, width?: string }[]
     rounded?: keyof typeof roundedClasses
     isBordered?: boolean
+    isSelectable?: boolean
     headerColor?: string
     bodyColor?: string
     itemsSize?: keyof typeof sizes
@@ -202,10 +213,15 @@ const props = withDefaults(
     columns: () => [],
     rounded: 'lg',
     isBordered: false,
+    isSelectable: false,
     headerColor:
       'bg-[#F4F4F5] text-[#71717A] dark:bg-[#27272A] dark:text-[#A1A1AA]',
     bodyColor: '',
     itemsSize: 'md',
   },
 )
+
+const emit = defineEmits<{
+  'row-click': [item: { id: string | number, [key: string]: unknown }]
+}>()
 </script>

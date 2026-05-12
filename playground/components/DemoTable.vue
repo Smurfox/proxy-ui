@@ -67,10 +67,79 @@
         </template>
       </PUTable>
     </div>
+
+    <!-- Table with items selection -->
+    <div class="w-full max-w-5xl mx-auto flex flex-col gap-3">
+      <h1 class="font-semibold text-lg dark:text-white">
+        Table with Selection
+      </h1>
+      <p class="text-sm text-gray-600 dark:text-gray-400">
+        Set <code>is-selectable</code> and listen to <code>@row-click</code>.
+        Rows highlight on hover and emit the clicked item.
+      </p>
+      <PUTable
+        :items="itemsCustom"
+        :columns="columnsCustom"
+        rounded="2xl"
+        is-bordered
+        is-selectable
+        body-color="bg-white dark:bg-[#18181B]"
+        @row-click="onRowClick"
+      >
+        <template #cell-folio="{ value }">
+          <div class="flex items-center gap-2">
+            <Icon
+              name="ion:document-text-outline"
+              size="20"
+            />
+            <span class="font-bold text-xs">{{ value }}</span>
+          </div>
+        </template>
+        <template #cell-actions>
+          <div class="flex items-center gap-2">
+            <Icon
+              name="ion:eye-outline"
+              size="18"
+              class="text-gray-500 hover:text-gray-700 cursor-pointer"
+            />
+            <Icon
+              name="ion:pencil-outline"
+              size="18"
+              class="text-gray-500 hover:text-gray-700 cursor-pointer"
+            />
+            <Icon
+              name="ion:trash-outline"
+              size="18"
+              class="text-gray-500 hover:text-gray-700 cursor-pointer"
+            />
+          </div>
+        </template>
+      </PUTable>
+      <p class="text-xs text-gray-500 dark:text-white/60">
+        Last clicked: <code>{{ lastClicked ? `${lastClicked.folio} — ${lastClicked.client}` : '—' }}</code>
+      </p>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+
+interface CustomItem {
+  id: number
+  folio: string
+  date: string
+  client: string
+  store: string
+  total: string
+}
+
+const lastClicked = ref<CustomItem | null>(null)
+
+function onRowClick(item: { id: string | number, [key: string]: unknown }) {
+  lastClicked.value = item as unknown as CustomItem
+}
+
 const columns = [
   { name: 'NAME', id: 'name', width: '40%' },
   { name: 'QUANTITY', id: 'quantity', width: '15%' },
