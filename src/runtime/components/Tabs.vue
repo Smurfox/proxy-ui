@@ -22,8 +22,8 @@
             : inactiveTextColor + ' cursor-pointer',
       ]"
       @click="
-        !(tab.disabled || disabledTabs.includes(tab.value)) &&
-        emit('update:modelValue', tab.value)
+        !(tab.disabled || disabledTabs.includes(tab.value))
+          && emit('update:modelValue', tab.value)
       "
     >
       <motion.div
@@ -45,36 +45,36 @@
 </template>
 
 <script setup lang="ts">
-import { motion } from "motion-v";
-import type { TabItem, TabsRounded, TabsProps } from "../types";
+import { motion } from 'motion-v'
+import type { TabsProps } from '../types'
 
 const roundedClasses = {
-  none: "rounded-none",
-  xs: "rounded-xs",
-  sm: "rounded-sm",
-  md: "rounded-md",
-  lg: "rounded-lg",
-  xl: "rounded-xl",
-  "2xl": "rounded-2xl",
-  full: "rounded-full",
-} as const;
+  'none': 'rounded-none',
+  'xs': 'rounded-xs',
+  'sm': 'rounded-sm',
+  'md': 'rounded-md',
+  'lg': 'rounded-lg',
+  'xl': 'rounded-xl',
+  '2xl': 'rounded-2xl',
+  'full': 'rounded-full',
+} as const
 
-const props = withDefaults(defineProps<TabsProps>(), {
-  modelValue: "",
+withDefaults(defineProps<TabsProps>(), {
+  modelValue: '',
   iconSize: 15,
-  rounded: "lg",
-  bgColor: "bg-black/5 dark:bg-white/10",
-  btnColor: "bg-white dark:bg-white/10",
-  activeTextColor: "text-black dark:text-white",
+  rounded: 'lg',
+  bgColor: 'bg-black/5 dark:bg-white/10',
+  btnColor: 'bg-white dark:bg-white/10',
+  activeTextColor: 'text-black dark:text-white',
   inactiveTextColor:
-    "text-black/70 dark:text-white/70 hover:text-black dark:hover:text-white",
+    'text-black/70 dark:text-white/70 hover:text-black dark:hover:text-white',
   disabledTabs: () => [],
   isVertical: false,
-});
+})
 
 const emit = defineEmits<{
-  "update:modelValue": [value: string];
-}>();
+  'update:modelValue': [value: string]
+}>()
 </script>
 
 <style scoped></style>

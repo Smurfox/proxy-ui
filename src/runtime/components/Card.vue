@@ -14,32 +14,32 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
-import type { CardVariant } from "../types";
+import { computed } from 'vue'
+import type { CardVariant } from '../types'
 
 const props = withDefaults(
   defineProps<{
-    variant?: CardVariant;
-    customClass?: string;
-    isBordered?: boolean;
+    variant?: CardVariant
+    customClass?: string
+    isBordered?: boolean
   }>(),
   {
     isBordered: false,
   },
-);
+)
 
 const hasBg = computed(() =>
-  props.customClass?.split(" ").some((c) => c.startsWith("bg-")),
-);
+  props.customClass?.split(' ').some(c => c.startsWith('bg-')),
+)
 const hasPadding = computed(() =>
-  props.customClass?.split(" ").some((c) => /^p[xytblrse]?-/.test(c)),
-);
+  props.customClass?.split(' ').some(c => /^p[xytblrse]?-/.test(c)),
+)
 const hasShadow = computed(() =>
-  props.customClass?.split(" ").some((c) => c.startsWith("shadow-")),
-);
+  props.customClass?.split(' ').some(c => c.startsWith('shadow-')),
+)
 const hasRounded = computed(() =>
-  props.customClass?.split(" ").some((c) => c.startsWith("rounded-")),
-);
+  props.customClass?.split(' ').some(c => c.startsWith('rounded-')),
+)
 </script>
 
 <style scoped>
