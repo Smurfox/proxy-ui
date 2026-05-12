@@ -2,7 +2,7 @@
   <div class="relative w-full">
     <!-- Vista de tabla para pantallas medianas y grandes -->
     <div
-      class="hidden md:block overflow-x-clip"
+      class="hidden md:block overflow-clip"
       :class="[
         roundedClasses[props.rounded],
         isBordered ? 'border border-gray-200 dark:border-white/10 ' : '',
