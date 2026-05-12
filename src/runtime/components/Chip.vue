@@ -32,9 +32,9 @@
 import type { ChipSize, ChipVariant, ChipColor, ChipRounded } from '../types'
 
 const sizes = {
-  sm: 'text-xs min-w-18 py-1 px-2',
-  md: 'text-xs min-w-20 py-1.5 px-2',
-  lg: 'text-sm min-w-24 py-2 px-4',
+  sm: 'text-xs min-w-8 py-1 px-2',
+  md: 'text-xs min-w-12 py-1.5 px-2',
+  lg: 'text-sm min-w-14 py-2 px-4',
 } as const
 
 const variantClasses = {
