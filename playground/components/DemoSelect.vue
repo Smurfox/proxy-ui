@@ -1,13 +1,17 @@
 <template>
   <div class="p-6 w-full flex flex-col items-start gap-8">
     <div class="flex flex-col gap-5">
-      <h2 class="text-2xl font-semibold dark:text-white -mb-4">Select</h2>
+      <h2 class="text-2xl font-semibold dark:text-white -mb-4">
+        Select
+      </h2>
       <p class="text-gray-600 dark:text-gray-400">
         A collection of select components for forms and user interactions.
       </p>
     </div>
     <div class="w-200 mx-auto flex flex-col gap-3">
-      <h1 class="font-semibold text-lg">Usage</h1>
+      <h1 class="font-semibold text-lg">
+        Usage
+      </h1>
       <div
         class="border border-gray-300 flex flex-col gap-6 p-9 w-full rounded-xl"
       >
@@ -30,7 +34,9 @@
       </div>
     </div>
     <div class="w-200 mx-auto flex flex-col gap-3">
-      <h1 class="font-semibold text-lg">Validation Field</h1>
+      <h1 class="font-semibold text-lg">
+        Validation Field
+      </h1>
       <div
         class="border border-gray-300 flex flex-col gap-6 p-9 w-full rounded-xl"
       >
@@ -54,7 +60,9 @@
       </div>
     </div>
     <div class="w-200 mx-auto flex flex-col gap-3">
-      <h1 class="font-semibold text-lg">Disabled State</h1>
+      <h1 class="font-semibold text-lg">
+        Disabled State
+      </h1>
       <div
         class="border border-gray-300 flex flex-col gap-6 p-9 w-full rounded-xl"
       >
@@ -76,7 +84,9 @@
       </div>
     </div>
     <div class="w-200 mx-auto flex flex-col gap-3">
-      <h1 class="font-semibold text-lg">Empty State</h1>
+      <h1 class="font-semibold text-lg">
+        Empty State
+      </h1>
       <div
         class="border border-gray-300 flex flex-col gap-6 p-9 w-full rounded-xl"
       >

@@ -37,7 +37,10 @@
 
         <tbody :class="props.bodyColor">
           <template v-if="items.length > 0">
-            <tr v-for="item in items" :key="item.id">
+            <tr
+              v-for="item in items"
+              :key="item.id"
+            >
               <td
                 v-for="column in columns"
                 :key="column.id"
@@ -74,7 +77,11 @@
         :key="item.id"
         class="bg-white dark:bg-[#18181B] border border-gray-200 dark:border-white/10 rounded-lg p-4 shadow-sm"
       >
-        <slot name="mobile-card" :item="item" :columns="columns">
+        <slot
+          name="mobile-card"
+          :item="item"
+          :columns="columns"
+        >
           <!-- Contenido por defecto si no se proporciona slot personalizado -->
           <div class="space-y-2">
             <div
@@ -114,82 +121,82 @@
 
 <script setup lang="ts">
 const roundedClasses = {
-  none: "rounded-none",
-  xs: "rounded-xs",
-  sm: "rounded-sm",
-  md: "rounded-md",
-  lg: "rounded-lg",
-  xl: "rounded-xl",
-  "2xl": "rounded-2xl",
-  "3xl": "rounded-3xl",
-  full: "rounded-full",
-} as const;
+  'none': 'rounded-none',
+  'xs': 'rounded-xs',
+  'sm': 'rounded-sm',
+  'md': 'rounded-md',
+  'lg': 'rounded-lg',
+  'xl': 'rounded-xl',
+  '2xl': 'rounded-2xl',
+  '3xl': 'rounded-3xl',
+  'full': 'rounded-full',
+} as const
 
 const roundedStartClasses = {
-  none: "rounded-s-none",
-  xs: "rounded-s-xs",
-  sm: "rounded-s-sm",
-  md: "rounded-s-md",
-  lg: "rounded-s-lg",
-  xl: "rounded-s-xl",
-  "2xl": "rounded-s-2xl",
-  "3xl": "rounded-s-3xl",
-  full: "rounded-s-full",
-} as const;
+  'none': 'rounded-s-none',
+  'xs': 'rounded-s-xs',
+  'sm': 'rounded-s-sm',
+  'md': 'rounded-s-md',
+  'lg': 'rounded-s-lg',
+  'xl': 'rounded-s-xl',
+  '2xl': 'rounded-s-2xl',
+  '3xl': 'rounded-s-3xl',
+  'full': 'rounded-s-full',
+} as const
 
 const roundedEndClasses = {
-  none: "rounded-e-none",
-  xs: "rounded-e-xs",
-  sm: "rounded-e-sm",
-  md: "rounded-e-md",
-  lg: "rounded-e-lg",
-  xl: "rounded-e-xl",
-  "2xl": "rounded-e-2xl",
-  "3xl": "rounded-e-3xl",
-  full: "rounded-e-full",
-} as const;
+  'none': 'rounded-e-none',
+  'xs': 'rounded-e-xs',
+  'sm': 'rounded-e-sm',
+  'md': 'rounded-e-md',
+  'lg': 'rounded-e-lg',
+  'xl': 'rounded-e-xl',
+  '2xl': 'rounded-e-2xl',
+  '3xl': 'rounded-e-3xl',
+  'full': 'rounded-e-full',
+} as const
 
 const roundedTopStartClasses = {
-  none: "rounded-ss-none",
-  xs: "rounded-ss-xs",
-  sm: "rounded-ss-sm",
-  md: "rounded-ss-md",
-  lg: "rounded-ss-lg",
-  xl: "rounded-ss-xl",
-  "2xl": "rounded-ss-2xl",
-  "3xl": "rounded-ss-3xl",
-  full: "rounded-ss-full",
-} as const;
+  'none': 'rounded-ss-none',
+  'xs': 'rounded-ss-xs',
+  'sm': 'rounded-ss-sm',
+  'md': 'rounded-ss-md',
+  'lg': 'rounded-ss-lg',
+  'xl': 'rounded-ss-xl',
+  '2xl': 'rounded-ss-2xl',
+  '3xl': 'rounded-ss-3xl',
+  'full': 'rounded-ss-full',
+} as const
 
 const roundedTopEndClasses = {
-  none: "rounded-se-none",
-  xs: "rounded-se-xs",
-  sm: "rounded-se-sm",
-  md: "rounded-se-md",
-  lg: "rounded-se-lg",
-  xl: "rounded-se-xl",
-  "2xl": "rounded-se-2xl",
-  "3xl": "rounded-se-3xl",
-  full: "rounded-se-full",
-} as const;
+  'none': 'rounded-se-none',
+  'xs': 'rounded-se-xs',
+  'sm': 'rounded-se-sm',
+  'md': 'rounded-se-md',
+  'lg': 'rounded-se-lg',
+  'xl': 'rounded-se-xl',
+  '2xl': 'rounded-se-2xl',
+  '3xl': 'rounded-se-3xl',
+  'full': 'rounded-se-full',
+} as const
 
 const props = withDefaults(
   defineProps<{
-    items: any[];
-    columns: { name: string; id: string; width?: string }[];
-    rounded?: keyof typeof roundedClasses;
-    isBordered?: boolean;
-    headerColor?: string;
-    bodyColor?: string;
+    items?: Array<{ id: string | number, [key: string]: unknown }>
+    columns?: { name: string, id: string, width?: string }[]
+    rounded?: keyof typeof roundedClasses
+    isBordered?: boolean
+    headerColor?: string
+    bodyColor?: string
   }>(),
   {
     items: () => [],
     columns: () => [],
-    rounded: "lg",
+    rounded: 'lg',
     isBordered: false,
     headerColor:
-      "bg-[#F4F4F5] text-[#71717A] dark:bg-[#27272A] dark:text-[#A1A1AA]",
-    bodyColor: "",
+      'bg-[#F4F4F5] text-[#71717A] dark:bg-[#27272A] dark:text-[#A1A1AA]',
+    bodyColor: '',
   },
-);
+)
 </script>

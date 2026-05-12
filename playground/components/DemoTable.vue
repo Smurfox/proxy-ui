@@ -1,7 +1,9 @@
 <template>
   <div class="p-6 w-full flex flex-col items-start gap-8">
     <div class="flex flex-col gap-5">
-      <h2 class="text-2xl font-semibold dark:text-white -mb-4">Table</h2>
+      <h2 class="text-2xl font-semibold dark:text-white -mb-4">
+        Table
+      </h2>
       <p class="text-gray-600 dark:text-gray-400">
         A data table for listing structured rows with columns, sorting,
         selection, and custom cell rendering.
@@ -10,11 +12,16 @@
 
     <!-- Table with custom cell rendering -->
     <div class="w-full max-w-5xl mx-auto flex flex-col gap-3">
-      <h1 class="font-semibold text-lg dark:text-white">Usage</h1>
+      <h1 class="font-semibold text-lg dark:text-white">
+        Usage
+      </h1>
       <div
         class="bg-white dark:bg-[#18181B] border border-gray-200 dark:border-white/10 p-6 rounded-xl"
       >
-        <PUTable :items="items" :columns="columns"></PUTable>
+        <PUTable
+          :items="items"
+          :columns="columns"
+        />
       </div>
     </div>
 
@@ -27,16 +34,19 @@
         :items="itemsCustom"
         :columns="columnsCustom"
         rounded="2xl"
-        isBordered
-        bodyColor="bg-white dark:bg-[#18181B]"
+        is-bordered
+        body-color="bg-white dark:bg-[#18181B]"
       >
-        <template #cell-folio="{ value, item }">
+        <template #cell-folio="{ value }">
           <div class="flex items-center gap-2">
-            <Icon name="ion:document-text-outline" size="20" />
+            <Icon
+              name="ion:document-text-outline"
+              size="20"
+            />
             <span class="font-bold text-xs">{{ value }}</span>
           </div>
         </template>
-        <template #cell-actions="{ value, item }">
+        <template #cell-actions>
           <div class="flex items-center gap-2">
             <Icon
               name="ion:eye-outline"
@@ -62,57 +72,57 @@
 
 <script setup lang="ts">
 const columns = [
-  { name: "NAME", id: "name", width: "40%" },
-  { name: "QUANTITY", id: "quantity", width: "15%" },
-  { name: "U. PRICE", id: "unitPrice", width: "15%" },
-  { name: "DISCOUNT", id: "discount", width: "15%" },
-  { name: "TOTAL", id: "total", width: "20%" },
-];
+  { name: 'NAME', id: 'name', width: '40%' },
+  { name: 'QUANTITY', id: 'quantity', width: '15%' },
+  { name: 'U. PRICE', id: 'unitPrice', width: '15%' },
+  { name: 'DISCOUNT', id: 'discount', width: '15%' },
+  { name: 'TOTAL', id: 'total', width: '20%' },
+]
 const items = [
   {
     id: 1,
-    name: "Product 1",
+    name: 'Product 1',
     quantity: 2,
-    unitPrice: "$10.00",
-    discount: "5%",
-    total: "$19.00",
+    unitPrice: '$10.00',
+    discount: '5%',
+    total: '$19.00',
   },
   {
     id: 2,
-    name: "Product 2",
+    name: 'Product 2',
     quantity: 1,
-    unitPrice: "$20.00",
-    discount: "0%",
-    total: "$20.00",
+    unitPrice: '$20.00',
+    discount: '0%',
+    total: '$20.00',
   },
-];
+]
 
 const columnsCustom = [
-  { name: "folio", id: "folio", width: "20%" },
-  { name: "date", id: "date", width: "15%" },
-  { name: "client", id: "client", width: "15%" },
-  { name: "store", id: "store", width: "15%" },
-  { name: "total", id: "total", width: "15%" },
-  { name: "actions", id: "actions", width: "20%" },
-];
+  { name: 'folio', id: 'folio', width: '20%' },
+  { name: 'date', id: 'date', width: '15%' },
+  { name: 'client', id: 'client', width: '15%' },
+  { name: 'store', id: 'store', width: '15%' },
+  { name: 'total', id: 'total', width: '15%' },
+  { name: 'actions', id: 'actions', width: '20%' },
+]
 const itemsCustom = [
   {
     id: 1,
-    folio: "FOL-001",
-    date: "2024-01-01",
-    client: "John Doe",
-    store: "Store A",
-    total: "$100.00",
+    folio: 'FOL-001',
+    date: '2024-01-01',
+    client: 'John Doe',
+    store: 'Store A',
+    total: '$100.00',
   },
   {
     id: 2,
-    folio: "FOL-002",
-    date: "2024-01-02",
-    client: "Jane Smith",
-    store: "Store B",
-    total: "$150.00",
+    folio: 'FOL-002',
+    date: '2024-01-02',
+    client: 'Jane Smith',
+    store: 'Store B',
+    total: '$150.00',
   },
-];
+]
 </script>
 
 <style scoped></style>

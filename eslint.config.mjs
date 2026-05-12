@@ -15,6 +15,10 @@ export default createConfigForNuxt({
     ],
   },
 })
-  .append(
-    // your custom flat config here...
-  )
+  .append({
+    rules: {
+      // Component files are single-word by design — they get the `PU` prefix
+      // at registration time via addComponentsDir in src/module.ts.
+      'vue/multi-word-component-names': 'off',
+    },
+  })
