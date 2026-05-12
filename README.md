@@ -628,12 +628,13 @@ A responsive data table that renders as a normal `<table>` on `md+` viewports an
 
 | Prop          | Type                                                                        | Default                                  | Description                                                              |
 | ------------- | --------------------------------------------------------------------------- | ---------------------------------------- | ------------------------------------------------------------------------ |
-| `items`       | `Array<{ id: string \| number, [key: string]: unknown }>`                   | `[]`                                     | Row data. Each item must have an `id` used as the Vue key.               |
-| `columns`     | `{ name: string, id: string, width?: string }[]`                            | `[]`                                     | Column definitions. `id` is the row key to read, `width` is CSS width.   |
-| `rounded`     | `'none' \| 'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| '3xl' \| 'full'` | `'lg'`                                  | Border radius of the outer container.                                    |
-| `isBordered`  | `boolean`                                                                   | `false`                                  | Adds an outer border around the table.                                   |
-| `headerColor` | `string`                                                                    | `bg-[#F4F4F5] text-[#71717A] dark:bg-[#27272A] dark:text-[#A1A1AA]` | Tailwind classes applied to `<thead>`.                       |
-| `bodyColor`   | `string`                                                                    | `''`                                     | Tailwind classes applied to `<tbody>`.                                   |
+| `items`       | `Array<{ id: string \| number, [key: string]: unknown }>`                    | `[]`                                                                | Row data. Each item must have an `id` used as the Vue key.                              |
+| `columns`     | `{ name: string, id: string, width?: string }[]`                             | `[]`                                                                | Column definitions. `id` is the row key to read, `width` is CSS width.                  |
+| `rounded`     | `'none' \| 'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| '3xl' \| 'full'` | `'lg'`                                                              | Border radius of the outer container.                                                   |
+| `isBordered`  | `boolean`                                                                    | `false`                                                             | Adds an outer border around the table.                                                  |
+| `itemsSize`   | `'sm' \| 'md' \| 'lg'`                                                       | `'md'`                                                              | Vertical padding of body rows. `sm` → `py-2`, `md` → `py-4`, `lg` → `py-6`.             |
+| `headerColor` | `string`                                                                     | `bg-[#F4F4F5] text-[#71717A] dark:bg-[#27272A] dark:text-[#A1A1AA]` | Tailwind classes applied to `<thead>`.                                                  |
+| `bodyColor`   | `string`                                                                     | `''`                                                                | Tailwind classes applied to `<tbody>`.                                                  |
 
 **Slots**
 

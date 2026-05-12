@@ -45,7 +45,8 @@
                 v-for="column in columns"
                 :key="column.id"
                 :style="{ width: column.width || 'auto' }"
-                class="px-4 py-2 text-gray-900 dark:text-white break-words"
+                class="px-4 text-gray-900 dark:text-white break-words"
+                :class="sizes[props.itemsSize]"
               >
                 <slot
                   :name="`cell-${column.id}`"
@@ -180,6 +181,12 @@ const roundedTopEndClasses = {
   'full': 'rounded-se-full',
 } as const
 
+const sizes = {
+  sm: 'py-2',
+  md: 'py-4',
+  lg: 'py-6',
+} as const
+
 const props = withDefaults(
   defineProps<{
     items?: Array<{ id: string | number, [key: string]: unknown }>
@@ -188,6 +195,7 @@ const props = withDefaults(
     isBordered?: boolean
     headerColor?: string
     bodyColor?: string
+    itemsSize?: keyof typeof sizes
   }>(),
   {
     items: () => [],
@@ -197,6 +205,7 @@ const props = withDefaults(
     headerColor:
       'bg-[#F4F4F5] text-[#71717A] dark:bg-[#27272A] dark:text-[#A1A1AA]',
     bodyColor: '',
+    itemsSize: 'md',
   },
 )
 </script>
