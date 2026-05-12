@@ -204,6 +204,122 @@ A flexible input component with validation and state management.
 
 ---
 
+### PUTextArea
+
+A multi-line text input. Shares the look and feel of `PUInput`, with extra props for `rows` and resize behavior.
+
+```vue
+<PUTextArea v-model="message" label="Message" placeholder="Write your message" />
+```
+
+**Props**
+
+| Prop          | Type                                                        | Default                   | Description                                          |
+| ------------- | ----------------------------------------------------------- | ------------------------- | ---------------------------------------------------- |
+| `modelValue`  | `string \| number`                                          | —                         | Bound value (v-model).                               |
+| `label`       | `string`                                                    | —                         | Label displayed above the textarea.                  |
+| `labelClass`  | `string`                                                    | `'text-sm font-semibold'` | Custom classes for the label.                        |
+| `placeholder` | `string`                                                    | —                         | Placeholder text.                                    |
+| `description` | `string`                                                    | —                         | Helper text displayed below.                         |
+| `rounded`     | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| 'full'` | `'xl'`                    | Border radius.                                       |
+| `variant`     | `'default' \| 'secondary'`                                  | `'default'`               | Visual style.                                        |
+| `rows`        | `number \| string`                                          | `4`                       | Initial number of visible rows.                      |
+| `resize`      | `'none' \| 'both' \| 'horizontal' \| 'vertical'`            | `'vertical'`              | Resize behavior.                                     |
+| `required`    | `boolean`                                                   | `false`                   | Shows a red asterisk on the label.                   |
+| `error`       | `string`                                                    | —                         | Error message to display. Changes styling to danger. |
+| `disabled`    | `boolean`                                                   | `false`                   | Disables the textarea.                               |
+
+**Slots**
+
+| Slot           | Description                   |
+| -------------- | ----------------------------- |
+| `startContent` | Icon or content at the start. |
+| `endContent`   | Icon or content at the end.   |
+
+**Examples**
+
+```vue
+<!-- Basic -->
+<PUTextArea v-model="message" label="Message" placeholder="Write your message" />
+
+<!-- Fixed size, no resize -->
+<PUTextArea label="Comment" :rows="6" resize="none" />
+
+<!-- With error -->
+<PUTextArea label="Bio" error="Bio is required" required />
+
+<!-- With icon -->
+<PUTextArea label="Notes">
+  <template #startContent>
+    <Icon name="lucide:notebook-pen" />
+  </template>
+</PUTextArea>
+```
+
+---
+
+### PUSelect
+
+A custom select with an animated dropdown panel teleported to `body`. Dark-mode aware, supports `v-model`, and emits both `update:modelValue` and `change`.
+
+```vue
+<PUSelect
+  v-model="role"
+  label="Role"
+  :options="[
+    { label: 'Admin', value: 'admin' },
+    { label: 'Editor', value: 'editor' },
+    { label: 'Viewer', value: 'viewer' },
+  ]"
+/>
+```
+
+**Props**
+
+| Prop          | Type                                                        | Default                   | Description                                          |
+| ------------- | ----------------------------------------------------------- | ------------------------- | ---------------------------------------------------- |
+| `modelValue`  | `string \| number \| null`                                  | `null`                    | Selected value (v-model).                            |
+| `options`     | `{ label: string, value: string \| number }[]`              | `[]`                      | Items shown in the dropdown.                         |
+| `label`       | `string`                                                    | —                         | Label displayed above the select.                    |
+| `labelClass`  | `string`                                                    | `'text-sm font-semibold'` | Custom classes for the label.                        |
+| `placeholder` | `string`                                                    | `'Seleccionar'`           | Text shown when nothing is selected.                 |
+| `description` | `string`                                                    | —                         | Helper text displayed below.                         |
+| `rounded`     | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| 'full'` | `'xl'`                    | Border radius.                                       |
+| `variant`     | `'default' \| 'secondary'`                                  | `'default'`               | Visual style.                                        |
+| `required`    | `boolean`                                                   | `false`                   | Shows a red asterisk on the label.                   |
+| `error`       | `string`                                                    | `''`                      | Error message to display. Changes styling to danger. |
+| `disabled`    | `boolean`                                                   | `false`                   | Disables the select.                                 |
+
+**Events**
+
+| Event               | Payload            | Description                            |
+| ------------------- | ------------------ | -------------------------------------- |
+| `update:modelValue` | `string \| number` | Emitted when an option is picked.      |
+| `change`            | `string \| number` | Emitted alongside `update:modelValue`. |
+
+**Examples**
+
+```vue
+<!-- Basic -->
+<PUSelect v-model="country" :options="countries" label="Country" />
+
+<!-- With description -->
+<PUSelect
+  v-model="plan"
+  :options="plans"
+  label="Plan"
+  description="You can change this later"
+/>
+
+<!-- With error -->
+<PUSelect v-model="status" :options="statuses" error="Pick a status" required />
+
+<!-- Disabled -->
+<PUSelect :options="statuses" disabled label="Locked" />
+```
+
+---
+
 ### PUCard
 
 A flexible card component with customizable styling and borders.
@@ -451,17 +567,152 @@ const activeTab = ref("dashboard");
 
 ---
 
+### PUDropdown
+
+A floating panel anchored to an activator element. Opens on click and closes on outside click. Provides a `closeDropdown` function (via `inject`) so child items can close the panel after acting.
+
+```vue
+<PUDropdown>
+  <template #activator>
+    <PUButton label="Options" end-icon="lucide:chevron-down" />
+  </template>
+  <template #content>
+    <ul class="p-2">
+      <li class="px-3 py-2 hover:bg-gray-100 dark:hover:bg-white/10 rounded-lg cursor-pointer">
+        Profile
+      </li>
+      <li class="px-3 py-2 hover:bg-gray-100 dark:hover:bg-white/10 rounded-lg cursor-pointer">
+        Settings
+      </li>
+    </ul>
+  </template>
+</PUDropdown>
+```
+
+**Slots**
+
+| Slot        | Description                                              |
+| ----------- | -------------------------------------------------------- |
+| `activator` | The element the user clicks to open the dropdown.        |
+| `content`   | The floating panel contents (rendered when open).        |
+
+**Provides**
+
+| Key             | Type         | Description                                                              |
+| --------------- | ------------ | ------------------------------------------------------------------------ |
+| `closeDropdown` | `() => void` | Call from inside `content` to close the dropdown (e.g. after an action). |
+
+```vue
+<!-- Closing the dropdown from a child item -->
+<script setup>
+import { inject } from "vue";
+const closeDropdown = inject("closeDropdown");
+</script>
+
+<template>
+  <button @click="handleAction(); closeDropdown?.()">Action</button>
+</template>
+```
+
+---
+
+### PUTable
+
+A responsive data table that renders as a normal `<table>` on `md+` viewports and switches to a stack of cards on mobile. Cells are rendered through per-column scoped slots so you can fully customize their content.
+
+```vue
+<PUTable :columns="columns" :items="items" />
+```
+
+**Props**
+
+| Prop          | Type                                                                        | Default                                  | Description                                                              |
+| ------------- | --------------------------------------------------------------------------- | ---------------------------------------- | ------------------------------------------------------------------------ |
+| `items`       | `Array<{ id: string \| number, [key: string]: unknown }>`                    | `[]`                                                                | Row data. Each item must have an `id` used as the Vue key.                              |
+| `columns`     | `{ name: string, id: string, width?: string }[]`                             | `[]`                                                                | Column definitions. `id` is the row key to read, `width` is CSS width.                  |
+| `rounded`     | `'none' \| 'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| '3xl' \| 'full'` | `'lg'`                                                              | Border radius of the outer container.                                                   |
+| `isBordered`   | `boolean`                                                                    | `false`                                                             | Adds an outer border around the table.                                                  |
+| `isSelectable` | `boolean`                                                                    | `false`                                                             | Enables row click + hover effects (cursor, bg highlight, motion-v lift). Emits `row-click`. |
+| `itemsSize`    | `'sm' \| 'md' \| 'lg'`                                                       | `'md'`                                                              | Vertical padding of body rows. `sm` → `py-2`, `md` → `py-4`, `lg` → `py-6`.             |
+| `headerColor`  | `string`                                                                     | `bg-[#F4F4F5] text-[#71717A] dark:bg-[#27272A] dark:text-[#A1A1AA]` | Tailwind classes applied to `<thead>`.                                                  |
+| `bodyColor`    | `string`                                                                     | `''`                                                                | Tailwind classes applied to `<tbody>`.                                                  |
+
+**Events**
+
+| Event       | Payload                                                  | Description                                                              |
+| ----------- | -------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `row-click` | `item: { id: string \| number, [key: string]: unknown }` | Emitted when a row is clicked (only when `isSelectable` is `true`).      |
+
+**Slots**
+
+| Slot            | Scope                                  | Description                                                                  |
+| --------------- | -------------------------------------- | ---------------------------------------------------------------------------- |
+| `cell-{id}`     | `{ item, value }`                      | Customize the cell for the column with `id` = `{id}`. Falls back to `value`. |
+| `mobile-card`   | `{ item, columns }`                    | Replace the default mobile card layout for an entire row.                    |
+
+**Examples**
+
+```vue
+<template>
+  <!-- Basic table -->
+  <PUTable :columns="columns" :items="items" />
+
+  <!-- Custom cell rendering -->
+  <PUTable :columns="columns" :items="items" rounded="2xl" is-bordered>
+    <template #cell-status="{ value }">
+      <PUChip :label="value" :color="value === 'Active' ? 'success' : 'danger'" variant="flat" size="sm" />
+    </template>
+    <template #cell-actions="{ item }">
+      <div class="flex gap-2 justify-end">
+        <PUButton is-icon-only icon="lucide:pencil" variant="ghost" size="sm" @click.stop="edit(item)" />
+        <PUButton is-icon-only icon="lucide:trash-2" variant="ghost" color="danger" size="sm" @click.stop="remove(item)" />
+      </div>
+    </template>
+  </PUTable>
+
+  <!-- Selectable rows with row-click -->
+  <PUTable
+    :columns="columns"
+    :items="items"
+    is-selectable
+    @row-click="onRowClick"
+  />
+</template>
+
+<script setup>
+const columns = [
+  { name: "Name", id: "name", width: "40%" },
+  { name: "Status", id: "status", width: "30%" },
+  { name: "", id: "actions", width: "30%" },
+];
+const items = [
+  { id: 1, name: "Ada Lovelace", status: "Active" },
+  { id: 2, name: "Alan Turing", status: "Inactive" },
+];
+
+function onRowClick(item) {
+  console.log("clicked row:", item);
+}
+</script>
+
+> When `isSelectable` is enabled, clicks on interactive children (buttons, links) propagate to the row. Use `@click.stop` on those children if you don't want them to fire `row-click`.
+```
+
+---
+
 ## TypeScript
 
 ProxyUI exports all component types:
 
 ```ts
 import type {
+  GlobalRounded,
   ButtonProps,
   ButtonColor,
   ButtonVariant,
   ButtonSize,
   ButtonRounded,
+  InputProps,
   InputVariant,
   InputRounded,
   ChipProps,
@@ -478,6 +729,8 @@ import type {
   TabsRounded,
 } from "proxy-ui";
 ```
+
+> `PUTextArea`, `PUSelect`, `PUDropdown`, and `PUTable` define their props inline and do not export dedicated `Props` types. They reuse `InputVariant` and `InputRounded` from the same package.
 
 ---
 

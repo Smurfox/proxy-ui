@@ -15,6 +15,25 @@ Check all of these BEFORE doing anything else. If any fails, abort with a clear 
 2. **On `develop` branch.** Run `git branch --show-current`. If not `develop`, abort: tell the user the publish flow starts from `develop`.
 3. **Develop is in sync with origin.** Run `git fetch origin develop` then `git rev-list --left-right --count develop...origin/develop`. If develop is behind or has diverged, abort and ask the user to reconcile.
 
+## Pre-flight: README check
+
+Before asking for the bump, verify the README documents every user-facing change since the last release. This is the step that's easy to forget and that ships incomplete docs to npm.
+
+1. Find the last release tag: `git describe --tags --abbrev=0 --match 'v*'`. Store as `$LAST_TAG`.
+2. List commits since that tag: `git log $LAST_TAG..HEAD --oneline`.
+3. From that list, flag commits whose subject suggests **user-visible** changes:
+   - `feat(...)` / `feat:` — almost always needs README coverage (new component, new prop, new slot, new event).
+   - `fix(...)` / `fix:` — only if it changes documented behavior or default values.
+   - Anything that adds or renames a public prop, slot, event, or component.
+   - Ignore: `chore:`, `docs:`, `refactor:`, `test:`, `style:`, and internal-only fixes.
+4. For each flagged commit, open the relevant component file(s) and confirm the README in this repo describes the new prop/slot/event/default. If the README is missing **anything** that a consumer would need to know, list those gaps for the user.
+5. Use `AskUserQuestion` to confirm before continuing. Phrase it like: "I found N user-facing commits since $LAST_TAG. The README covers X but appears to be missing: [Y, Z]. Continue anyway, or pause so you can update the README first?"
+   - **Pause** → abort the publish flow with a one-line message ("Paused — update README, commit, push, then re-run /publish"). Do **not** auto-write the README; the user should review and word the docs.
+   - **Continue** → proceed to step 1.
+6. If you find no flagged commits (e.g., the release is purely chores/docs/fixes with no API surface changes), skip the question and continue silently to step 1.
+
+Do not perform this check by trusting commit messages alone — open the actual code diff for any flagged commit (`git show <sha> -- src/runtime/`) so you can see the real change, not just what the commit message claimed.
+
 ## Steps
 
 ### 1. Ask the bump type
