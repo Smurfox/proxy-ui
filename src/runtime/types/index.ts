@@ -127,3 +127,41 @@ export interface TabsProps {
   disabledTabs?: string[]
   isVertical?: boolean
 }
+
+export interface LottieProps {
+  animationData: object
+  loop?: boolean
+  height?: number
+  width?: number
+}
+
+export type TableRounded = GlobalRounded
+export type TableItemsSize = 'sm' | 'md' | 'lg'
+
+export interface TableColumn {
+  name: string
+  id: string
+  width?: string
+}
+
+export interface TableItem {
+  id: string | number
+  [key: string]: unknown
+}
+
+export interface TableProps {
+  items?: TableItem[]
+  columns?: TableColumn[]
+  rounded?: TableRounded
+  isBordered?: boolean
+  isSelectable?: boolean
+  headerColor?: string
+  bodyColor?: string
+  itemsSize?: TableItemsSize
+  hasShadow?: boolean
+  emptyStateTitle?: string
+  emptyStateDescription?: string
+  showEmptyAnimation?: boolean
+  emptyAnimationData?: object
+  emptyAnimationSize?: number
+}

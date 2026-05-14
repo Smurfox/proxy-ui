@@ -21,6 +21,7 @@
         <PUTable
           :items="items"
           :columns="columns"
+          :has-shadow="false"
         />
       </div>
     </div>
@@ -116,8 +117,48 @@
         </template>
       </PUTable>
       <p class="text-xs text-gray-500 dark:text-white/60">
-        Last clicked: <code>{{ lastClicked ? `${lastClicked.folio} — ${lastClicked.client}` : '—' }}</code>
+        Last clicked:
+        <code>{{
+          lastClicked ? `${lastClicked.folio} — ${lastClicked.client}` : "—"
+        }}</code>
       </p>
+    </div>
+
+    <!-- Empty state -->
+    <div class="w-full max-w-5xl mx-auto flex flex-col gap-3">
+      <h1 class="font-semibold text-lg dark:text-white">
+        Empty State
+      </h1>
+      <p class="text-sm text-gray-600 dark:text-gray-400">
+        When the <code>items</code> array is empty, a bundled Lottie animation
+        is shown above the default message. Disable it with
+        <code>:show-empty-animation="false"</code> or override it with
+        <code>:empty-animation-data</code>.
+      </p>
+      <PUTable
+        :items="[]"
+        :columns="columnsCustom"
+        rounded="2xl"
+        is-bordered
+        is-selectable
+        body-color="bg-white dark:bg-[#18181B]"
+        @row-click="onRowClick"
+      />
+    </div>
+
+    <!-- Empty state without animation -->
+    <div class="w-full max-w-5xl mx-auto flex flex-col gap-3">
+      <h1 class="font-semibold text-lg dark:text-white">
+        Empty State (animation disabled)
+      </h1>
+      <PUTable
+        :items="[]"
+        :columns="columnsCustom"
+        :show-empty-animation="false"
+        rounded="2xl"
+        is-bordered
+        body-color="bg-white dark:bg-[#18181B]"
+      />
     </div>
   </div>
 </template>

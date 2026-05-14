@@ -6,6 +6,7 @@
       :class="[
         roundedClasses[props.rounded],
         isBordered ? 'border border-gray-200 dark:border-white/10 ' : '',
+        hasShadow ? 'pu-shadow-ios' : '',
       ]"
     >
       <table class="w-full text-sm text-left rtl:text-right table-fixed">
@@ -42,7 +43,11 @@
               :key="item.id"
               :while-hover="props.isSelectable ? { scale: 1.01 } : {}"
               :transition="{ type: 'spring', stiffness: 400, damping: 30 }"
-              :class="props.isSelectable ? 'cursor-pointer hover:bg-gray-100 dark:hover:bg-white/5' : ''"
+              :class="
+                props.isSelectable
+                  ? 'cursor-pointer hover:bg-gray-100 dark:hover:bg-white/5'
+                  : ''
+              "
               @click="props.isSelectable && emit('row-click', item)"
             >
               <td
@@ -66,9 +71,25 @@
           <tr v-else>
             <td
               :colspan="columns.length"
-              class="text-lg text-center py-20 text-black/50 dark:text-white/50"
+              class="text-center py-10"
             >
-              No se encontraron resultados
+              <div class="flex flex-col items-center gap-1">
+                <Lottie
+                  v-if="props.showEmptyAnimation"
+                  :animation-data="props.emptyAnimationData ?? defaultEmptyAnimation"
+                  :width="props.emptyAnimationSize"
+                  :height="props.emptyAnimationSize"
+                />
+                <p class="text-lg font-medium text-black/70 dark:text-white/70">
+                  {{ props.emptyStateTitle }}
+                </p>
+                <p
+                  v-if="props.emptyStateDescription"
+                  class="text-sm text-black/50 dark:text-white/50"
+                >
+                  {{ props.emptyStateDescription }}
+                </p>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -83,7 +104,11 @@
         :while-hover="props.isSelectable ? { y: -3 } : {}"
         :transition="{ type: 'spring', stiffness: 400, damping: 25 }"
         class="bg-white dark:bg-[#18181B] border border-gray-200 dark:border-white/10 rounded-lg p-4 shadow-sm"
-        :class="props.isSelectable ? 'cursor-pointer hover:bg-gray-50 dark:hover:bg-white/5 hover:shadow-md' : ''"
+        :class="
+          props.isSelectable
+            ? 'cursor-pointer hover:bg-gray-50 dark:hover:bg-white/5 hover:shadow-md'
+            : ''
+        "
         @click="props.isSelectable && emit('row-click', item)"
       >
         <slot
@@ -120,9 +145,23 @@
       <!-- Mensaje cuando no hay items -->
       <div
         v-if="items.length === 0"
-        class="text-lg text-center py-20 text-black/50 dark:text-white/50"
+        class="text-center py-10 flex flex-col items-center gap-1"
       >
-        No se encontraron resultados
+        <Lottie
+          v-if="props.showEmptyAnimation"
+          :animation-data="props.emptyAnimationData ?? defaultEmptyAnimation"
+          :width="props.emptyAnimationSize"
+          :height="props.emptyAnimationSize"
+        />
+        <p class="text-lg font-medium text-black/70 dark:text-white/70">
+          {{ props.emptyStateTitle }}
+        </p>
+        <p
+          v-if="props.emptyStateDescription"
+          class="text-sm text-black/50 dark:text-white/50"
+        >
+          {{ props.emptyStateDescription }}
+        </p>
       </div>
     </div>
   </div>
@@ -130,6 +169,8 @@
 
 <script setup lang="ts">
 import { motion } from 'motion-v'
+import Lottie from './Lottie.vue'
+import defaultEmptyAnimation from '../assets/empty-state.json'
 
 const roundedClasses = {
   'none': 'rounded-none',
@@ -207,6 +248,12 @@ const props = withDefaults(
     headerColor?: string
     bodyColor?: string
     itemsSize?: keyof typeof sizes
+    hasShadow?: boolean
+    emptyStateTitle?: string
+    emptyStateDescription?: string
+    showEmptyAnimation?: boolean
+    emptyAnimationData?: object
+    emptyAnimationSize?: number
   }>(),
   {
     items: () => [],
@@ -218,6 +265,13 @@ const props = withDefaults(
       'bg-[#F4F4F5] text-[#71717A] dark:bg-[#27272A] dark:text-[#A1A1AA]',
     bodyColor: '',
     itemsSize: 'md',
+    hasShadow: true,
+    emptyStateTitle: 'No results found',
+    emptyStateDescription:
+      'Try adjusting your search or filter to find what you\'re looking for.',
+    showEmptyAnimation: true,
+    emptyAnimationData: undefined,
+    emptyAnimationSize: 220,
   },
 )
 
@@ -225,3 +279,9 @@ const emit = defineEmits<{
   'row-click': [item: { id: string | number, [key: string]: unknown }]
 }>()
 </script>
+
+<style scoped>
+.pu-shadow-ios {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+</style>
