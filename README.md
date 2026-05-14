@@ -616,6 +616,43 @@ const closeDropdown = inject("closeDropdown");
 
 ---
 
+### PULottie
+
+A Lottie animation player powered by `vue3-lottie`. Renders inside `ClientOnly` so it is SSR-safe, and shrinks 80px in width and height on screens narrower than 768px.
+
+```vue
+<script setup>
+import animationData from "./my-animation.json";
+</script>
+
+<template>
+  <PULottie :animation-data="animationData" />
+</template>
+```
+
+**Props**
+
+| Prop            | Type      | Default | Description                                                  |
+| --------------- | --------- | ------- | ------------------------------------------------------------ |
+| `animationData` | `object`  | —       | Parsed Lottie JSON object. Required.                         |
+| `loop`          | `boolean` | `true`  | Whether the animation loops.                                 |
+| `height`        | `number`  | `420`   | Height in pixels. Reduced by 80px on viewports below 768px.  |
+| `width`         | `number`  | `420`   | Width in pixels. Reduced by 80px on viewports below 768px.   |
+
+**Examples**
+
+```vue
+<!-- Play once -->
+<PULottie :animation-data="data" :loop="false" />
+
+<!-- Custom size -->
+<PULottie :animation-data="data" :width="240" :height="240" />
+```
+
+> `PUTable` ships with a bundled empty-state Lottie that uses this component internally. You can disable or override it via the table's `showEmptyAnimation` and `emptyAnimationData` props.
+
+---
+
 ### PUTable
 
 A responsive data table that renders as a normal `<table>` on `md+` viewports and switches to a stack of cards on mobile. Cells are rendered through per-column scoped slots so you can fully customize their content.
@@ -626,16 +663,22 @@ A responsive data table that renders as a normal `<table>` on `md+` viewports an
 
 **Props**
 
-| Prop          | Type                                                                        | Default                                  | Description                                                              |
-| ------------- | --------------------------------------------------------------------------- | ---------------------------------------- | ------------------------------------------------------------------------ |
-| `items`       | `Array<{ id: string \| number, [key: string]: unknown }>`                    | `[]`                                                                | Row data. Each item must have an `id` used as the Vue key.                              |
-| `columns`     | `{ name: string, id: string, width?: string }[]`                             | `[]`                                                                | Column definitions. `id` is the row key to read, `width` is CSS width.                  |
-| `rounded`     | `'none' \| 'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| '3xl' \| 'full'` | `'lg'`                                                              | Border radius of the outer container.                                                   |
-| `isBordered`   | `boolean`                                                                    | `false`                                                             | Adds an outer border around the table.                                                  |
-| `isSelectable` | `boolean`                                                                    | `false`                                                             | Enables row click + hover effects (cursor, bg highlight, motion-v lift). Emits `row-click`. |
-| `itemsSize`    | `'sm' \| 'md' \| 'lg'`                                                       | `'md'`                                                              | Vertical padding of body rows. `sm` → `py-2`, `md` → `py-4`, `lg` → `py-6`.             |
-| `headerColor`  | `string`                                                                     | `bg-[#F4F4F5] text-[#71717A] dark:bg-[#27272A] dark:text-[#A1A1AA]` | Tailwind classes applied to `<thead>`.                                                  |
-| `bodyColor`    | `string`                                                                     | `''`                                                                | Tailwind classes applied to `<tbody>`.                                                  |
+| Prop                   | Type                                                                         | Default                                                                                  | Description                                                                                 |
+| ---------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `items`                | `Array<{ id: string \| number, [key: string]: unknown }>`                    | `[]`                                                                                     | Row data. Each item must have an `id` used as the Vue key.                                  |
+| `columns`              | `{ name: string, id: string, width?: string }[]`                             | `[]`                                                                                     | Column definitions. `id` is the row key to read, `width` is CSS width.                      |
+| `rounded`              | `'none' \| 'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| '3xl' \| 'full'` | `'lg'`                                                                                   | Border radius of the outer container.                                                       |
+| `isBordered`           | `boolean`                                                                    | `false`                                                                                  | Adds an outer border around the table.                                                      |
+| `isSelectable`         | `boolean`                                                                    | `false`                                                                                  | Enables row click + hover effects (cursor, bg highlight, motion-v lift). Emits `row-click`. |
+| `itemsSize`            | `'sm' \| 'md' \| 'lg'`                                                       | `'md'`                                                                                   | Vertical padding of body rows. `sm` → `py-2`, `md` → `py-4`, `lg` → `py-6`.                 |
+| `headerColor`          | `string`                                                                     | `bg-[#F4F4F5] text-[#71717A] dark:bg-[#27272A] dark:text-[#A1A1AA]`                      | Tailwind classes applied to `<thead>`.                                                      |
+| `bodyColor`            | `string`                                                                     | `''`                                                                                     | Tailwind classes applied to `<tbody>`.                                                      |
+| `hasShadow`            | `boolean`                                                                    | `true`                                                                                   | Adds an iOS-style outer shadow to the table container.                                      |
+| `emptyStateTitle`      | `string`                                                                     | `'No results found'`                                                                     | Heading shown when `items` is empty.                                                        |
+| `emptyStateDescription`| `string`                                                                     | `'Try adjusting your search or filter to find what you\'re looking for.'`                | Sub-text shown under the empty-state title.                                                 |
+| `showEmptyAnimation`   | `boolean`                                                                    | `true`                                                                                   | Renders a bundled Lottie above the empty-state text. Set to `false` to hide it.             |
+| `emptyAnimationData`   | `object \| undefined`                                                        | bundled `empty-state.json`                                                               | Override the empty-state Lottie with your own animation JSON object.                        |
+| `emptyAnimationSize`   | `number`                                                                     | `220`                                                                                    | Width and height of the empty-state animation, in pixels.                                   |
 
 **Events**
 
@@ -727,10 +770,16 @@ import type {
   TabItem,
   TabsProps,
   TabsRounded,
+  LottieProps,
+  TableProps,
+  TableColumn,
+  TableItem,
+  TableRounded,
+  TableItemsSize,
 } from "proxy-ui";
 ```
 
-> `PUTextArea`, `PUSelect`, `PUDropdown`, and `PUTable` define their props inline and do not export dedicated `Props` types. They reuse `InputVariant` and `InputRounded` from the same package.
+> `PUTextArea`, `PUSelect`, and `PUDropdown` define their props inline and do not export dedicated `Props` types. They reuse `InputVariant` and `InputRounded` from the same package.
 
 ---
 
