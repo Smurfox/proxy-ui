@@ -589,6 +589,12 @@ A floating panel anchored to an activator element. Opens on click and closes on 
 </PUDropdown>
 ```
 
+**Props**
+
+| Prop           | Type     | Default     | Description                                                        |
+| -------------- | -------- | ----------- | ------------------------------------------------------------------ |
+| `menuMinWidth` | `string` | `'min-w-52'` | Tailwind min-width class applied to the floating panel.            |
+
 **Slots**
 
 | Slot        | Description                                              |
