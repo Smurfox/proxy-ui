@@ -23,14 +23,14 @@ A component library built for **Nuxt 4**, designed with a clean and consistent A
 ## Installation
 
 ```bash
-npm install proxy-ui
+npm install @smurfox/proxy-ui
 ```
 
 Add the module to your `nuxt.config.ts`:
 
 ```ts
 export default defineNuxtConfig({
-  modules: ["proxy-ui"],
+  modules: ["@smurfox/proxy-ui"],
 });
 ```
 
@@ -782,7 +782,7 @@ import type {
   TableItem,
   TableRounded,
   TableItemsSize,
-} from "proxy-ui";
+} from "@smurfox/proxy-ui";
 ```
 
 > `PUTextArea`, `PUSelect`, and `PUDropdown` define their props inline and do not export dedicated `Props` types. They reuse `InputVariant` and `InputRounded` from the same package.
