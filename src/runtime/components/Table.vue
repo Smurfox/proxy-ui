@@ -60,9 +60,9 @@
                 <slot
                   :name="`cell-${column.id}`"
                   :item="item"
-                  :value="item[column.id]"
+                  :value="getCellValue(item, column.id)"
                 >
-                  {{ item[column.id] }}
+                  {{ getCellValue(item, column.id) }}
                 </slot>
               </td>
             </motion.tr>
@@ -134,9 +134,9 @@
                 <slot
                   :name="`cell-${column.id}`"
                   :item="item"
-                  :value="item[column.id]"
+                  :value="getCellValue(item, column.id)"
                 >
-                  {{ item[column.id] }}
+                  {{ getCellValue(item, column.id) }}
                 </slot>
               </div>
             </div>
@@ -169,7 +169,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="TItem extends { id: string | number }">
 import { motion } from 'motion-v'
 import Lottie from './Lottie.vue'
 import defaultEmptyAnimation from '../assets/empty-state.json'
@@ -242,7 +242,7 @@ const sizes = {
 
 const props = withDefaults(
   defineProps<{
-    items?: Array<{ id: string | number, [key: string]: unknown }>
+    items?: TItem[]
     columns?: { name: string, id: string, width?: string }[]
     rounded?: keyof typeof roundedClasses
     isBordered?: boolean
@@ -280,8 +280,12 @@ const props = withDefaults(
 )
 
 const emit = defineEmits<{
-  'row-click': [item: { id: string | number, [key: string]: unknown }]
+  'row-click': [item: TItem]
 }>()
+
+function getCellValue(item: TItem, key: string): unknown {
+  return (item as Record<string, unknown>)[key]
+}
 </script>
 
 <style scoped>
