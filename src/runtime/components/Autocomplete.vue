@@ -1,11 +1,23 @@
 <template>
   <div class="flex flex-col gap-1">
-    <div v-if="label" class="flex items-start gap-1">
-      <label class="dark:text-white" :class="[labelClass]">{{ label }} </label>
-      <span v-if="props.required" class="text-danger">*</span>
+    <div
+      v-if="label"
+      class="flex items-start gap-1"
+    >
+      <label
+        class="dark:text-white"
+        :class="[labelClass]"
+      >{{ label }} </label>
+      <span
+        v-if="props.required"
+        class="text-danger"
+      >*</span>
     </div>
 
-    <div ref="selectRef" class="relative w-full text-left">
+    <div
+      ref="selectRef"
+      class="relative w-full text-left"
+    >
       <input
         ref="inputRef"
         type="text"
@@ -21,7 +33,7 @@
         @input="onInput"
         @focus="open"
         @click.stop="open"
-      />
+      >
 
       <button
         v-if="searchQuery && !props.disabled"
@@ -29,7 +41,10 @@
         class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-white cursor-pointer"
         @click.stop="clear"
       >
-        <Icon name="mdi:close-circle" size="18" />
+        <Icon
+          name="mdi:close-circle"
+          size="18"
+        />
       </button>
       <Icon
         v-else
@@ -38,7 +53,10 @@
         :class="{ 'rotate-180': isOpen && !props.disabled }"
       />
 
-      <Teleport v-if="isOpen && !props.disabled" to="body">
+      <Teleport
+        v-if="isOpen && !props.disabled"
+        to="body"
+      >
         <AnimatePresence>
           <motion.div
             v-if="isOpen && !props.disabled"
@@ -101,206 +119,209 @@
     >
       {{ description }}
     </p>
-    <p v-if="props.error" class="text-danger text-xs mt-1">
+    <p
+      v-if="props.error"
+      class="text-danger text-xs mt-1"
+    >
       {{ props.error }}
     </p>
   </div>
 </template>
 
 <script lang="ts">
-import { AnimatePresence, motion } from "motion-v";
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
-import type { InputRounded, InputVariant } from "../types";
-import { createPopoverGroup } from "../composables/popoverGroup";
+import { AnimatePresence, motion } from 'motion-v'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import type { InputRounded, InputVariant } from '../types'
+import { createPopoverGroup } from '../composables/popoverGroup'
 
-const popoverGroup = createPopoverGroup();
+const popoverGroup = createPopoverGroup()
 </script>
 
 <script setup lang="ts">
 interface AutocompleteOption {
-  label: string;
-  value: string | number;
+  label: string
+  value: string | number
 }
 
 const roundedVariants = {
-  none: "rounded-none",
-  sm: "rounded-sm",
-  md: "rounded-md",
-  lg: "rounded-lg",
-  xl: "rounded-xl",
-  "2xl": "rounded-2xl",
-  full: "rounded-full",
-} as const;
+  'none': 'rounded-none',
+  'sm': 'rounded-sm',
+  'md': 'rounded-md',
+  'lg': 'rounded-lg',
+  'xl': 'rounded-xl',
+  '2xl': 'rounded-2xl',
+  'full': 'rounded-full',
+} as const
 
 const variants = {
   default:
-    "border border-gray-200 dark:border-[#2D323B] bg-white dark:bg-[#242830] enabled:hover:bg-gray-100 dark:enabled:hover:bg-[#2A2F37] dark:text-white dark:placeholder:text-[#6B7280] focus:bg-white dark:focus:bg-[#242830] focus:ring-2 focus:ring-primary focus:outline-none",
+    'border border-gray-200 dark:border-[#2D323B] bg-white dark:bg-[#242830] enabled:hover:bg-gray-100 dark:enabled:hover:bg-[#2A2F37] dark:text-white dark:placeholder:text-[#6B7280] focus:bg-white dark:focus:bg-[#242830] focus:ring-2 focus:ring-primary focus:outline-none',
   secondary:
-    "border border-gray-200 dark:border-[#2D323B] bg-[#EBEBEC] dark:bg-[#1C2026] dark:text-white dark:placeholder:text-[#6B7280] enabled:hover:bg-[#E0E0E1] dark:enabled:hover:bg-[#22272F] focus:bg-[#EBEBEC] dark:focus:bg-[#1C2026] focus:ring-2 focus:ring-primary focus:outline-none",
-} as const;
+    'border border-gray-200 dark:border-[#2D323B] bg-[#EBEBEC] dark:bg-[#1C2026] dark:text-white dark:placeholder:text-[#6B7280] enabled:hover:bg-[#E0E0E1] dark:enabled:hover:bg-[#22272F] focus:bg-[#EBEBEC] dark:focus:bg-[#1C2026] focus:ring-2 focus:ring-primary focus:outline-none',
+} as const
 
 const errorVariants = {
   default:
-    "border border-danger bg-danger/10 dark:bg-danger/20 text-black dark:text-white enabled:hover:bg-white/20 dark:enabled:hover:bg-white/20 focus:bg-white dark:focus:bg-white/10 focus:ring-2 focus:ring-danger focus:outline-none",
+    'border border-danger bg-danger/10 dark:bg-danger/20 text-black dark:text-white enabled:hover:bg-white/20 dark:enabled:hover:bg-white/20 focus:bg-white dark:focus:bg-white/10 focus:ring-2 focus:ring-danger focus:outline-none',
   secondary:
-    "border border-danger bg-danger/22 dark:bg-danger/10 text-black dark:text-white enabled:hover:bg-[#E0E0E1] dark:enabled:hover:bg-white/30 focus:bg-[#EBEBEC] dark:focus:bg-white/20 focus:ring-2 focus:ring-danger focus:outline-none",
-} as const;
+    'border border-danger bg-danger/22 dark:bg-danger/10 text-black dark:text-white enabled:hover:bg-[#E0E0E1] dark:enabled:hover:bg-white/30 focus:bg-[#EBEBEC] dark:focus:bg-white/20 focus:ring-2 focus:ring-danger focus:outline-none',
+} as const
 
 const props = withDefaults(
   defineProps<{
-    modelValue?: string | number | null;
-    options?: AutocompleteOption[];
-    label?: string;
-    labelClass?: string;
-    placeholder?: string;
-    description?: string;
-    rounded?: InputRounded;
-    variant?: InputVariant;
-    required?: boolean;
-    error?: string;
-    disabled?: boolean;
+    modelValue?: string | number | null
+    options?: AutocompleteOption[]
+    label?: string
+    labelClass?: string
+    placeholder?: string
+    description?: string
+    rounded?: InputRounded
+    variant?: InputVariant
+    required?: boolean
+    error?: string
+    disabled?: boolean
   }>(),
   {
     modelValue: null,
     options: () => [],
-    labelClass: "text-sm font-semibold",
-    placeholder: "Search...",
-    rounded: "xl",
-    variant: "default",
+    labelClass: 'text-sm font-semibold',
+    placeholder: 'Search...',
+    rounded: 'xl',
+    variant: 'default',
     required: false,
-    error: "",
+    error: '',
     disabled: false,
   },
-);
+)
 
 const emit = defineEmits<{
-  "update:modelValue": [value: string | number | null];
-  change: [value: string | number | null];
-  search: [value: string];
-}>();
+  'update:modelValue': [value: string | number | null]
+  'change': [value: string | number | null]
+  'search': [value: string]
+}>()
 
-const selectRef = ref<HTMLDivElement | null>(null);
-const inputRef = ref<HTMLInputElement | null>(null);
-const isOpen = ref(false);
-const isDarkMode = ref(false);
-const dropdownPosition = ref({ top: 0, left: 0, width: 0 });
-const searchQuery = ref("");
+const selectRef = ref<HTMLDivElement | null>(null)
+const inputRef = ref<HTMLInputElement | null>(null)
+const isOpen = ref(false)
+const isDarkMode = ref(false)
+const dropdownPosition = ref({ top: 0, left: 0, width: 0 })
+const searchQuery = ref('')
 
 const selectedOption = computed(() => {
-  return props.options.find((option) => option.value === props.modelValue);
-});
+  return props.options.find(option => option.value === props.modelValue)
+})
 
 const filteredOptions = computed(() => {
-  const q = searchQuery.value.trim().toLowerCase();
-  if (!q) return props.options;
+  const q = searchQuery.value.trim().toLowerCase()
+  if (!q) return props.options
   if (
-    selectedOption.value &&
-    searchQuery.value === selectedOption.value.label
+    selectedOption.value
+    && searchQuery.value === selectedOption.value.label
   ) {
-    return props.options;
+    return props.options
   }
-  return props.options.filter((option) =>
+  return props.options.filter(option =>
     option.label.toLowerCase().includes(q),
-  );
-});
+  )
+})
 
 const dropdownStyle = computed(() => ({
   top: `${dropdownPosition.value.top}px`,
   left: `${dropdownPosition.value.left}px`,
   width: `${dropdownPosition.value.width}px`,
   zIndex: 9999,
-}));
+}))
 
 const selectedOptionClass = computed(() => {
-  return isDarkMode.value ? "bg-primary/15" : "bg-primary/10";
-});
+  return isDarkMode.value ? 'bg-primary/15' : 'bg-primary/10'
+})
 
 const unselectedOptionClass = computed(() => {
-  return isDarkMode.value ? "text-white" : "text-black";
-});
+  return isDarkMode.value ? 'text-white' : 'text-black'
+})
 
 watch(
   () => props.modelValue,
   () => {
-    searchQuery.value = selectedOption.value?.label ?? "";
+    searchQuery.value = selectedOption.value?.label ?? ''
   },
   { immediate: true },
-);
+)
 
 function syncDarkMode() {
-  isDarkMode.value = Boolean(selectRef.value?.closest(".dark"));
+  isDarkMode.value = Boolean(selectRef.value?.closest('.dark'))
 }
 
 function calculateDropdownPosition() {
-  if (!selectRef.value) return;
-  syncDarkMode();
-  const rect = selectRef.value.getBoundingClientRect();
+  if (!selectRef.value) return
+  syncDarkMode()
+  const rect = selectRef.value.getBoundingClientRect()
   dropdownPosition.value = {
     top: rect.bottom + window.scrollY + 8,
     left: rect.left + window.scrollX,
     width: rect.width,
-  };
+  }
 }
 
 async function open() {
-  if (props.disabled || isOpen.value) return;
-  popoverGroup.open(close);
-  await nextTick();
-  calculateDropdownPosition();
-  isOpen.value = true;
+  if (props.disabled || isOpen.value) return
+  popoverGroup.open(close)
+  await nextTick()
+  calculateDropdownPosition()
+  isOpen.value = true
 }
 
 function close() {
-  if (!isOpen.value) return;
-  isOpen.value = false;
-  popoverGroup.release(close);
-  searchQuery.value = selectedOption.value?.label ?? "";
+  if (!isOpen.value) return
+  isOpen.value = false
+  popoverGroup.release(close)
+  searchQuery.value = selectedOption.value?.label ?? ''
 }
 
 function onInput(event: Event) {
-  const value = (event.target as HTMLInputElement).value;
-  searchQuery.value = value;
-  emit("search", value);
-  if (!isOpen.value) open();
+  const value = (event.target as HTMLInputElement).value
+  searchQuery.value = value
+  emit('search', value)
+  if (!isOpen.value) open()
 }
 
 function selectOption(option: AutocompleteOption) {
-  emit("update:modelValue", option.value);
-  emit("change", option.value);
-  searchQuery.value = option.label;
-  isOpen.value = false;
-  popoverGroup.release(close);
+  emit('update:modelValue', option.value)
+  emit('change', option.value)
+  searchQuery.value = option.label
+  isOpen.value = false
+  popoverGroup.release(close)
 }
 
 function clear() {
-  searchQuery.value = "";
-  emit("update:modelValue", null);
-  emit("change", null);
-  emit("search", "");
-  inputRef.value?.focus();
+  searchQuery.value = ''
+  emit('update:modelValue', null)
+  emit('change', null)
+  emit('search', '')
+  inputRef.value?.focus()
 }
 
 function onClickOutside(event: MouseEvent) {
   if (selectRef.value && !selectRef.value.contains(event.target as Node)) {
-    close();
+    close()
   }
 }
 
 function onScroll() {
-  if (isOpen.value) calculateDropdownPosition();
+  if (isOpen.value) calculateDropdownPosition()
 }
 
 onMounted(() => {
-  syncDarkMode();
-  document.addEventListener("click", onClickOutside);
-  window.addEventListener("scroll", onScroll, true);
-  window.addEventListener("resize", onScroll);
-});
+  syncDarkMode()
+  document.addEventListener('click', onClickOutside)
+  window.addEventListener('scroll', onScroll, true)
+  window.addEventListener('resize', onScroll)
+})
 
 onUnmounted(() => {
-  document.removeEventListener("click", onClickOutside);
-  window.removeEventListener("scroll", onScroll, true);
-  window.removeEventListener("resize", onScroll);
-  popoverGroup.release(close);
-});
+  document.removeEventListener('click', onClickOutside)
+  window.removeEventListener('scroll', onScroll, true)
+  window.removeEventListener('resize', onScroll)
+  popoverGroup.release(close)
+})
 </script>

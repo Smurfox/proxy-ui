@@ -1,8 +1,17 @@
 <template>
   <div class="flex flex-col gap-1">
-    <div v-if="label" class="flex items-start gap-1">
-      <label class="dark:text-white" :class="[labelClass]">{{ label }} </label>
-      <span v-if="props.required" class="text-danger">*</span>
+    <div
+      v-if="label"
+      class="flex items-start gap-1"
+    >
+      <label
+        class="dark:text-white"
+        :class="[labelClass]"
+      >{{ label }} </label>
+      <span
+        v-if="props.required"
+        class="text-danger"
+      >*</span>
     </div>
     <div class="relative w-full">
       <!-- startContent -->
@@ -30,7 +39,7 @@
           emit('update:modelValue', ($event.target as HTMLInputElement).value)
         "
         @focus="handleFocus"
-      />
+      >
       <!-- endContent -->
       <div
         v-if="$slots.endContent"
@@ -46,75 +55,78 @@
       {{ description }}
     </p>
     <!-- error message fuera de contenedor relativo -->
-    <p v-if="props.error" class="text-danger text-xs mt-1">
+    <p
+      v-if="props.error"
+      class="text-danger text-xs mt-1"
+    >
       {{ props.error }}
     </p>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { InputVariant, InputRounded } from "../types";
+import type { InputVariant, InputRounded } from '../types'
 
 const roundedClasses = {
-  none: "rounded-none",
-  sm: "rounded-sm",
-  md: "rounded-md",
-  lg: "rounded-lg",
-  xl: "rounded-xl",
-  "2xl": "rounded-2xl",
-  full: "rounded-full",
-} as const;
+  'none': 'rounded-none',
+  'sm': 'rounded-sm',
+  'md': 'rounded-md',
+  'lg': 'rounded-lg',
+  'xl': 'rounded-xl',
+  '2xl': 'rounded-2xl',
+  'full': 'rounded-full',
+} as const
 
 const variants = {
   default:
-    "border border-gray-200 dark:border-[#2D323B] bg-white dark:bg-[#242830] enabled:hover:bg-gray-100 dark:enabled:hover:bg-[#2A2F37] dark:text-white dark:placeholder:text-[#6B7280] focus:bg-white dark:focus:bg-[#242830] focus:ring-2 focus:ring-primary focus:outline-none",
+    'border border-gray-200 dark:border-[#2D323B] bg-white dark:bg-[#242830] enabled:hover:bg-gray-100 dark:enabled:hover:bg-[#2A2F37] dark:text-white dark:placeholder:text-[#6B7280] focus:bg-white dark:focus:bg-[#242830] focus:ring-2 focus:ring-primary focus:outline-none',
   secondary:
-    "border border-gray-200 dark:border-[#2D323B] bg-[#EBEBEC] dark:bg-[#1C2026] dark:text-white dark:placeholder:text-[#6B7280] enabled:hover:bg-[#E0E0E1] dark:enabled:hover:bg-[#22272F] focus:bg-[#EBEBEC] dark:focus:bg-[#1C2026] focus:ring-2 focus:ring-primary focus:outline-none",
-} as const;
+    'border border-gray-200 dark:border-[#2D323B] bg-[#EBEBEC] dark:bg-[#1C2026] dark:text-white dark:placeholder:text-[#6B7280] enabled:hover:bg-[#E0E0E1] dark:enabled:hover:bg-[#22272F] focus:bg-[#EBEBEC] dark:focus:bg-[#1C2026] focus:ring-2 focus:ring-primary focus:outline-none',
+} as const
 const errorVariants = {
   default:
-    "border border-danger bg-danger/10 dark:bg-danger/20 text-black dark:text-white enabled:hover:bg-white/20 dark:enabled:hover:bg-white/20 focus:bg-white dark:focus:bg-white/10 focus:ring-2 focus:ring-danger focus:outline-none",
+    'border border-danger bg-danger/10 dark:bg-danger/20 text-black dark:text-white enabled:hover:bg-white/20 dark:enabled:hover:bg-white/20 focus:bg-white dark:focus:bg-white/10 focus:ring-2 focus:ring-danger focus:outline-none',
   secondary:
-    "border border-danger bg-danger/22 dark:bg-danger/10 text-black dark:text-white enabled:hover:bg-[#E0E0E1] dark:enabled:hover:bg-white/30 focus:bg-[#EBEBEC] dark:focus:bg-white/20 focus:ring-2 focus:ring-danger focus:outline-none",
-} as const;
+    'border border-danger bg-danger/22 dark:bg-danger/10 text-black dark:text-white enabled:hover:bg-[#E0E0E1] dark:enabled:hover:bg-white/30 focus:bg-[#EBEBEC] dark:focus:bg-white/20 focus:ring-2 focus:ring-danger focus:outline-none',
+} as const
 
 const props = withDefaults(
   defineProps<{
-    modelValue?: string | number;
-    type?: string;
-    label?: string;
-    labelClass?: string;
-    placeholder?: string;
-    description?: string;
-    rounded?: InputRounded;
-    variant?: InputVariant;
-    required?: boolean;
-    error?: string;
-    disabled?: boolean;
-    focus?: boolean;
+    modelValue?: string | number
+    type?: string
+    label?: string
+    labelClass?: string
+    placeholder?: string
+    description?: string
+    rounded?: InputRounded
+    variant?: InputVariant
+    required?: boolean
+    error?: string
+    disabled?: boolean
+    focus?: boolean
   }>(),
   {
-    type: "text",
-    labelClass: "text-sm font-semibold",
-    rounded: "xl",
-    variant: "default",
+    type: 'text',
+    labelClass: 'text-sm font-semibold',
+    rounded: 'xl',
+    variant: 'default',
     required: false,
     disabled: false,
     focus: false,
   },
-);
+)
 
 const emit = defineEmits<{
-  "update:modelValue": [value: string | number];
-}>();
+  'update:modelValue': [value: string | number]
+}>()
 
 // Manejar el evento focus
 const handleFocus = (event: Event) => {
   if (props.focus) {
-    const target = event.target as HTMLInputElement;
-    target.select();
+    const target = event.target as HTMLInputElement
+    target.select()
   }
-};
+}
 </script>
 
 <style scoped>
