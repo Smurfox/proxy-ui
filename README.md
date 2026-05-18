@@ -164,6 +164,7 @@ A flexible input component with validation and state management.
 | `required`    | `boolean`                                                   | `false`                   | Shows a red asterisk on the label.                   |
 | `error`       | `string`                                                    | —                         | Error message to display. Changes styling to danger. |
 | `disabled`    | `boolean`                                                   | `false`                   | Disables the input.                                  |
+| `focus`       | `boolean`                                                   | `false`                   | Selects the whole text on focus (useful for pre-filled fields the user is likely to replace). |
 
 **Slots**
 
@@ -177,6 +178,9 @@ A flexible input component with validation and state management.
 ```vue
 <!-- Basic -->
 <PUInput label="Email" type="email" placeholder="you@example.com" />
+
+<!-- Select all on focus (great for pre-filled codes the user wants to replace) -->
+<PUInput v-model="orderCode" label="Order code" focus />
 
 <!-- With helper text -->
 <PUInput label="Password" type="password" description="At least 8 characters" />
@@ -260,7 +264,7 @@ A multi-line text input. Shares the look and feel of `PUInput`, with extra props
 
 ### PUSelect
 
-A custom select with an animated dropdown panel teleported to `body`. Dark-mode aware, supports `v-model`, and emits both `update:modelValue` and `change`.
+A custom select with an animated dropdown panel teleported to `body`. Dark-mode aware, supports `v-model`, and emits both `update:modelValue` and `change`. Only one `PUSelect` can be open at a time across the page — opening a new one automatically closes any other open select.
 
 ```vue
 <PUSelect
@@ -316,6 +320,85 @@ A custom select with an animated dropdown panel teleported to `body`. Dark-mode 
 
 <!-- Disabled -->
 <PUSelect :options="statuses" disabled label="Locked" />
+```
+
+---
+
+### PUAutocomplete
+
+A searchable variant of `PUSelect` — same look and dropdown behavior, but the trigger is a real `<input>` that filters the options as you type. Includes a clear (`×`) button that resets both the search text and the selected value. Like `PUSelect`, the dropdown is teleported to `body` and only one autocomplete can be open at a time.
+
+```vue
+<PUAutocomplete
+  v-model="framework"
+  label="Framework"
+  placeholder="Search a framework"
+  :options="[
+    { label: 'Nuxt', value: 'nuxt' },
+    { label: 'Vue', value: 'vue' },
+    { label: 'React', value: 'react' },
+  ]"
+/>
+```
+
+Filtering is case-insensitive and matches `label`. When the input text matches the currently-selected option's label exactly, the list is shown unfiltered so the user can browse all options again without clearing first. On close without selection, the input reverts to the selected option's label (or empty if nothing was selected).
+
+**Props**
+
+| Prop          | Type                                                        | Default                   | Description                                          |
+| ------------- | ----------------------------------------------------------- | ------------------------- | ---------------------------------------------------- |
+| `modelValue`  | `string \| number \| null`                                  | `null`                    | Selected value (v-model).                            |
+| `options`     | `{ label: string, value: string \| number }[]`              | `[]`                      | Items shown in the dropdown.                         |
+| `label`       | `string`                                                    | —                         | Label displayed above the input.                     |
+| `labelClass`  | `string`                                                    | `'text-sm font-semibold'` | Custom classes for the label.                        |
+| `placeholder` | `string`                                                    | `'Search...'`             | Placeholder text shown when the input is empty.      |
+| `description` | `string`                                                    | —                         | Helper text displayed below.                         |
+| `rounded`     | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| 'full'` | `'xl'`                    | Border radius.                                       |
+| `variant`     | `'default' \| 'secondary'`                                  | `'default'`               | Visual style.                                        |
+| `required`    | `boolean`                                                   | `false`                   | Shows a red asterisk on the label.                   |
+| `error`       | `string`                                                    | `''`                      | Error message to display. Changes styling to danger. |
+| `disabled`    | `boolean`                                                   | `false`                   | Disables the input.                                  |
+
+**Events**
+
+| Event               | Payload                          | Description                                                              |
+| ------------------- | -------------------------------- | ------------------------------------------------------------------------ |
+| `update:modelValue` | `string \| number \| null`       | Emitted when an option is picked, or `null` when the clear button is used. |
+| `change`            | `string \| number \| null`       | Emitted alongside `update:modelValue`.                                   |
+| `search`            | `string`                         | Emitted on every keystroke with the current input text. Useful for remote search. |
+
+**Examples**
+
+```vue
+<!-- Basic -->
+<PUAutocomplete v-model="country" :options="countries" label="Country" />
+
+<!-- Secondary variant + required -->
+<PUAutocomplete
+  v-model="city"
+  variant="secondary"
+  :options="cities"
+  label="City"
+  required
+/>
+
+<!-- With error -->
+<PUAutocomplete
+  v-model="status"
+  :options="statuses"
+  label="Status"
+  error="Pick a status"
+  required
+/>
+
+<!-- Remote search via the `search` event -->
+<PUAutocomplete
+  v-model="user"
+  :options="remoteResults"
+  label="User"
+  placeholder="Type to search users"
+  @search="onSearch"
+/>
 ```
 
 ---
@@ -569,7 +652,7 @@ const activeTab = ref("dashboard");
 
 ### PUDropdown
 
-A floating panel anchored to an activator element. Opens on click and closes on outside click. Provides a `closeDropdown` function (via `inject`) so child items can close the panel after acting.
+A floating panel anchored to an activator element. The menu is teleported to `body` and positioned with `position: fixed` relative to the activator, so it escapes any `overflow` ancestor (scroll containers, modals, etc.). The menu re-positions itself on scroll and resize while open. Opens on click and closes on outside click; only one `PUDropdown` can be open at a time across the page. Provides a `closeDropdown` function (via `inject`) so child items can close the panel after acting.
 
 ```vue
 <PUDropdown>
@@ -782,10 +865,12 @@ import type {
   TableItem,
   TableRounded,
   TableItemsSize,
+  AutocompleteOption,
+  AutocompleteProps,
 } from "@smurfox/proxy-ui";
 ```
 
-> `PUTextArea`, `PUSelect`, and `PUDropdown` define their props inline and do not export dedicated `Props` types. They reuse `InputVariant` and `InputRounded` from the same package.
+> `PUTextArea`, `PUSelect`, and `PUDropdown` define their props inline and do not export dedicated `Props` types. They reuse `InputVariant` and `InputRounded` from the same package. `PUAutocomplete` does export `AutocompleteProps` and `AutocompleteOption`.
 
 ---
 
