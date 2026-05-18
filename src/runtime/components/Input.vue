@@ -50,7 +50,7 @@
     </div>
     <p
       v-if="description && !props.error"
-      class="text-gray-600 dark:text-white/60 text-xs"
+      class="text-gray-600 dark:text-[#8B92A0] text-xs"
     >
       {{ description }}
     </p>
@@ -79,9 +79,9 @@ const roundedClasses = {
 
 const variants = {
   default:
-    'border border-gray-200 dark:border-white/10 bg-white dark:bg-white/10 enabled:hover:bg-gray-100 dark:enabled:hover:bg-white/20 dark:text-white focus:bg-white dark:focus:bg-white/10 focus:ring-2 focus:ring-primary focus:outline-none',
+    'border border-gray-200 dark:border-[#2D323B] bg-white dark:bg-[#242830] enabled:hover:bg-gray-100 dark:enabled:hover:bg-[#2A2F37] dark:text-white dark:placeholder:text-[#6B7280] focus:bg-white dark:focus:bg-[#242830] focus:ring-2 focus:ring-primary focus:outline-none',
   secondary:
-    'border border-gray-200 dark:border-white/10 bg-[#EBEBEC] dark:bg-white/20 dark:text-white enabled:hover:bg-[#E0E0E1] dark:enabled:hover:bg-white/30 focus:bg-[#EBEBEC] dark:focus:bg-white/20 focus:ring-2 focus:ring-primary focus:outline-none',
+    'border border-gray-200 dark:border-[#2D323B] bg-[#EBEBEC] dark:bg-[#1C2026] dark:text-white dark:placeholder:text-[#6B7280] enabled:hover:bg-[#E0E0E1] dark:enabled:hover:bg-[#22272F] focus:bg-[#EBEBEC] dark:focus:bg-[#1C2026] focus:ring-2 focus:ring-primary focus:outline-none',
 } as const
 const errorVariants = {
   default:

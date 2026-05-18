@@ -98,9 +98,7 @@
       <h1 class="font-semibold text-lg">
         Select on focus
       </h1>
-      <div
-        class="border border-gray-300 flex flex-col gap-6 p-9 w-full rounded-xl"
-      >
+      <PUCard class="p-6! flex flex-col gap-6">
         <PUInput
           v-model="focusValue"
           label="Order code"
@@ -119,7 +117,7 @@
             <Icon name="ion:pricetag" />
           </template>
         </PUInput>
-      </div>
+      </PUCard>
     </div>
     <div class="w-200 mx-auto flex flex-col gap-3">
       <h1 class="font-semibold text-lg">

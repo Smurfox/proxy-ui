@@ -15,15 +15,17 @@
       <h1 class="font-semibold text-lg dark:text-white">
         Usage
       </h1>
-      <div
-        class="bg-white dark:bg-[#18181B] border border-gray-200 dark:border-white/10 p-6 rounded-xl"
+      <PUCard
+        rounded="2xl"
+        is-bordered
+        class="w-full"
       >
         <PUTable
           :items="items"
           :columns="columns"
           :has-shadow="false"
         />
-      </div>
+      </PUCard>
     </div>
 
     <!-- Custom cell rendering -->
@@ -36,7 +38,7 @@
         :columns="columnsCustom"
         rounded="2xl"
         is-bordered
-        body-color="bg-white dark:bg-[#18181B]"
+        is-body-colored
       >
         <template #cell-folio="{ value }">
           <div class="flex items-center gap-2">
@@ -84,7 +86,7 @@
         rounded="2xl"
         is-bordered
         is-selectable
-        body-color="bg-white dark:bg-[#18181B]"
+        is-body-colored
         @row-click="onRowClick"
       >
         <template #cell-folio="{ value }">
@@ -141,7 +143,7 @@
         rounded="2xl"
         is-bordered
         is-selectable
-        body-color="bg-white dark:bg-[#18181B]"
+        is-body-colored
         @row-click="onRowClick"
       />
     </div>
@@ -157,7 +159,7 @@
         :show-empty-animation="false"
         rounded="2xl"
         is-bordered
-        body-color="bg-white dark:bg-[#18181B]"
+        is-body-colored
       />
     </div>
   </div>

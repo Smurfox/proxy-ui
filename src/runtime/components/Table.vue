@@ -5,8 +5,8 @@
       class="hidden md:block overflow-clip"
       :class="[
         roundedClasses[props.rounded],
-        isBordered ? 'border border-gray-200 dark:border-white/10 ' : '',
         hasShadow ? 'pu-shadow-ios' : '',
+        isBordered ? 'border border-gray-200 dark:border-[#23272F] ' : '',
       ]"
     >
       <table class="w-full text-sm text-left rtl:text-right table-fixed">
@@ -36,7 +36,7 @@
           </tr>
         </thead>
 
-        <tbody :class="props.bodyColor">
+        <tbody :class="[props.isBodyColored ? props.bodyColor : '']">
           <template v-if="items.length > 0">
             <motion.tr
               v-for="item in items"
@@ -45,7 +45,7 @@
               :transition="{ type: 'spring', stiffness: 400, damping: 30 }"
               :class="
                 props.isSelectable
-                  ? 'cursor-pointer hover:bg-gray-100 dark:hover:bg-white/5'
+                  ? 'cursor-pointer hover:bg-gray-100 dark:hover:bg-[#1C2026]'
                   : ''
               "
               @click="props.isSelectable && emit('row-click', item)"
@@ -76,7 +76,9 @@
               <div class="flex flex-col items-center gap-1">
                 <Lottie
                   v-if="props.showEmptyAnimation"
-                  :animation-data="props.emptyAnimationData ?? defaultEmptyAnimation"
+                  :animation-data="
+                    props.emptyAnimationData ?? defaultEmptyAnimation
+                  "
                   :width="props.emptyAnimationSize"
                   :height="props.emptyAnimationSize"
                 />
@@ -246,6 +248,7 @@ const props = withDefaults(
     isBordered?: boolean
     isSelectable?: boolean
     headerColor?: string
+    isBodyColored?: boolean
     bodyColor?: string
     itemsSize?: keyof typeof sizes
     hasShadow?: boolean
@@ -262,8 +265,9 @@ const props = withDefaults(
     isBordered: false,
     isSelectable: false,
     headerColor:
-      'bg-[#F4F4F5] text-[#71717A] dark:bg-[#27272A] dark:text-[#A1A1AA]',
-    bodyColor: '',
+      'bg-[#F4F4F5] text-[#71717A] dark:bg-[#20242C] dark:text-[#9CA3AF]',
+    isBodyColored: false,
+    bodyColor: 'bg-white dark:bg-[#14171C]',
     itemsSize: 'md',
     hasShadow: true,
     emptyStateTitle: 'No results found',
