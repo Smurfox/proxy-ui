@@ -41,6 +41,7 @@
             <motion.tr
               v-for="item in items"
               :key="item.id"
+              :data-row-id="item.id"
               :while-hover="props.isSelectable ? { scale: 1.01 } : {}"
               :transition="{ type: 'spring', stiffness: 400, damping: 30 }"
               :class="
@@ -48,7 +49,7 @@
                   ? 'cursor-pointer hover:bg-gray-100 dark:hover:bg-[#1C2026]'
                   : ''
               "
-              @click="props.isSelectable && emit('row-click', item)"
+              @click="onRowClick"
             >
               <td
                 v-for="column in columns"
@@ -103,6 +104,7 @@
       <motion.div
         v-for="item in items"
         :key="item.id"
+        :data-row-id="item.id"
         :while-hover="props.isSelectable ? { y: -3 } : {}"
         :transition="{ type: 'spring', stiffness: 400, damping: 25 }"
         class="bg-white dark:bg-[#18181B] border border-gray-200 dark:border-white/10 rounded-lg p-4 shadow-sm"
@@ -111,7 +113,7 @@
             ? 'cursor-pointer hover:bg-gray-50 dark:hover:bg-white/5 hover:shadow-md'
             : ''
         "
-        @click="props.isSelectable && emit('row-click', item)"
+        @click="onRowClick"
       >
         <slot
           name="mobile-card"
@@ -285,6 +287,15 @@ const emit = defineEmits<{
 
 function getCellValue(item: TItem, key: string): unknown {
   return (item as Record<string, unknown>)[key]
+}
+
+function onRowClick(event: MouseEvent) {
+  if (!props.isSelectable) return
+  const el = event.currentTarget as HTMLElement | null
+  const id = el?.dataset.rowId
+  if (id == null) return
+  const item = props.items.find(i => String(i.id) === id)
+  if (item) emit('row-click', item)
 }
 </script>
 
