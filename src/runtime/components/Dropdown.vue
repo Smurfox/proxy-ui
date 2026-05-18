@@ -3,32 +3,44 @@
     ref="dropdownRef"
     class="relative inline-block text-left"
   >
-    <div @click="toggle">
+    <div
+      ref="activatorRef"
+      @click="toggle"
+    >
       <slot name="activator" />
     </div>
 
-    <AnimatePresence>
-      <motion.div
-        v-if="isOpen"
-        :initial="{ scale: 0.9, opacity: 0, y: -10 }"
-        :exit="{ opacity: 0 }"
-        :animate="{ scale: 1, opacity: 1, y: 0 }"
-        :class="[
-          'absolute right-0 z-50 mt-2 origin-top-right bg-white border border-gray-100 rounded-xl shadow-xl dark:bg-[#18181B] dark:border-black/40',
-          props.menuMinWidth,
-        ]"
-        @click="handleContentClick"
-      >
-        <slot name="content" />
-      </motion.div>
-    </AnimatePresence>
+    <Teleport to="body">
+      <AnimatePresence>
+        <motion.div
+          v-if="isOpen"
+          ref="menuRef"
+          :initial="{ scale: 0.9, opacity: 0, y: -10 }"
+          :exit="{ opacity: 0 }"
+          :animate="{ scale: 1, opacity: 1, y: 0 }"
+          :style="menuStyle"
+          :class="[
+            'fixed z-50 origin-top-right bg-white border border-gray-100 rounded-xl shadow-xl dark:bg-[#18181B] dark:border-black/40',
+            props.menuMinWidth,
+          ]"
+          @click="handleContentClick"
+        >
+          <slot name="content" />
+        </motion.div>
+      </AnimatePresence>
+    </Teleport>
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts">
 import { AnimatePresence, motion } from 'motion-v'
-import { ref, onMounted, onUnmounted, provide } from 'vue'
+import { ref, reactive, onMounted, onUnmounted, provide, nextTick, watch } from 'vue'
+import { createPopoverGroup } from '../composables/popoverGroup'
 
+const popoverGroup = createPopoverGroup()
+</script>
+
+<script setup lang="ts">
 const props = withDefaults(
   defineProps<{
     menuMinWidth?: string
@@ -40,28 +52,61 @@ const props = withDefaults(
 
 const isOpen = ref(false)
 const dropdownRef = ref<HTMLDivElement | null>(null)
+const activatorRef = ref<HTMLDivElement | null>(null)
+const menuRef = ref<HTMLElement | null>(null)
 
-const toggle = () => {
-  isOpen.value = !isOpen.value
+const menuStyle = reactive<Record<string, string>>({
+  top: '0px',
+  right: '0px',
+})
+
+const updatePosition = () => {
+  if (!activatorRef.value) return
+  const rect = activatorRef.value.getBoundingClientRect()
+  menuStyle.top = `${rect.bottom + 8}px`
+  menuStyle.right = `${window.innerWidth - rect.right}px`
 }
 
 const close = () => {
   isOpen.value = false
+  popoverGroup.release(close)
 }
 
-// Proveer la función close para que los items del dropdown puedan usarla
+const toggle = () => {
+  if (isOpen.value) {
+    close()
+    return
+  }
+  popoverGroup.open(close)
+  isOpen.value = true
+  nextTick(updatePosition)
+}
+
 provide('closeDropdown', close)
 
 const onClickOutside = (event: MouseEvent) => {
-  if (dropdownRef.value && !dropdownRef.value.contains(event.target as Node)) {
+  const target = event.target as Node
+  const insideActivator = dropdownRef.value?.contains(target)
+  const insideMenu = menuRef.value?.contains(target)
+  if (!insideActivator && !insideMenu) {
     setTimeout(() => close(), 10)
   }
 }
 
 const handleContentClick = (event: MouseEvent) => {
-  // No cerramos automáticamente, los items se encargarán de cerrar cuando sea necesario
   event.stopPropagation()
 }
+
+watch(isOpen, (open) => {
+  if (open) {
+    window.addEventListener('scroll', updatePosition, true)
+    window.addEventListener('resize', updatePosition)
+  }
+  else {
+    window.removeEventListener('scroll', updatePosition, true)
+    window.removeEventListener('resize', updatePosition)
+  }
+})
 
 onMounted(() => {
   document.addEventListener('click', onClickOutside)
@@ -69,5 +114,8 @@ onMounted(() => {
 
 onUnmounted(() => {
   document.removeEventListener('click', onClickOutside)
+  window.removeEventListener('scroll', updatePosition, true)
+  window.removeEventListener('resize', updatePosition)
+  popoverGroup.release(close)
 })
 </script>

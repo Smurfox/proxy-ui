@@ -38,6 +38,7 @@
         @input="
           emit('update:modelValue', ($event.target as HTMLInputElement).value)
         "
+        @focus="handleFocus"
       >
       <!-- endContent -->
       <div
@@ -102,6 +103,7 @@ const props = withDefaults(
     required?: boolean
     error?: string
     disabled?: boolean
+    focus?: boolean
   }>(),
   {
     type: 'text',
@@ -110,12 +112,21 @@ const props = withDefaults(
     variant: 'default',
     required: false,
     disabled: false,
+    focus: false,
   },
 )
 
 const emit = defineEmits<{
   'update:modelValue': [value: string | number]
 }>()
+
+// Manejar el evento focus
+const handleFocus = (event: Event) => {
+  if (props.focus) {
+    const target = event.target as HTMLInputElement
+    target.select()
+  }
+}
 </script>
 
 <style scoped>

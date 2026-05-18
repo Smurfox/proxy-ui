@@ -18,27 +18,40 @@
       ref="selectRef"
       class="relative w-full text-left"
     >
-      <button
-        type="button"
-        class="w-full p-3 text-sm text-left transition-colors flex items-center justify-between gap-3"
+      <input
+        ref="inputRef"
+        type="text"
+        :value="searchQuery"
+        :placeholder="props.placeholder"
+        :disabled="props.disabled"
+        class="w-full p-3 pr-10 text-sm transition-colors"
         :class="[
           roundedVariants[props.rounded],
           props.error ? errorVariants[props.variant] : variants[props.variant],
-          props.disabled ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer',
-          !selectedOption ? 'text-gray-500 dark:text-white/50' : '',
+          props.disabled ? 'opacity-70 cursor-not-allowed' : 'cursor-text',
         ]"
-        :disabled="props.disabled"
-        @click.stop="toggle"
+        @input="onInput"
+        @focus="open"
+        @click.stop="open"
       >
-        <span class="truncate">
-          {{ displayText }}
-        </span>
+
+      <button
+        v-if="searchQuery && !props.disabled"
+        type="button"
+        class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-white cursor-pointer"
+        @click.stop="clear"
+      >
         <Icon
-          name="mdi:chevron-down"
-          class="text-gray-400 transition-transform duration-200 shrink-0"
-          :class="{ 'rotate-180': isOpen && !props.disabled }"
+          name="mdi:close-circle"
+          size="18"
         />
       </button>
+      <Icon
+        v-else
+        name="mdi:chevron-down"
+        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 transition-transform duration-200 pointer-events-none"
+        :class="{ 'rotate-180': isOpen && !props.disabled }"
+      />
 
       <Teleport
         v-if="isOpen && !props.disabled"
@@ -60,7 +73,7 @@
             @click.stop
           >
             <div
-              v-if="props.options.length === 0"
+              v-if="filteredOptions.length === 0"
               class="px-4 py-2 text-sm text-center"
               :class="isDarkMode ? 'text-white/60' : 'text-black/50'"
             >
@@ -68,7 +81,7 @@
             </div>
             <template v-else>
               <button
-                v-for="option in props.options"
+                v-for="option in filteredOptions"
                 :key="String(option.value)"
                 type="button"
                 class="w-full flex items-center justify-between gap-3 px-3 py-2 mb-1 text-left cursor-pointer rounded-lg transition-colors"
@@ -117,7 +130,7 @@
 
 <script lang="ts">
 import { AnimatePresence, motion } from 'motion-v'
-import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import type { InputRounded, InputVariant } from '../types'
 import { createPopoverGroup } from '../composables/popoverGroup'
 
@@ -125,7 +138,7 @@ const popoverGroup = createPopoverGroup()
 </script>
 
 <script setup lang="ts">
-interface SelectOption {
+interface AutocompleteOption {
   label: string
   value: string | number
 }
@@ -157,7 +170,7 @@ const errorVariants = {
 const props = withDefaults(
   defineProps<{
     modelValue?: string | number | null
-    options?: SelectOption[]
+    options?: AutocompleteOption[]
     label?: string
     labelClass?: string
     placeholder?: string
@@ -172,7 +185,7 @@ const props = withDefaults(
     modelValue: null,
     options: () => [],
     labelClass: 'text-sm font-semibold',
-    placeholder: 'Seleccionar',
+    placeholder: 'Search...',
     rounded: 'xl',
     variant: 'default',
     required: false,
@@ -182,21 +195,31 @@ const props = withDefaults(
 )
 
 const emit = defineEmits<{
-  'update:modelValue': [value: string | number]
-  'change': [value: string | number]
+  'update:modelValue': [value: string | number | null]
+  'change': [value: string | number | null]
+  'search': [value: string]
 }>()
 
 const selectRef = ref<HTMLDivElement | null>(null)
+const inputRef = ref<HTMLInputElement | null>(null)
 const isOpen = ref(false)
 const isDarkMode = ref(false)
 const dropdownPosition = ref({ top: 0, left: 0, width: 0 })
+const searchQuery = ref('')
 
 const selectedOption = computed(() => {
   return props.options.find(option => option.value === props.modelValue)
 })
 
-const displayText = computed(() => {
-  return selectedOption.value?.label || props.placeholder
+const filteredOptions = computed(() => {
+  const q = searchQuery.value.trim().toLowerCase()
+  if (!q) return props.options
+  if (selectedOption.value && searchQuery.value === selectedOption.value.label) {
+    return props.options
+  }
+  return props.options.filter(option =>
+    option.label.toLowerCase().includes(q),
+  )
 })
 
 const dropdownStyle = computed(() => ({
@@ -214,17 +237,21 @@ const unselectedOptionClass = computed(() => {
   return isDarkMode.value ? 'text-white' : 'text-black'
 })
 
+watch(
+  () => props.modelValue,
+  () => {
+    searchQuery.value = selectedOption.value?.label ?? ''
+  },
+  { immediate: true },
+)
+
 function syncDarkMode() {
   isDarkMode.value = Boolean(selectRef.value?.closest('.dark'))
 }
 
 function calculateDropdownPosition() {
-  if (!selectRef.value) {
-    return
-  }
-
+  if (!selectRef.value) return
   syncDarkMode()
-
   const rect = selectRef.value.getBoundingClientRect()
   dropdownPosition.value = {
     top: rect.bottom + window.scrollY + 8,
@@ -233,16 +260,8 @@ function calculateDropdownPosition() {
   }
 }
 
-async function toggle() {
-  if (props.disabled) {
-    return
-  }
-
-  if (isOpen.value) {
-    close()
-    return
-  }
-
+async function open() {
+  if (props.disabled || isOpen.value) return
   popoverGroup.open(close)
   await nextTick()
   calculateDropdownPosition()
@@ -250,14 +269,33 @@ async function toggle() {
 }
 
 function close() {
+  if (!isOpen.value) return
+  isOpen.value = false
+  popoverGroup.release(close)
+  searchQuery.value = selectedOption.value?.label ?? ''
+}
+
+function onInput(event: Event) {
+  const value = (event.target as HTMLInputElement).value
+  searchQuery.value = value
+  emit('search', value)
+  if (!isOpen.value) open()
+}
+
+function selectOption(option: AutocompleteOption) {
+  emit('update:modelValue', option.value)
+  emit('change', option.value)
+  searchQuery.value = option.label
   isOpen.value = false
   popoverGroup.release(close)
 }
 
-function selectOption(option: SelectOption) {
-  emit('update:modelValue', option.value)
-  emit('change', option.value)
-  close()
+function clear() {
+  searchQuery.value = ''
+  emit('update:modelValue', null)
+  emit('change', null)
+  emit('search', '')
+  inputRef.value?.focus()
 }
 
 function onClickOutside(event: MouseEvent) {
@@ -267,9 +305,7 @@ function onClickOutside(event: MouseEvent) {
 }
 
 function onScroll() {
-  if (isOpen.value) {
-    calculateDropdownPosition()
-  }
+  if (isOpen.value) calculateDropdownPosition()
 }
 
 onMounted(() => {

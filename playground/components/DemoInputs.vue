@@ -96,6 +96,33 @@
     </div>
     <div class="w-200 mx-auto flex flex-col gap-3">
       <h1 class="font-semibold text-lg">
+        Select on focus
+      </h1>
+      <div
+        class="border border-gray-300 flex flex-col gap-6 p-9 w-full rounded-xl"
+      >
+        <PUInput
+          v-model="focusValue"
+          label="Order code"
+          placeholder="Enter the code"
+          description="Click the input — the text gets selected so you can replace it in one go."
+          focus
+        />
+        <PUInput
+          v-model="focusValueSecondary"
+          label="Coupon"
+          variant="secondary"
+          placeholder="Enter the coupon"
+          focus
+        >
+          <template #startContent>
+            <Icon name="ion:pricetag" />
+          </template>
+        </PUInput>
+      </div>
+    </div>
+    <div class="w-200 mx-auto flex flex-col gap-3">
+      <h1 class="font-semibold text-lg">
         Disabled State
       </h1>
       <div
@@ -144,6 +171,11 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const focusValue = ref('ORD-1024')
+const focusValueSecondary = ref('SUMMER-25')
+</script>
 
 <style scoped></style>
