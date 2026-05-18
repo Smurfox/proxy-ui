@@ -758,7 +758,7 @@ A responsive data table that renders as a normal `<table>` on `md+` viewports an
 
 | Prop                   | Type                                                                         | Default                                                                                  | Description                                                                                 |
 | ---------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `items`                | `Array<{ id: string \| number, [key: string]: unknown }>`                    | `[]`                                                                                     | Row data. Each item must have an `id` used as the Vue key.                                  |
+| `items`                | `TItem[]` where `TItem extends { id: string \| number }`                     | `[]`                                                                                     | Row data. `PUTable` is generic in `TItem`, so passing `SaleOrder[]`, `User[]`, etc. is type-safe — `row-click` and the `cell-{id}` slot scope infer your interface. |
 | `columns`              | `{ name: string, id: string, width?: string }[]`                             | `[]`                                                                                     | Column definitions. `id` is the row key to read, `width` is CSS width.                      |
 | `rounded`              | `'none' \| 'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| '3xl' \| 'full'` | `'lg'`                                                                                   | Border radius of the outer container.                                                       |
 | `isBordered`           | `boolean`                                                                    | `false`                                                                                  | Adds an outer border around the table.                                                      |
@@ -778,7 +778,7 @@ A responsive data table that renders as a normal `<table>` on `md+` viewports an
 
 | Event       | Payload                                                  | Description                                                              |
 | ----------- | -------------------------------------------------------- | ------------------------------------------------------------------------ |
-| `row-click` | `item: { id: string \| number, [key: string]: unknown }` | Emitted when a row is clicked (only when `isSelectable` is `true`).      |
+| `row-click` | `item: TItem`                                            | Emitted when a row is clicked (only when `isSelectable` is `true`). `TItem` is inferred from `items`. |
 
 **Slots**
 
