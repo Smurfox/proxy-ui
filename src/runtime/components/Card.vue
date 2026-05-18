@@ -1,12 +1,12 @@
 <template>
   <div
     :class="[
-      !hasBg ? 'bg-white dark:bg-white/5' : '',
+      !hasBg ? 'bg-white dark:bg-[#14171C]' : '',
       !hasPadding ? 'p-4' : '',
       !hasShadow ? 'pu-shadow-ios' : '',
       !hasRounded ? 'rounded-2xl' : '',
       customClass,
-      isBordered ? 'border border-gray-200 dark:border-white/5' : '',
+      isBordered ? 'border border-gray-200 dark:border-[#23272F]' : '',
     ]"
   >
     <slot />
@@ -24,7 +24,7 @@ const props = withDefaults(
     isBordered?: boolean
   }>(),
   {
-    isBordered: false,
+    isBordered: true,
   },
 )
 

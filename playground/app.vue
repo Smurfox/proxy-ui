@@ -4,7 +4,7 @@
     class="min-h-screen"
   >
     <div
-      class="bg-[#F5F5F7] dark:bg-zinc-950 min-h-screen p-8 transition-colors duration-300"
+      class="bg-[#F5F5F7] dark:bg-[#08090c] min-h-screen p-8 transition-colors duration-300"
     >
       <!-- Toggle button -->
       <button

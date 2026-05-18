@@ -77,7 +77,7 @@ const props = withDefaults(
 
 // #region Color Logic
 const defaultColorClasses = {
-  default: 'bg-gray-200/80 dark:bg-white/10 text-black dark:text-white',
+  default: 'bg-gray-200/80 dark:bg-[#242830] text-black dark:text-white',
   ios: 'bg-blue-500 text-white',
   primary: 'bg-primary text-white',
   danger: 'bg-danger text-black',
@@ -86,12 +86,12 @@ const defaultColorClasses = {
 } as const
 
 const secondaryColorClasses = {
-  default: 'bg-gray-100 dark:bg-white/5 text-black dark:text-white',
-  ios: 'bg-gray-200/60 dark:bg-white/7 text-blue-500',
-  primary: 'bg-gray-200/60 dark:bg-white/7 text-primary',
-  danger: 'bg-gray-200/60 dark:bg-white/7 text-danger',
-  success: 'bg-gray-200/60 dark:bg-white/7 text-success',
-  warning: 'bg-gray-200/60 dark:bg-white/7 text-warning',
+  default: 'bg-gray-100 dark:bg-[#242830] text-black dark:text-white',
+  ios: 'bg-gray-200/60 dark:bg-[#242830] text-blue-500',
+  primary: 'bg-gray-200/60 dark:bg-[#242830] text-primary',
+  danger: 'bg-gray-200/60 dark:bg-[#242830] text-danger',
+  success: 'bg-gray-200/60 dark:bg-[#242830] text-success',
+  warning: 'bg-gray-200/60 dark:bg-[#242830] text-warning',
 } as const
 
 const outlineColorClasses = {
@@ -105,7 +105,7 @@ const outlineColorClasses = {
 } as const
 
 const flatColorClasses = {
-  default: 'bg-gray-100 dark:bg-white/5 text-black dark:text-white',
+  default: 'bg-gray-100 dark:bg-[#242830] text-black dark:text-white',
   ios: 'bg-blue-500/15 text-blue-500',
   primary: 'bg-primary/15 text-primary',
   danger: 'bg-danger/15 text-danger',
