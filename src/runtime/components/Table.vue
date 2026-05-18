@@ -5,8 +5,8 @@
       class="hidden md:block overflow-clip"
       :class="[
         roundedClasses[props.rounded],
-        isBordered ? 'border border-gray-200 dark:border-white/10 ' : '',
         hasShadow ? 'pu-shadow-ios' : '',
+        isBordered ? 'border border-gray-200 dark:border-[#23272F] ' : '',
       ]"
     >
       <table class="w-full text-sm text-left rtl:text-right table-fixed">
@@ -36,7 +36,7 @@
           </tr>
         </thead>
 
-        <tbody :class="props.bodyColor">
+        <tbody :class="[props.isBodyColored ? props.bodyColor : '']">
           <template v-if="items.length > 0">
             <motion.tr
               v-for="item in items"
@@ -45,7 +45,7 @@
               :transition="{ type: 'spring', stiffness: 400, damping: 30 }"
               :class="
                 props.isSelectable
-                  ? 'cursor-pointer hover:bg-gray-100 dark:hover:bg-white/5'
+                  ? 'cursor-pointer hover:bg-gray-100 dark:hover:bg-[#1C2026]'
                   : ''
               "
               @click="props.isSelectable && emit('row-click', item)"
@@ -69,14 +69,13 @@
           </template>
 
           <tr v-else>
-            <td
-              :colspan="columns.length"
-              class="text-center py-10"
-            >
+            <td :colspan="columns.length" class="text-center py-10">
               <div class="flex flex-col items-center gap-1">
                 <Lottie
                   v-if="props.showEmptyAnimation"
-                  :animation-data="props.emptyAnimationData ?? defaultEmptyAnimation"
+                  :animation-data="
+                    props.emptyAnimationData ?? defaultEmptyAnimation
+                  "
                   :width="props.emptyAnimationSize"
                   :height="props.emptyAnimationSize"
                 />
@@ -111,11 +110,7 @@
         "
         @click="props.isSelectable && emit('row-click', item)"
       >
-        <slot
-          name="mobile-card"
-          :item="item"
-          :columns="columns"
-        >
+        <slot name="mobile-card" :item="item" :columns="columns">
           <!-- Contenido por defecto si no se proporciona slot personalizado -->
           <div class="space-y-2">
             <div
@@ -168,116 +163,118 @@
 </template>
 
 <script setup lang="ts">
-import { motion } from 'motion-v'
-import Lottie from './Lottie.vue'
-import defaultEmptyAnimation from '../assets/empty-state.json'
+import { motion } from "motion-v";
+import Lottie from "./Lottie.vue";
+import defaultEmptyAnimation from "../assets/empty-state.json";
 
 const roundedClasses = {
-  'none': 'rounded-none',
-  'xs': 'rounded-xs',
-  'sm': 'rounded-sm',
-  'md': 'rounded-md',
-  'lg': 'rounded-lg',
-  'xl': 'rounded-xl',
-  '2xl': 'rounded-2xl',
-  '3xl': 'rounded-3xl',
-  'full': 'rounded-full',
-} as const
+  none: "rounded-none",
+  xs: "rounded-xs",
+  sm: "rounded-sm",
+  md: "rounded-md",
+  lg: "rounded-lg",
+  xl: "rounded-xl",
+  "2xl": "rounded-2xl",
+  "3xl": "rounded-3xl",
+  full: "rounded-full",
+} as const;
 
 const roundedStartClasses = {
-  'none': 'rounded-s-none',
-  'xs': 'rounded-s-xs',
-  'sm': 'rounded-s-sm',
-  'md': 'rounded-s-md',
-  'lg': 'rounded-s-lg',
-  'xl': 'rounded-s-xl',
-  '2xl': 'rounded-s-2xl',
-  '3xl': 'rounded-s-3xl',
-  'full': 'rounded-s-full',
-} as const
+  none: "rounded-s-none",
+  xs: "rounded-s-xs",
+  sm: "rounded-s-sm",
+  md: "rounded-s-md",
+  lg: "rounded-s-lg",
+  xl: "rounded-s-xl",
+  "2xl": "rounded-s-2xl",
+  "3xl": "rounded-s-3xl",
+  full: "rounded-s-full",
+} as const;
 
 const roundedEndClasses = {
-  'none': 'rounded-e-none',
-  'xs': 'rounded-e-xs',
-  'sm': 'rounded-e-sm',
-  'md': 'rounded-e-md',
-  'lg': 'rounded-e-lg',
-  'xl': 'rounded-e-xl',
-  '2xl': 'rounded-e-2xl',
-  '3xl': 'rounded-e-3xl',
-  'full': 'rounded-e-full',
-} as const
+  none: "rounded-e-none",
+  xs: "rounded-e-xs",
+  sm: "rounded-e-sm",
+  md: "rounded-e-md",
+  lg: "rounded-e-lg",
+  xl: "rounded-e-xl",
+  "2xl": "rounded-e-2xl",
+  "3xl": "rounded-e-3xl",
+  full: "rounded-e-full",
+} as const;
 
 const roundedTopStartClasses = {
-  'none': 'rounded-ss-none',
-  'xs': 'rounded-ss-xs',
-  'sm': 'rounded-ss-sm',
-  'md': 'rounded-ss-md',
-  'lg': 'rounded-ss-lg',
-  'xl': 'rounded-ss-xl',
-  '2xl': 'rounded-ss-2xl',
-  '3xl': 'rounded-ss-3xl',
-  'full': 'rounded-ss-full',
-} as const
+  none: "rounded-ss-none",
+  xs: "rounded-ss-xs",
+  sm: "rounded-ss-sm",
+  md: "rounded-ss-md",
+  lg: "rounded-ss-lg",
+  xl: "rounded-ss-xl",
+  "2xl": "rounded-ss-2xl",
+  "3xl": "rounded-ss-3xl",
+  full: "rounded-ss-full",
+} as const;
 
 const roundedTopEndClasses = {
-  'none': 'rounded-se-none',
-  'xs': 'rounded-se-xs',
-  'sm': 'rounded-se-sm',
-  'md': 'rounded-se-md',
-  'lg': 'rounded-se-lg',
-  'xl': 'rounded-se-xl',
-  '2xl': 'rounded-se-2xl',
-  '3xl': 'rounded-se-3xl',
-  'full': 'rounded-se-full',
-} as const
+  none: "rounded-se-none",
+  xs: "rounded-se-xs",
+  sm: "rounded-se-sm",
+  md: "rounded-se-md",
+  lg: "rounded-se-lg",
+  xl: "rounded-se-xl",
+  "2xl": "rounded-se-2xl",
+  "3xl": "rounded-se-3xl",
+  full: "rounded-se-full",
+} as const;
 
 const sizes = {
-  sm: 'py-2',
-  md: 'py-4',
-  lg: 'py-6',
-} as const
+  sm: "py-2",
+  md: "py-4",
+  lg: "py-6",
+} as const;
 
 const props = withDefaults(
   defineProps<{
-    items?: Array<{ id: string | number, [key: string]: unknown }>
-    columns?: { name: string, id: string, width?: string }[]
-    rounded?: keyof typeof roundedClasses
-    isBordered?: boolean
-    isSelectable?: boolean
-    headerColor?: string
-    bodyColor?: string
-    itemsSize?: keyof typeof sizes
-    hasShadow?: boolean
-    emptyStateTitle?: string
-    emptyStateDescription?: string
-    showEmptyAnimation?: boolean
-    emptyAnimationData?: object
-    emptyAnimationSize?: number
+    items?: Array<{ id: string | number; [key: string]: unknown }>;
+    columns?: { name: string; id: string; width?: string }[];
+    rounded?: keyof typeof roundedClasses;
+    isBordered?: boolean;
+    isSelectable?: boolean;
+    headerColor?: string;
+    isBodyColored?: boolean;
+    bodyColor?: string;
+    itemsSize?: keyof typeof sizes;
+    hasShadow?: boolean;
+    emptyStateTitle?: string;
+    emptyStateDescription?: string;
+    showEmptyAnimation?: boolean;
+    emptyAnimationData?: object;
+    emptyAnimationSize?: number;
   }>(),
   {
     items: () => [],
     columns: () => [],
-    rounded: 'lg',
+    rounded: "lg",
     isBordered: false,
     isSelectable: false,
     headerColor:
-      'bg-[#F4F4F5] text-[#71717A] dark:bg-[#27272A] dark:text-[#A1A1AA]',
-    bodyColor: '',
-    itemsSize: 'md',
+      "bg-[#F4F4F5] text-[#71717A] dark:bg-[#20242C] dark:text-[#9CA3AFd]",
+    isBodyColored: false,
+    bodyColor: "bg-white dark:bg-[#14171C]",
+    itemsSize: "md",
     hasShadow: true,
-    emptyStateTitle: 'No results found',
+    emptyStateTitle: "No results found",
     emptyStateDescription:
-      'Try adjusting your search or filter to find what you\'re looking for.',
+      "Try adjusting your search or filter to find what you're looking for.",
     showEmptyAnimation: true,
     emptyAnimationData: undefined,
     emptyAnimationSize: 220,
   },
-)
+);
 
 const emit = defineEmits<{
-  'row-click': [item: { id: string | number, [key: string]: unknown }]
-}>()
+  "row-click": [item: { id: string | number; [key: string]: unknown }];
+}>();
 </script>
 
 <style scoped>

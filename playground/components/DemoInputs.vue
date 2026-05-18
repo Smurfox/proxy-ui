@@ -1,17 +1,13 @@
 <template>
   <div class="p-6 w-full flex flex-col items-start gap-8">
     <div class="flex flex-col gap-5">
-      <h2 class="text-2xl font-semibold dark:text-white -mb-4">
-        Inputs
-      </h2>
+      <h2 class="text-2xl font-semibold dark:text-white -mb-4">Inputs</h2>
       <p class="text-gray-600 dark:text-gray-400">
         A collection of input components for forms and user interactions.
       </p>
     </div>
     <div class="w-200 mx-auto flex flex-col gap-3">
-      <h1 class="font-semibold text-lg">
-        Usage
-      </h1>
+      <h1 class="font-semibold text-lg">Usage</h1>
       <div
         class="border border-gray-300 flex flex-col gap-6 p-9 w-full rounded-xl"
       >
@@ -29,12 +25,7 @@
           required
         >
           <template #endContent>
-            <PUButton
-              color="primary"
-              variant="ghost"
-              size="sm"
-              label="Show"
-            />
+            <PUButton color="primary" variant="ghost" size="sm" label="Show" />
           </template>
         </PUInput>
         <PUTextArea
@@ -46,9 +37,7 @@
       </div>
     </div>
     <div class="w-200 mx-auto flex flex-col gap-3">
-      <h1 class="font-semibold text-lg">
-        Validation Field
-      </h1>
+      <h1 class="font-semibold text-lg">Validation Field</h1>
       <div
         class="border border-gray-300 flex flex-col gap-6 p-9 w-full rounded-xl"
       >
@@ -74,12 +63,7 @@
             <Icon name="ion:lock-closed" />
           </template>
           <template #endContent>
-            <PUButton
-              color="danger"
-              variant="ghost"
-              size="sm"
-              label="Show"
-            />
+            <PUButton color="danger" variant="ghost" size="sm" label="Show" />
           </template>
         </PUInput>
         <PUTextArea
@@ -95,12 +79,8 @@
       </div>
     </div>
     <div class="w-200 mx-auto flex flex-col gap-3">
-      <h1 class="font-semibold text-lg">
-        Select on focus
-      </h1>
-      <div
-        class="border border-gray-300 flex flex-col gap-6 p-9 w-full rounded-xl"
-      >
+      <h1 class="font-semibold text-lg">Select on focus</h1>
+      <PUCard class="p-6! flex flex-col gap-6">
         <PUInput
           v-model="focusValue"
           label="Order code"
@@ -119,25 +99,16 @@
             <Icon name="ion:pricetag" />
           </template>
         </PUInput>
-      </div>
+      </PUCard>
     </div>
     <div class="w-200 mx-auto flex flex-col gap-3">
-      <h1 class="font-semibold text-lg">
-        Disabled State
-      </h1>
+      <h1 class="font-semibold text-lg">Disabled State</h1>
       <div
         class="border border-gray-300 flex flex-col gap-6 p-9 w-full rounded-xl"
       >
-        <PUInput
-          label="Name"
-          placeholder="Enter your username"
-          disabled
-        >
+        <PUInput label="Name" placeholder="Enter your username" disabled>
           <template #startContent>
-            <Icon
-              name="ion:person"
-              class="dark:text-white"
-            />
+            <Icon name="ion:person" class="dark:text-white" />
           </template>
         </PUInput>
         <PUInput
@@ -147,10 +118,7 @@
           disabled
         >
           <template #startContent>
-            <Icon
-              name="ion:person"
-              class="dark:text-white"
-            />
+            <Icon name="ion:person" class="dark:text-white" />
           </template>
         </PUInput>
         <PUTextArea
@@ -160,10 +128,7 @@
           disabled
         >
           <template #startContent>
-            <Icon
-              name="ion:chatbox"
-              class="dark:text-white"
-            />
+            <Icon name="ion:chatbox" class="dark:text-white" />
           </template>
         </PUTextArea>
       </div>
@@ -172,10 +137,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from "vue";
 
-const focusValue = ref('ORD-1024')
-const focusValueSecondary = ref('SUMMER-25')
+const focusValue = ref("ORD-1024");
+const focusValueSecondary = ref("SUMMER-25");
 </script>
 
 <style scoped></style>
