@@ -116,14 +116,15 @@
 </template>
 
 <script lang="ts">
-let activeClose: (() => void) | null = null
-</script>
-
-<script setup lang="ts">
 import { AnimatePresence, motion } from 'motion-v'
 import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import type { InputRounded, InputVariant } from '../types'
+import { createPopoverGroup } from '../composables/popoverGroup'
 
+const popoverGroup = createPopoverGroup()
+</script>
+
+<script setup lang="ts">
 interface SelectOption {
   label: string
   value: string | number
@@ -242,8 +243,7 @@ async function toggle() {
     return
   }
 
-  if (activeClose && activeClose !== close) activeClose()
-  activeClose = close
+  popoverGroup.open(close)
   await nextTick()
   calculateDropdownPosition()
   isOpen.value = true
@@ -251,7 +251,7 @@ async function toggle() {
 
 function close() {
   isOpen.value = false
-  if (activeClose === close) activeClose = null
+  popoverGroup.release(close)
 }
 
 function selectOption(option: SelectOption) {
@@ -283,6 +283,6 @@ onUnmounted(() => {
   document.removeEventListener('click', onClickOutside)
   window.removeEventListener('scroll', onScroll, true)
   window.removeEventListener('resize', onScroll)
-  if (activeClose === close) activeClose = null
+  popoverGroup.release(close)
 })
 </script>

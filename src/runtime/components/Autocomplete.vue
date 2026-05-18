@@ -129,14 +129,15 @@
 </template>
 
 <script lang="ts">
-let activeClose: (() => void) | null = null
-</script>
-
-<script setup lang="ts">
 import { AnimatePresence, motion } from 'motion-v'
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import type { InputRounded, InputVariant } from '../types'
+import { createPopoverGroup } from '../composables/popoverGroup'
 
+const popoverGroup = createPopoverGroup()
+</script>
+
+<script setup lang="ts">
 interface AutocompleteOption {
   label: string
   value: string | number
@@ -261,8 +262,7 @@ function calculateDropdownPosition() {
 
 async function open() {
   if (props.disabled || isOpen.value) return
-  if (activeClose && activeClose !== close) activeClose()
-  activeClose = close
+  popoverGroup.open(close)
   await nextTick()
   calculateDropdownPosition()
   isOpen.value = true
@@ -271,7 +271,7 @@ async function open() {
 function close() {
   if (!isOpen.value) return
   isOpen.value = false
-  if (activeClose === close) activeClose = null
+  popoverGroup.release(close)
   searchQuery.value = selectedOption.value?.label ?? ''
 }
 
@@ -287,7 +287,7 @@ function selectOption(option: AutocompleteOption) {
   emit('change', option.value)
   searchQuery.value = option.label
   isOpen.value = false
-  if (activeClose === close) activeClose = null
+  popoverGroup.release(close)
 }
 
 function clear() {
@@ -319,6 +319,6 @@ onUnmounted(() => {
   document.removeEventListener('click', onClickOutside)
   window.removeEventListener('scroll', onScroll, true)
   window.removeEventListener('resize', onScroll)
-  if (activeClose === close) activeClose = null
+  popoverGroup.release(close)
 })
 </script>

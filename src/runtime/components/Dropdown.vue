@@ -33,13 +33,14 @@
 </template>
 
 <script lang="ts">
-let activeClose: (() => void) | null = null
+import { AnimatePresence, motion } from 'motion-v'
+import { ref, reactive, onMounted, onUnmounted, provide, nextTick, watch } from 'vue'
+import { createPopoverGroup } from '../composables/popoverGroup'
+
+const popoverGroup = createPopoverGroup()
 </script>
 
 <script setup lang="ts">
-import { AnimatePresence, motion } from 'motion-v'
-import { ref, reactive, onMounted, onUnmounted, provide, nextTick, watch } from 'vue'
-
 const props = withDefaults(
   defineProps<{
     menuMinWidth?: string
@@ -68,7 +69,7 @@ const updatePosition = () => {
 
 const close = () => {
   isOpen.value = false
-  if (activeClose === close) activeClose = null
+  popoverGroup.release(close)
 }
 
 const toggle = () => {
@@ -76,8 +77,7 @@ const toggle = () => {
     close()
     return
   }
-  if (activeClose && activeClose !== close) activeClose()
-  activeClose = close
+  popoverGroup.open(close)
   isOpen.value = true
   nextTick(updatePosition)
 }
@@ -116,6 +116,6 @@ onUnmounted(() => {
   document.removeEventListener('click', onClickOutside)
   window.removeEventListener('scroll', updatePosition, true)
   window.removeEventListener('resize', updatePosition)
-  if (activeClose === close) activeClose = null
+  popoverGroup.release(close)
 })
 </script>

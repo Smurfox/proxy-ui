@@ -1,6 +1,8 @@
 <template>
   <PUCard class="p-6 w-full flex flex-col items-start gap-8">
-    <h2 class="text-lg font-semibold dark:text-white -mb-4">Dropdown</h2>
+    <h2 class="text-lg font-semibold dark:text-white -mb-4">
+      Dropdown
+    </h2>
 
     <div class="w-full flex flex-col gap-3">
       <div
