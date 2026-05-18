@@ -98,6 +98,25 @@ export interface InputProps {
   disabled?: boolean
 }
 
+export interface AutocompleteOption {
+  label: string
+  value: string | number
+}
+
+export interface AutocompleteProps {
+  modelValue?: string | number | null
+  options?: AutocompleteOption[]
+  label?: string
+  labelClass?: string
+  placeholder?: string
+  description?: string
+  rounded?: InputRounded
+  variant?: InputVariant
+  required?: boolean
+  error?: string
+  disabled?: boolean
+}
+
 export type TabsRounded
   = | 'none'
     | 'xs'
