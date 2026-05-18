@@ -258,7 +258,7 @@ const props = withDefaults(
     isBordered: false,
     isSelectable: false,
     headerColor:
-      "bg-[#F4F4F5] text-[#71717A] dark:bg-[#20242C] dark:text-[#9CA3AFd]",
+      "bg-[#F4F4F5] text-[#71717A] dark:bg-[#20242C] dark:text-[#9CA3AF]",
     isBodyColored: false,
     bodyColor: "bg-white dark:bg-[#14171C]",
     itemsSize: "md",
