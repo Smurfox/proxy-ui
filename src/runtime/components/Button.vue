@@ -124,7 +124,7 @@ const props = withDefaults(
 // #region Color Logic
 const defaultColorClasses = {
   default:
-    'bg-gray-200/80 dark:bg-white/10 text-black dark:text-white hover:bg-gray-300/80 dark:hover:bg-white/20',
+    'bg-gray-200/80 dark:bg-[#242830] text-black dark:text-white hover:bg-gray-300/80 dark:hover:bg-[#2D323B]',
   ios: 'bg-blue-500 text-white hover:brightness-110',
   primary: 'bg-primary text-white hover:brightness-110',
   danger: 'bg-danger text-black hover:brightness-110',
@@ -134,21 +134,21 @@ const defaultColorClasses = {
 
 const secondaryColorClasses = {
   default:
-    'bg-gray-100 dark:bg-white/5 text-black dark:text-white hover:bg-gray-200/80 dark:hover:bg-white/10',
-  ios: 'bg-gray-200/60 dark:bg-white/7 text-blue-500 hover:bg-gray-200 dark:hover:bg-white/10',
+    'bg-gray-100 dark:bg-[#1A1D23] text-black dark:text-white hover:bg-gray-200/80 dark:hover:bg-[#22262E]',
+  ios: 'bg-gray-200/60 dark:bg-[#242830] text-blue-500 hover:bg-gray-200 dark:hover:bg-white/10',
   primary:
-    'bg-gray-200/60 dark:bg-white/7 text-primary hover:bg-gray-200 dark:hover:bg-white/10',
+    'bg-gray-200/60 dark:bg-[#242830] text-primary hover:bg-gray-200 dark:hover:bg-white/10',
   danger:
-    'bg-gray-200/60 dark:bg-white/7 text-danger hover:bg-gray-200 dark:hover:bg-white/10',
+    'bg-gray-200/60 dark:bg-[#242830] text-danger hover:bg-gray-200 dark:hover:bg-white/10',
   success:
-    'bg-gray-200/60 dark:bg-white/7 text-success hover:bg-gray-200 dark:hover:bg-white/10',
+    'bg-gray-200/60 dark:bg-[#242830] text-success hover:bg-gray-200 dark:hover:bg-white/10',
   warning:
-    'bg-gray-200/60 dark:bg-white/7 text-warning hover:bg-gray-200 dark:hover:bg-white/10',
+    'bg-gray-200/60 dark:bg-[#242830] text-warning hover:bg-gray-200 dark:hover:bg-white/10',
 } as const
 
 const outlineColorClasses = {
   default:
-    'border border-gray-300 text-black dark:border-white/15 dark:text-white hover:bg-gray-100/80 dark:hover:bg-white/10',
+    'border border-gray-300 text-black dark:border-[#2D323B] dark:text-white hover:bg-gray-100/80 dark:hover:bg-[#1A1D23]',
   ios: 'border border-blue-500 text-blue-500 hover:bg-blue-500/15 dark:hover:bg-blue-500/25',
   primary:
     'border border-primary text-primary hover:bg-primary/15 dark:hover:bg-primary/25',
@@ -162,7 +162,7 @@ const outlineColorClasses = {
 
 const ghostColorClasses = {
   default:
-    'text-black dark:text-white hover:bg-gray-200/60 dark:hover:bg-white/10',
+    'text-black dark:text-white hover:bg-gray-200/60 dark:hover:bg-[#1F232B]',
   ios: 'text-blue-500 hover:bg-blue-100 dark:hover:bg-blue-500/20',
   primary: 'text-primary hover:bg-primary/20 dark:hover:bg-primary/30',
   danger: 'text-danger hover:bg-danger/20 dark:hover:bg-danger/30',
@@ -172,7 +172,7 @@ const ghostColorClasses = {
 
 const flatColorClasses = {
   default:
-    'bg-gray-100 dark:bg-white/5 text-black dark:text-white hover:bg-gray-200/80 dark:hover:bg-white/10',
+    'bg-gray-100 dark:bg-[#1C1F26] text-black dark:text-white hover:bg-gray-200/80 dark:hover:bg-[#242830]',
   ios: 'bg-blue-500/15 text-blue-500 hover:bg-blue-500/25',
   primary:
     'bg-primary/15 text-primary hover:bg-primary/25 dark:hover:bg-primary/30',

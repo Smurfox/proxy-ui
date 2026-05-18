@@ -34,11 +34,14 @@ export default defineNuxtConfig({
 });
 ```
 
-Add Tailwind to your CSS entry file:
+Add Tailwind to your CSS entry file and register the library as a source so Tailwind picks up the component classes:
 
 ```css
 @import "tailwindcss";
+@source "../node_modules/@smurfox/proxy-ui/dist";
 ```
+
+> The `@source` path is relative to the CSS file. If your CSS lives deeper (e.g. `app/assets/css/main.css`), adjust the number of `../` segments so it resolves to your project root's `node_modules`. Without this directive, Tailwind v4 will not scan the library files and variants like `flat`/`outline` will render unstyled.
 
 That's it. All `PU` components are auto-imported and ready to use.
 
@@ -50,6 +53,7 @@ ProxyUI uses CSS variables for colors. Add them to your CSS file to customize:
 
 ```css
 @import "tailwindcss";
+@source "../node_modules/@smurfox/proxy-ui/dist";
 
 @theme {
   --color-primary: #376fff;
@@ -420,7 +424,7 @@ A flexible card component with customizable styling and borders.
 | ------------- | ---------------------------- | ----------- | --------------------------------- |
 | `variant`     | `'default' \| 'liquidGlass'` | `'default'` | Visual style of the card.         |
 | `customClass` | `string`                     | —           | Custom Tailwind classes to apply. |
-| `isBordered`  | `boolean`                    | `false`     | Adds a border to the card.        |
+| `isBordered`  | `boolean`                    | `true`      | Adds a border to the card.        |
 
 **Examples**
 
