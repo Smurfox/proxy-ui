@@ -115,6 +115,10 @@
   </div>
 </template>
 
+<script lang="ts">
+let activeClose: (() => void) | null = null
+</script>
+
 <script setup lang="ts">
 import { AnimatePresence, motion } from 'motion-v'
 import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
@@ -233,16 +237,21 @@ async function toggle() {
     return
   }
 
-  if (!isOpen.value) {
-    await nextTick()
-    calculateDropdownPosition()
+  if (isOpen.value) {
+    close()
+    return
   }
 
-  isOpen.value = !isOpen.value
+  if (activeClose && activeClose !== close) activeClose()
+  activeClose = close
+  await nextTick()
+  calculateDropdownPosition()
+  isOpen.value = true
 }
 
 function close() {
   isOpen.value = false
+  if (activeClose === close) activeClose = null
 }
 
 function selectOption(option: SelectOption) {
@@ -274,5 +283,6 @@ onUnmounted(() => {
   document.removeEventListener('click', onClickOutside)
   window.removeEventListener('scroll', onScroll, true)
   window.removeEventListener('resize', onScroll)
+  if (activeClose === close) activeClose = null
 })
 </script>
