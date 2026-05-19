@@ -79,9 +79,9 @@ const roundedClasses = {
 
 const variants = {
   default:
-    'border border-gray-200 dark:border-[#2D323B] bg-white dark:bg-[#242830] enabled:hover:bg-gray-100 dark:enabled:hover:bg-[#2A2F37] dark:text-white dark:placeholder:text-[#6B7280] focus:bg-white dark:focus:bg-[#242830] focus:ring-2 focus:ring-primary focus:outline-none',
+    'border border-gray-200 dark:border-[#2D323B] bg-gray-100 dark:bg-[#1C2026] dark:text-white dark:placeholder:text-[#6B7280] enabled:hover:bg-[#E0E0E1] dark:enabled:hover:bg-[#22272F] focus:bg-[#EBEBEC] dark:focus:bg-[#1C2026] focus:ring-2 focus:ring-primary focus:outline-none',
   secondary:
-    'border border-gray-200 dark:border-[#2D323B] bg-[#EBEBEC] dark:bg-[#1C2026] dark:text-white dark:placeholder:text-[#6B7280] enabled:hover:bg-[#E0E0E1] dark:enabled:hover:bg-[#22272F] focus:bg-[#EBEBEC] dark:focus:bg-[#1C2026] focus:ring-2 focus:ring-primary focus:outline-none',
+    'border border-gray-200 dark:border-[#2D323B] bg-white dark:bg-[#242830] enabled:hover:bg-gray-100 dark:enabled:hover:bg-[#2A2F37] dark:text-white dark:placeholder:text-[#6B7280] focus:bg-white dark:focus:bg-[#242830] focus:ring-2 focus:ring-primary focus:outline-none',
 } as const
 const errorVariants = {
   default:

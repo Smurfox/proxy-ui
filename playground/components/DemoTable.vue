@@ -162,11 +162,63 @@
         is-body-colored
       />
     </div>
+
+    <!-- With pagination -->
+    <div class="w-full max-w-5xl mx-auto flex flex-col gap-3">
+      <h1 class="font-semibold text-lg dark:text-white">
+        With Pagination
+      </h1>
+      <p class="text-sm text-gray-600 dark:text-gray-400">
+        Set <code>with-pagination</code> to render the table footer with the
+        pagination controls. This example has 15 records and displays 5 rows.
+      </p>
+      <PUTable
+        :items="paginatedItemsPreview"
+        :columns="columnsCustom"
+        :pagination-page="currentPage"
+        :pagination-total-items="paginatedItemsCustom.length"
+        :pagination-items-per-page="5"
+        rounded="2xl"
+        is-bordered
+        is-body-colored
+        with-pagination
+        @update:pagination-page="currentPage = $event"
+      >
+        <template #cell-folio="{ value }">
+          <div class="flex items-center gap-2">
+            <Icon
+              name="ion:document-text-outline"
+              size="20"
+            />
+            <span class="font-bold text-xs">{{ value }}</span>
+          </div>
+        </template>
+        <template #cell-actions>
+          <div class="flex items-center gap-2">
+            <Icon
+              name="ion:eye-outline"
+              size="18"
+              class="text-gray-500 hover:text-gray-700 cursor-pointer"
+            />
+            <Icon
+              name="ion:pencil-outline"
+              size="18"
+              class="text-gray-500 hover:text-gray-700 cursor-pointer"
+            />
+            <Icon
+              name="ion:trash-outline"
+              size="18"
+              class="text-gray-500 hover:text-gray-700 cursor-pointer"
+            />
+          </div>
+        </template>
+      </PUTable>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 interface CustomItem {
   id: number
@@ -235,6 +287,27 @@ const itemsCustom = [
     total: '$150.00',
   },
 ]
+
+const paginatedItemsCustom = Array.from({ length: 50 }, (_, index) => {
+  const id = index + 1
+  return {
+    id,
+    folio: `FOL-${String(id).padStart(3, '0')}`,
+    date: `2024-01-${String((id % 28) + 1).padStart(2, '0')}`,
+    client: `Client ${id}`,
+    store: `Store ${String.fromCharCode(64 + ((id - 1) % 5) + 1)}`,
+    total: `$${(95 + id * 12).toFixed(2)}`,
+  }
+})
+
+const currentPage = ref(1)
+const itemsPerPage = 5
+
+const paginatedItemsPreview = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  const end = start + itemsPerPage
+  return paginatedItemsCustom.slice(start, end)
+})
 </script>
 
 <style scoped></style>

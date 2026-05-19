@@ -26,6 +26,11 @@
         :size="iconSize"
         :class="iconColor ? `text-${iconColor}` : ''"
       />
+      <slot v-else-if="!label" />
+      <span
+        v-else
+        class="font-medium leading-none"
+      >{{ label }}</span>
     </template>
     <template v-else>
       <Icon
@@ -148,7 +153,7 @@ const secondaryColorClasses = {
 
 const outlineColorClasses = {
   default:
-    'border border-gray-300 text-black dark:border-[#2D323B] dark:text-white hover:bg-gray-100/80 dark:hover:bg-[#1A1D23]',
+    'border border-gray-200 text-black dark:border-[#2D323B] dark:text-white hover:bg-gray-100/80 dark:hover:bg-[#1A1D23]',
   ios: 'border border-blue-500 text-blue-500 hover:bg-blue-500/15 dark:hover:bg-blue-500/25',
   primary:
     'border border-primary text-primary hover:bg-primary/15 dark:hover:bg-primary/25',
