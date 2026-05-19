@@ -96,6 +96,28 @@
             </td>
           </tr>
         </tbody>
+
+        <tfoot
+          v-if="props.withPagination"
+          class="border-t border-gray-200/70 dark:border-[#23272F]"
+          :class="[props.isBodyColored ? props.bodyColor : '']"
+        >
+          <tr>
+            <td
+              :colspan="columns.length"
+              class="px-4 py-3"
+            >
+              <Pagination
+                :page="props.paginationPage"
+                :total-items="resolvedPaginationTotalItems"
+                :items-per-page="resolvedPaginationItemsPerPage"
+                :show-items-count="props.paginationShowItemsCount"
+                @update:page="onPaginationPageUpdate"
+                @page-change="onPaginationPageChange"
+              />
+            </td>
+          </tr>
+        </tfoot>
       </table>
     </div>
 
@@ -172,8 +194,10 @@
 </template>
 
 <script setup lang="ts" generic="TItem extends { id: string | number }">
+import { computed } from 'vue'
 import { motion } from 'motion-v'
 import Lottie from './Lottie.vue'
+import Pagination from './Pagination.vue'
 import defaultEmptyAnimation from '../assets/empty-state.json'
 
 const roundedClasses = {
@@ -259,6 +283,11 @@ const props = withDefaults(
     showEmptyAnimation?: boolean
     emptyAnimationData?: object
     emptyAnimationSize?: number
+    withPagination?: boolean
+    paginationPage?: number
+    paginationTotalItems?: number
+    paginationItemsPerPage?: number
+    paginationShowItemsCount?: boolean
   }>(),
   {
     items: () => [],
@@ -278,11 +307,27 @@ const props = withDefaults(
     showEmptyAnimation: true,
     emptyAnimationData: undefined,
     emptyAnimationSize: 220,
+    withPagination: false,
+    paginationPage: 1,
+    paginationTotalItems: undefined,
+    paginationItemsPerPage: undefined,
+    paginationShowItemsCount: true,
   },
 )
 
+const resolvedPaginationTotalItems = computed(() => {
+  return props.paginationTotalItems ?? props.items.length
+})
+
+const resolvedPaginationItemsPerPage = computed(() => {
+  if (props.paginationItemsPerPage != null) return props.paginationItemsPerPage
+  return props.items.length > 0 ? props.items.length : 10
+})
+
 const emit = defineEmits<{
   'row-click': [item: TItem]
+  'update:paginationPage': [page: number]
+  'pagination-page-change': [page: number]
 }>()
 
 function getCellValue(item: TItem, key: string): unknown {
@@ -296,6 +341,14 @@ function onRowClick(event: MouseEvent) {
   if (id == null) return
   const item = props.items.find(i => String(i.id) === id)
   if (item) emit('row-click', item)
+}
+
+function onPaginationPageUpdate(page: number) {
+  emit('update:paginationPage', page)
+}
+
+function onPaginationPageChange(page: number) {
+  emit('pagination-page-change', page)
 }
 </script>
 

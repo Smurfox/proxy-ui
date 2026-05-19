@@ -46,6 +46,8 @@
           <DemoAutocomplete v-else-if="activeTab === 'autocomplete'" />
           <DemoTable v-else-if="activeTab === 'table'" />
           <DemoDropdown v-else-if="activeTab === 'dropdown'" />
+          <DemoSkeleton v-else-if="activeTab === 'skeleton'" />
+          <DemoPagination v-else-if="activeTab === 'pagination'" />
           <DemoLottie v-else-if="activeTab === 'lottie'" />
         </div>
       </div>
@@ -69,6 +71,8 @@ const demoTabs = [
   { label: 'Autocomplete', value: 'autocomplete' },
   { label: 'Table', value: 'table' },
   { label: 'Dropdown', value: 'dropdown' },
+  { label: 'Skeleton', value: 'skeleton' },
+  { label: 'Pagination', value: 'pagination' },
   { label: 'Lottie', value: 'lottie' },
 ]
 

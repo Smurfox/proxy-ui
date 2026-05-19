@@ -773,12 +773,19 @@ A responsive data table that renders as a normal `<table>` on `md+` viewports an
 | `showEmptyAnimation`   | `boolean`                                                                    | `true`                                                                                   | Renders a bundled Lottie above the empty-state text. Set to `false` to hide it.             |
 | `emptyAnimationData`   | `object \| undefined`                                                        | bundled `empty-state.json`                                                               | Override the empty-state Lottie with your own animation JSON object.                        |
 | `emptyAnimationSize`   | `number`                                                                     | `220`                                                                                    | Width and height of the empty-state animation, in pixels.                                   |
+| `withPagination`         | `boolean`                                                                  | `false`                                                                                  | Renders a `PUPagination` inside the table footer.                                           |
+| `paginationPage`         | `number`                                                                   | `1`                                                                                      | Current page (use with `v-model:paginationPage`).                                           |
+| `paginationTotalItems`   | `number \| undefined`                                                      | `items.length`                                                                           | Total number of items across all pages. Defaults to the length of `items`.                  |
+| `paginationItemsPerPage` | `number \| undefined`                                                      | `items.length` (or `10` if empty)                                                        | Items per page. Defaults to the current `items` length so client-paginated tables work out of the box. |
+| `paginationShowItemsCount` | `boolean`                                                                | `true`                                                                                   | Show the "Mostrando X-Y de Z registros" label on the left.                                  |
 
 **Events**
 
-| Event       | Payload                                                  | Description                                                              |
-| ----------- | -------------------------------------------------------- | ------------------------------------------------------------------------ |
-| `row-click` | `item: TItem`                                            | Emitted when a row is clicked (only when `isSelectable` is `true`). `TItem` is inferred from `items`. |
+| Event                     | Payload          | Description                                                                                            |
+| ------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------ |
+| `row-click`               | `item: TItem`    | Emitted when a row is clicked (only when `isSelectable` is `true`). `TItem` is inferred from `items`.  |
+| `update:paginationPage`   | `page: number`   | Emitted when the user changes the page (enables `v-model:paginationPage`).                             |
+| `pagination-page-change`  | `page: number`   | Emitted alongside `update:paginationPage` for non-v-model listeners.                                   |
 
 **Slots**
 
@@ -837,6 +844,112 @@ function onRowClick(item) {
 
 ---
 
+### PUPagination
+
+A pagination control with first/prev/next/last buttons and a numeric page range (up to 5 page buttons grouped together). Used standalone or embedded inside `PUTable` via `withPagination`.
+
+```vue
+<PUPagination
+  v-model:page="page"
+  :total-items="items.length"
+  :items-per-page="10"
+/>
+```
+
+**Props**
+
+| Prop             | Type      | Default | Description                                                                |
+| ---------------- | --------- | ------- | -------------------------------------------------------------------------- |
+| `page`           | `number`  | `1`     | Current page (use with `v-model:page`).                                    |
+| `totalItems`     | `number`  | `0`     | Total number of items across all pages. Used to compute `totalPages`.      |
+| `itemsPerPage`   | `number`  | `10`    | Items per page.                                                            |
+| `showItemsCount` | `boolean` | `true`  | Show the "Mostrando X-Y de Z registros" label on the left (md+ viewports). |
+
+**Events**
+
+| Event           | Payload        | Description                                                       |
+| --------------- | -------------- | ----------------------------------------------------------------- |
+| `update:page`   | `page: number` | Emitted when the page changes (enables `v-model:page`).           |
+| `page-change`   | `page: number` | Emitted alongside `update:page` for non-v-model listeners.        |
+
+**Examples**
+
+```vue
+<!-- Basic -->
+<PUPagination v-model:page="page" :total-items="350" :items-per-page="20" />
+
+<!-- Without the items counter -->
+<PUPagination
+  v-model:page="page"
+  :total-items="350"
+  :items-per-page="20"
+  :show-items-count="false"
+/>
+
+<!-- Inside a PUTable -->
+<PUTable
+  v-model:pagination-page="page"
+  :columns="columns"
+  :items="pagedItems"
+  with-pagination
+  :pagination-total-items="totalItems"
+  :pagination-items-per-page="20"
+/>
+```
+
+---
+
+### PUSkeleton
+
+A shimmer loading placeholder used to reserve layout space while async content is fetching. Accepts named sizes or any Tailwind `h-*` / `w-*` utility class as a string.
+
+```vue
+<PUSkeleton />
+```
+
+**Props**
+
+| Prop      | Type                                                | Default         | Description                                                                                 |
+| --------- | --------------------------------------------------- | --------------- | ------------------------------------------------------------------------------------------- |
+| `variant` | `'rectangular' \| 'circular' \| 'text'`             | `'rectangular'` | Visual shape. `rectangular` is `rounded-xl`, `circular` is a full circle, `text` is `4px`.  |
+| `height`  | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| string`    | `'md'`          | Named height (`h-4` → `h-20`) or any Tailwind height utility (e.g. `'h-32'`, `'h-3.5'`).    |
+| `width`   | `'full' \| 'auto' \| string`                        | `'full'`        | `full` → `w-full`, `auto` → `w-auto`, or any Tailwind width utility (e.g. `'w-1/2'`).       |
+
+**Examples**
+
+```vue
+<!-- Basic -->
+<PUSkeleton />
+
+<!-- Variants -->
+<PUSkeleton variant="rectangular" height="h-20" width="w-32" />
+<PUSkeleton variant="circular" height="h-16" width="w-16" />
+<PUSkeleton variant="text" height="h-3" width="w-2/3" />
+
+<!-- Named heights -->
+<PUSkeleton height="xs" />
+<PUSkeleton height="sm" />
+<PUSkeleton height="md" />
+<PUSkeleton height="lg" />
+<PUSkeleton height="xl" />
+
+<!-- Composed card placeholder -->
+<PUCard class="p-6 flex flex-col gap-4">
+  <PUSkeleton height="h-40" />
+  <PUSkeleton height="h-5" width="w-2/3" />
+  <PUSkeleton height="h-4" width="w-1/2" />
+  <div class="flex items-center gap-3 pt-2">
+    <PUSkeleton height="h-10" width="w-10" />
+    <div class="flex flex-col gap-1.5 flex-1">
+      <PUSkeleton height="h-3.5" width="w-1/3" />
+      <PUSkeleton height="h-3" width="w-1/4" />
+    </div>
+  </div>
+</PUCard>
+```
+
+---
+
 ## TypeScript
 
 ProxyUI exports all component types:
@@ -870,6 +983,11 @@ import type {
   TableItem,
   TableRounded,
   TableItemsSize,
+  PaginationProps,
+  SkeletonProps,
+  SkeletonVariant,
+  SkeletonHeight,
+  SkeletonWidth,
   AutocompleteOption,
   AutocompleteProps,
 } from "@smurfox/proxy-ui";

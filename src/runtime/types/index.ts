@@ -175,6 +175,7 @@ export interface TableProps {
   isBordered?: boolean
   isSelectable?: boolean
   headerColor?: string
+  isBodyColored?: boolean
   bodyColor?: string
   itemsSize?: TableItemsSize
   hasShadow?: boolean
@@ -183,4 +184,26 @@ export interface TableProps {
   showEmptyAnimation?: boolean
   emptyAnimationData?: object
   emptyAnimationSize?: number
+  withPagination?: boolean
+  paginationPage?: number
+  paginationTotalItems?: number
+  paginationItemsPerPage?: number
+  paginationShowItemsCount?: boolean
+}
+
+export interface PaginationProps {
+  page?: number
+  totalItems?: number
+  itemsPerPage?: number
+  showItemsCount?: boolean
+}
+
+export type SkeletonHeight = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+export type SkeletonWidth = 'full' | 'auto'
+export type SkeletonVariant = 'rectangular' | 'circular' | 'text'
+
+export interface SkeletonProps {
+  height?: SkeletonHeight | string
+  width?: SkeletonWidth | string
+  variant?: SkeletonVariant
 }

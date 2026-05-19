@@ -24,7 +24,7 @@
       <textarea
         :placeholder="placeholder"
         :rows="rows"
-        class="w-full p-3 text-sm transition-colors"
+        class="w-full p-3 text-sm transition-[background-color,border-color]"
         :class="[
           $slots.startContent ? 'pl-9' : '',
           $slots.endContent ? 'pr-9' : '',
