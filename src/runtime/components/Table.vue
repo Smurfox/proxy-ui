@@ -38,15 +38,13 @@
 
         <tbody :class="[props.isBodyColored ? props.bodyColor : '']">
           <template v-if="items.length > 0">
-            <motion.tr
+            <tr
               v-for="item in items"
               :key="item.id"
               :data-row-id="item.id"
-              :while-hover="props.isSelectable ? { scale: 1.01 } : {}"
-              :transition="{ type: 'spring', stiffness: 400, damping: 30 }"
               :class="
                 props.isSelectable
-                  ? 'cursor-pointer hover:bg-gray-100 dark:hover:bg-[#1C2026]'
+                  ? 'cursor-pointer transition-colors duration-150 hover:bg-gray-100 dark:hover:bg-[#1C2026]'
                   : ''
               "
               @click="onRowClick"
@@ -66,7 +64,7 @@
                   {{ getCellValue(item, column.id) }}
                 </slot>
               </td>
-            </motion.tr>
+            </tr>
           </template>
 
           <tr v-else>
@@ -123,16 +121,14 @@
 
     <!-- Vista de tarjetas para dispositivos móviles -->
     <div class="block md:hidden space-y-4 p-1">
-      <motion.div
+      <div
         v-for="item in items"
         :key="item.id"
         :data-row-id="item.id"
-        :while-hover="props.isSelectable ? { y: -3 } : {}"
-        :transition="{ type: 'spring', stiffness: 400, damping: 25 }"
         class="bg-white dark:bg-[#18181B] border border-gray-200 dark:border-white/10 rounded-lg p-4 shadow-sm"
         :class="
           props.isSelectable
-            ? 'cursor-pointer hover:bg-gray-50 dark:hover:bg-white/5 hover:shadow-md'
+            ? 'cursor-pointer transition-all duration-150 hover:bg-gray-50 dark:hover:bg-white/5 hover:shadow-md hover:-translate-y-0.5'
             : ''
         "
         @click="onRowClick"
@@ -166,7 +162,7 @@
             </div>
           </div>
         </slot>
-      </motion.div>
+      </div>
 
       <!-- Mensaje cuando no hay items -->
       <div
@@ -195,7 +191,6 @@
 
 <script setup lang="ts" generic="TItem extends { id: string | number }">
 import { computed } from 'vue'
-import { motion } from 'motion-v'
 import Lottie from './Lottie.vue'
 import Pagination from './Pagination.vue'
 import defaultEmptyAnimation from '../assets/empty-state.json'
