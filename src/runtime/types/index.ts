@@ -98,6 +98,24 @@ export interface InputProps {
   disabled?: boolean
 }
 
+export interface DatePickerProps {
+  modelValue?: string
+  label?: string
+  labelClass?: string
+  placeholder?: string
+  description?: string
+  rounded?: InputRounded
+  variant?: InputVariant
+  required?: boolean
+  error?: string
+  disabled?: boolean
+  min?: string
+  max?: string
+  locale?: string
+  minYear?: number
+  maxYear?: number
+}
+
 export interface AutocompleteOption {
   label: string
   value: string | number

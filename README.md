@@ -96,10 +96,14 @@ A button component powered by `motion-v` for smooth press animations.
 | `disabled`    | `boolean`                                                                           | `false`     | Disables the button.                                             |
 | `loading`     | `boolean`                                                                           | `false`     | Shows a spinner and disables interaction.                        |
 | `isIconOnly`  | `boolean`                                                                           | `false`     | Displays only an icon without label.                             |
-| `icon`        | `string`                                                                            | —           | Iconify icon name for icon-only button.                          |
-| `startIcon`   | `string`                                                                            | —           | Iconify icon name rendered before the label.                     |
-| `endIcon`     | `string`                                                                            | —           | Iconify icon name rendered after the label.                      |
-| `customClass` | `string`                                                                            | —           | Tailwind classes applied when `color="custom"`.                  |
+| `icon`           | `string`                                                                            | —           | Iconify icon name for icon-only button.                          |
+| `startIcon`      | `string`                                                                            | —           | Iconify icon name rendered before the label.                     |
+| `startIconClass` | `string`                                                                            | —           | Extra classes applied to the `startIcon` (e.g. rotation, color override). |
+| `endIcon`        | `string`                                                                            | —           | Iconify icon name rendered after the label.                      |
+| `endIconClass`   | `string`                                                                            | —           | Extra classes applied to the `endIcon` (e.g. `rotate-180`).      |
+| `iconSize`       | `string`                                                                            | —           | Size passed to the icon-only `Icon` component.                   |
+| `iconColor`      | `string`                                                                            | —           | Color name appended as `text-{iconColor}` to the icon-only icon. |
+| `customClass`    | `string`                                                                            | —           | Extra Tailwind classes merged into the final class list. Combines with the variant/color and wins on conflicts via `tailwind-merge`. Used alone with `color="custom"` to define the entire color scheme. |
 
 **Examples**
 
@@ -131,11 +135,22 @@ A button component powered by `motion-v` for smooth press animations.
 <PUButton disabled label="Disabled" />
 <PUButton loading label="Saving..." />
 
-<!-- Custom color -->
+<!-- Custom color (customClass replaces the color scheme entirely) -->
 <PUButton
   color="custom"
   custom-class="bg-purple-500 text-white hover:bg-purple-600"
   label="Custom"
+/>
+
+<!-- Additive customClass — overrides text color on a ghost button -->
+<PUButton variant="ghost" custom-class="font-bold text-amber-500" label="Tweaked" />
+
+<!-- Rotating endIcon via endIconClass (e.g. caret that flips when open) -->
+<PUButton
+  variant="ghost"
+  label="Year"
+  end-icon="mdi:chevron-down"
+  :end-icon-class="isOpen ? 'rotate-180 transition-transform' : 'transition-transform'"
 />
 
 <!-- Slot -->
@@ -143,6 +158,8 @@ A button component powered by `motion-v` for smooth press animations.
   <span>Custom content</span>
 </PUButton>
 ```
+
+> `customClass` is now **additive**: it's merged into the class list through `tailwind-merge`, so conflicting utilities (`text-*`, `bg-*`, `font-*`, etc.) override the variant/color defaults automatically. Use `color="custom"` only when you want to fully replace the color scheme rather than override individual properties.
 
 ---
 
@@ -404,6 +421,101 @@ Filtering is case-insensitive and matches `label`. When the input text matches t
   @search="onSearch"
 />
 ```
+
+---
+
+### PUDatePicker
+
+A custom date picker that replaces the native `<input type="date">` with a calendar popover. The popover is teleported to `body` (so it escapes any `overflow` ancestor) and includes a year scroller so the user can jump decades without arrow-clicking month by month. Like `PUSelect`/`PUAutocomplete`, only one popover can be open at a time across the page, and the panel re-positions itself on scroll and resize.
+
+```vue
+<PUDatePicker v-model="birthDate" label="Birth date" required>
+  <template #startContent>
+    <Icon name="lucide:calendar" />
+  </template>
+</PUDatePicker>
+```
+
+The `modelValue` is an ISO date string (`YYYY-MM-DD`). The trigger shows the date formatted via `Intl.DateTimeFormat` with the component's `locale` (Spanish by default). Click the month/year label in the popover header to open the year scroller — it auto-scrolls to the current view year. The "Borrar" button clears the value without closing the popover, so you can pick a new date immediately. The "Hoy" button picks today (and is disabled if today is outside `min`/`max`).
+
+**Props**
+
+| Prop          | Type                                                        | Default                   | Description                                                                                       |
+| ------------- | ----------------------------------------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------- |
+| `modelValue`  | `string`                                                    | `''`                      | ISO date `YYYY-MM-DD` (v-model). Empty string means no selection.                                 |
+| `label`       | `string`                                                    | —                         | Label displayed above the trigger.                                                                |
+| `labelClass`  | `string`                                                    | `'text-sm font-semibold'` | Custom classes for the label.                                                                     |
+| `placeholder` | `string`                                                    | `'dd/mm/aaaa'`            | Text shown when no date is selected.                                                              |
+| `description` | `string`                                                    | —                         | Helper text displayed below.                                                                      |
+| `rounded`     | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| 'full'` | `'xl'`                    | Border radius of the trigger.                                                                     |
+| `variant`     | `'default' \| 'secondary'`                                  | `'default'`               | Visual style of the trigger.                                                                      |
+| `required`    | `boolean`                                                   | `false`                   | Shows a red asterisk on the label.                                                                |
+| `error`       | `string`                                                    | —                         | Error message to display. Changes styling to danger.                                              |
+| `disabled`    | `boolean`                                                   | `false`                   | Disables the trigger.                                                                             |
+| `min`         | `string`                                                    | —                         | Minimum selectable date (`YYYY-MM-DD`). Days, months, and years before it are disabled.           |
+| `max`         | `string`                                                    | —                         | Maximum selectable date (`YYYY-MM-DD`). Days, months, and years after it are disabled.            |
+| `locale`      | `string`                                                    | `'es'`                    | BCP 47 locale tag for the displayed date format and the month name in the header.                 |
+| `minYear`     | `number`                                                    | `currentYear - 100`       | Lower bound of the year scroller. Clamped further by `min` if present.                            |
+| `maxYear`     | `number`                                                    | `currentYear + 10`        | Upper bound of the year scroller. Clamped further by `max` if present.                            |
+
+**Slots**
+
+| Slot           | Description                                            |
+| -------------- | ------------------------------------------------------ |
+| `startContent` | Icon or content at the start of the trigger.           |
+| `endContent`   | Icon or content at the end (replaces the default calendar icon). |
+
+**Events**
+
+| Event               | Payload    | Description                                                                |
+| ------------------- | ---------- | -------------------------------------------------------------------------- |
+| `update:modelValue` | `string`   | ISO date when a date is picked, or empty string when "Borrar" is clicked.  |
+
+**Examples**
+
+```vue
+<!-- Basic -->
+<PUDatePicker v-model="startDate" label="Start date" />
+
+<!-- Bounded range (only 2026 dates) -->
+<PUDatePicker
+  v-model="bookingDate"
+  label="Booking"
+  min="2026-01-01"
+  max="2026-12-31"
+/>
+
+<!-- Birthday picker with a wider year range -->
+<PUDatePicker
+  v-model="birthDate"
+  label="Birth date"
+  :min-year="1900"
+  :max-year="2026"
+  required
+/>
+
+<!-- Different locale (English short format) -->
+<PUDatePicker v-model="date" label="Date" locale="en-GB" />
+
+<!-- Linked range — end date can't be before start date -->
+<PUDatePicker v-model="startDate" label="Start" />
+<PUDatePicker
+  v-model="endDate"
+  label="End"
+  :min="startDate || undefined"
+  variant="secondary"
+/>
+
+<!-- With validation error -->
+<PUDatePicker
+  v-model="date"
+  label="Birth date"
+  error="Please pick a valid date"
+  required
+/>
+```
+
+> The popover renders inside a wrapper that mirrors the host's `.dark` ancestor so all child `PUButton`/`PUCard` instances stay in sync with the app's theme — even though they are teleported to `body`. Dark-mode is captured on open; if the theme is toggled while the popover is open, close and reopen it to refresh.
 
 ---
 
@@ -990,10 +1102,11 @@ import type {
   SkeletonWidth,
   AutocompleteOption,
   AutocompleteProps,
+  DatePickerProps,
 } from "@smurfox/proxy-ui";
 ```
 
-> `PUTextArea`, `PUSelect`, and `PUDropdown` define their props inline and do not export dedicated `Props` types. They reuse `InputVariant` and `InputRounded` from the same package. `PUAutocomplete` does export `AutocompleteProps` and `AutocompleteOption`.
+> `PUTextArea`, `PUSelect`, and `PUDropdown` define their props inline and do not export dedicated `Props` types. They reuse `InputVariant` and `InputRounded` from the same package. `PUAutocomplete` and `PUDatePicker` do export `AutocompleteProps`/`AutocompleteOption` and `DatePickerProps` respectively.
 
 ---
 

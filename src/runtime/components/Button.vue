@@ -1,18 +1,7 @@
 <template>
   <motion.button
-    :class="[
-      isIconOnly ? iconOnlySizes[size] : sizes[size],
-      variantClasses[variant],
-      isIconOnly && customClass ? customClass : getColorBtn(variant, color),
-      roundedClasses[rounded],
-      {
-        'opacity-50': disabled || loading,
-        'cursor-pointer': !disabled && !loading,
-        'pointer-events-none': disabled || loading,
-      },
-    ]"
+    :class="buttonClass"
     :while-press="disabled || loading ? {} : { scale: 0.95 }"
-    class="flex items-center justify-center select-none transition-[color,background-color,opacity,filter] duration-200"
     @click="emit('click', $event)"
   >
     <template v-if="isIconOnly">
@@ -42,6 +31,7 @@
         v-if="startIcon"
         :name="startIcon"
         class="mr-2"
+        :class="startIconClass"
       />
       <slot v-if="!label" />
       <span
@@ -52,6 +42,7 @@
         v-if="endIcon"
         :name="endIcon"
         class="ml-2"
+        :class="endIconClass"
       />
     </template>
   </motion.button>
@@ -59,6 +50,8 @@
 
 <script setup lang="ts">
 import { motion } from 'motion-v'
+import { computed } from 'vue'
+import { twMerge } from 'tailwind-merge'
 import type {
   ButtonSize,
   ButtonVariant,
@@ -113,7 +106,9 @@ const props = withDefaults(
     isIconOnly?: boolean
     icon?: string
     startIcon?: string
+    startIconClass?: string
     endIcon?: string
+    endIconClass?: string
     iconSize?: string
     iconColor?: string
     customClass?: string
@@ -204,6 +199,22 @@ function getColorBtn(variant: ButtonVariant, color: ButtonColor) {
   }
 }
 // #endregion
+
+const buttonClass = computed(() =>
+  twMerge(
+    'flex items-center justify-center select-none transition-[color,background-color,opacity,filter] duration-200',
+    props.isIconOnly ? iconOnlySizes[props.size] : sizes[props.size],
+    variantClasses[props.variant],
+    props.isIconOnly && props.customClass
+      ? props.customClass
+      : getColorBtn(props.variant, props.color),
+    roundedClasses[props.rounded],
+    props.customClass,
+    (props.disabled || props.loading) && 'opacity-50',
+    !props.disabled && !props.loading && 'cursor-pointer',
+    (props.disabled || props.loading) && 'pointer-events-none',
+  ),
+)
 </script>
 
 <style scoped></style>

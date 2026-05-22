@@ -43,6 +43,7 @@
           <DemoCards v-else-if="activeTab === 'cards'" />
           <DemoInputs v-else-if="activeTab === 'inputs'" />
           <DemoSelect v-else-if="activeTab === 'select'" />
+          <DemoDatePicker v-else-if="activeTab === 'datepicker'" />
           <DemoAutocomplete v-else-if="activeTab === 'autocomplete'" />
           <DemoTable v-else-if="activeTab === 'table'" />
           <DemoDropdown v-else-if="activeTab === 'dropdown'" />
@@ -68,6 +69,7 @@ const demoTabs = [
   { label: 'Cards', value: 'cards' },
   { label: 'Inputs', value: 'inputs' },
   { label: 'Select', value: 'select' },
+  { label: 'Date Picker', value: 'datepicker' },
   { label: 'Autocomplete', value: 'autocomplete' },
   { label: 'Table', value: 'table' },
   { label: 'Dropdown', value: 'dropdown' },
