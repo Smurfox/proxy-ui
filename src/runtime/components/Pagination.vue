@@ -38,13 +38,14 @@
       />
       <div class="flex items-center gap-1">
         <Button
-          v-for="p in pageRange"
-          :key="p"
-          :label="p.toString()"
+          v-for="slot in pageRange"
+          v-show="slot.visible"
+          :key="slot.position"
+          :label="slot.page.toString()"
           is-icon-only
-          :color="p === currentPage ? 'primary' : 'default'"
-          :variant="p === currentPage ? 'default' : 'outline'"
-          @click="goToPage(p)"
+          :color="slot.page === currentPage ? 'primary' : 'default'"
+          :variant="slot.page === currentPage ? 'default' : 'outline'"
+          @click="goToPage(slot.page)"
         />
       </div>
       <Button
@@ -110,6 +111,10 @@ const endItem = computed(() => {
   return Math.min(end, props.totalItems)
 })
 
+// Stable-length slot list. Always 5 entries so PUButton instances are never
+// unmounted when totalPages shrinks (filter change) — motion-v's while-press
+// cleanup would dispatchEvent on a null DOM otherwise. Slots beyond the
+// current visible range are hidden via v-show, keeping the buttons mounted.
 const pageRange = computed(() => {
   const total = totalPages.value
   const current = currentPage.value
@@ -123,12 +128,17 @@ const pageRange = computed(() => {
     start = Math.max(end - maxPages + 1, 1)
   }
 
-  const range = []
-  for (let i = start; i <= end; i++) {
-    range.push(i)
+  const slots = []
+  for (let i = 0; i < maxPages; i++) {
+    const page = start + i
+    slots.push({
+      position: i,
+      page,
+      visible: page <= end,
+    })
   }
 
-  return range
+  return slots
 })
 
 function emitPage(page: number) {
