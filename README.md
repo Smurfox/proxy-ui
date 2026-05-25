@@ -178,6 +178,7 @@ A flexible input component with validation and state management.
 | `type`        | `string`                                                    | `'text'`                  | HTML input type (text, email, password, etc).        |
 | `label`       | `string`                                                    | —                         | Label displayed above the input.                     |
 | `labelClass`  | `string`                                                    | `'text-sm font-semibold'` | Custom classes for the label.                        |
+| `inlineLabel` | `boolean`                                                   | `false`                   | Render `label` as a floating label inside the input (small text above the value, no external label above). |
 | `placeholder` | `string`                                                    | —                         | Placeholder text inside the input.                   |
 | `description` | `string`                                                    | —                         | Helper text displayed below the input.               |
 | `rounded`     | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| 'full'` | `'xl'`                    | Border radius.                                       |
@@ -244,6 +245,7 @@ A multi-line text input. Shares the look and feel of `PUInput`, with extra props
 | `modelValue`  | `string \| number`                                          | —                         | Bound value (v-model).                               |
 | `label`       | `string`                                                    | —                         | Label displayed above the textarea.                  |
 | `labelClass`  | `string`                                                    | `'text-sm font-semibold'` | Custom classes for the label.                        |
+| `inlineLabel` | `boolean`                                                   | `false`                   | Render `label` as a floating label inside the textarea. |
 | `placeholder` | `string`                                                    | —                         | Placeholder text.                                    |
 | `description` | `string`                                                    | —                         | Helper text displayed below.                         |
 | `rounded`     | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| 'full'` | `'xl'`                    | Border radius.                                       |
@@ -307,6 +309,7 @@ A custom select with an animated dropdown panel teleported to `body`. Dark-mode 
 | `options`     | `{ label: string, value: string \| number }[]`              | `[]`                      | Items shown in the dropdown.                         |
 | `label`       | `string`                                                    | —                         | Label displayed above the select.                    |
 | `labelClass`  | `string`                                                    | `'text-sm font-semibold'` | Custom classes for the label.                        |
+| `inlineLabel` | `boolean`                                                   | `false`                   | Render `label` as a floating label inside the trigger. |
 | `placeholder` | `string`                                                    | `'Seleccionar'`           | Text shown when nothing is selected.                 |
 | `description` | `string`                                                    | —                         | Helper text displayed below.                         |
 | `rounded`     | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| 'full'` | `'xl'`                    | Border radius.                                       |
@@ -372,6 +375,7 @@ Filtering is case-insensitive and matches `label`. When the input text matches t
 | `options`     | `{ label: string, value: string \| number }[]`              | `[]`                      | Items shown in the dropdown.                         |
 | `label`       | `string`                                                    | —                         | Label displayed above the input.                     |
 | `labelClass`  | `string`                                                    | `'text-sm font-semibold'` | Custom classes for the label.                        |
+| `inlineLabel` | `boolean`                                                   | `false`                   | Render `label` as a floating label inside the input. |
 | `placeholder` | `string`                                                    | `'Search...'`             | Placeholder text shown when the input is empty.      |
 | `description` | `string`                                                    | —                         | Helper text displayed below.                         |
 | `rounded`     | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| 'full'` | `'xl'`                    | Border radius.                                       |
@@ -445,6 +449,7 @@ The `modelValue` is an ISO date string (`YYYY-MM-DD`). The trigger shows the dat
 | `modelValue`  | `string`                                                    | `''`                      | ISO date `YYYY-MM-DD` (v-model). Empty string means no selection.                                 |
 | `label`       | `string`                                                    | —                         | Label displayed above the trigger.                                                                |
 | `labelClass`  | `string`                                                    | `'text-sm font-semibold'` | Custom classes for the label.                                                                     |
+| `inlineLabel` | `boolean`                                                   | `false`                   | Render `label` as a floating label inside the trigger (compact dual-line layout).                 |
 | `placeholder` | `string`                                                    | `'dd/mm/aaaa'`            | Text shown when no date is selected.                                                              |
 | `description` | `string`                                                    | —                         | Helper text displayed below.                                                                      |
 | `rounded`     | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| 'full'` | `'xl'`                    | Border radius of the trigger.                                                                     |
@@ -513,7 +518,13 @@ The `modelValue` is an ISO date string (`YYYY-MM-DD`). The trigger shows the dat
   error="Please pick a valid date"
   required
 />
+
+<!-- Inline label — label stacked above the value inside the trigger -->
+<PUDatePicker v-model="startDate" label="Fecha inicial" inline-label />
+<PUDatePicker v-model="endDate" label="Fecha final" inline-label />
 ```
+
+> **Inline label** is supported by all form components (`PUInput`, `PUTextArea`, `PUSelect`, `PUAutocomplete`, `PUDatePicker`). When `inlineLabel` is `true`, the external `<label>` above the field is hidden and the label renders as a small floating label inside the field — ideal for compact filter rows or dense forms. The `required` asterisk follows the label automatically.
 
 > The popover renders inside a wrapper that mirrors the host's `.dark` ancestor so all child `PUButton`/`PUCard` instances stay in sync with the app's theme — even though they are teleported to `body`. Dark-mode is captured on open; if the theme is toggled while the popover is open, close and reopen it to refresh.
 

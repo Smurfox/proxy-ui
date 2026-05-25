@@ -89,6 +89,7 @@ export interface InputProps {
   type?: string
   label?: string
   labelClass?: string
+  inlineLabel?: boolean
   placeholder?: string
   description?: string
   rounded?: InputRounded
@@ -102,6 +103,7 @@ export interface DatePickerProps {
   modelValue?: string
   label?: string
   labelClass?: string
+  inlineLabel?: boolean
   placeholder?: string
   description?: string
   rounded?: InputRounded
@@ -126,6 +128,7 @@ export interface AutocompleteProps {
   options?: AutocompleteOption[]
   label?: string
   labelClass?: string
+  inlineLabel?: boolean
   placeholder?: string
   description?: string
   rounded?: InputRounded

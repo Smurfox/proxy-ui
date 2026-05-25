@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-1">
     <div
-      v-if="label"
+      v-if="label && !inlineLabel"
       class="flex items-start gap-1"
     >
       <label
@@ -20,19 +20,32 @@
     >
       <button
         type="button"
-        class="w-full p-3 text-sm text-left transition-colors flex items-center justify-between gap-3"
+        class="w-full text-sm text-left transition-colors flex items-center justify-between gap-3"
         :class="[
+          inlineLabel && label ? 'pt-2 pb-2.5 px-3' : 'p-3',
           roundedVariants[props.rounded],
           props.error ? errorVariants[props.variant] : variants[props.variant],
           props.disabled ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer',
-          !selectedOption ? 'text-gray-500 dark:text-white/50' : '',
         ]"
         :disabled="props.disabled"
         @click.stop="toggle"
       >
-        <span class="truncate">
-          {{ displayText }}
-        </span>
+        <div class="flex flex-col items-start min-w-0 flex-1 leading-tight">
+          <span
+            v-if="inlineLabel && label"
+            class="text-xs font-medium"
+            :class="props.error ? 'text-danger' : 'text-gray-600 dark:text-white/60'"
+          >
+            {{ label }}<span
+              v-if="props.required"
+              class="text-danger ml-0.5"
+            >*</span>
+          </span>
+          <span
+            class="truncate w-full"
+            :class="!selectedOption ? 'text-gray-500 dark:text-white/50' : ''"
+          >{{ displayText }}</span>
+        </div>
         <Icon
           name="mdi:chevron-down"
           class="text-gray-400 transition-transform duration-200 shrink-0"
@@ -160,6 +173,7 @@ const props = withDefaults(
     options?: SelectOption[]
     label?: string
     labelClass?: string
+    inlineLabel?: boolean
     placeholder?: string
     description?: string
     rounded?: InputRounded
@@ -172,6 +186,7 @@ const props = withDefaults(
     modelValue: null,
     options: () => [],
     labelClass: 'text-sm font-semibold',
+    inlineLabel: false,
     placeholder: 'Seleccionar',
     rounded: 'xl',
     variant: 'default',

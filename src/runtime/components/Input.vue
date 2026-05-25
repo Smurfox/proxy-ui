@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-1">
     <div
-      v-if="label"
+      v-if="label && !inlineLabel"
       class="flex items-start gap-1"
     >
       <label
@@ -22,13 +22,28 @@
       >
         <slot name="startContent" />
       </div>
+      <!-- inline label -->
+      <label
+        v-if="inlineLabel && label"
+        class="absolute top-1.5 text-xs font-medium leading-tight pointer-events-none z-10"
+        :class="[
+          $slots.startContent ? 'left-9' : 'left-3',
+          props.error ? 'text-danger' : 'text-gray-600 dark:text-white/60',
+        ]"
+      >
+        {{ label }}<span
+          v-if="props.required"
+          class="text-danger ml-0.5"
+        >*</span>
+      </label>
       <input
         :type="type"
         :placeholder="placeholder"
-        class="w-full p-3 text-sm transition-colors"
+        class="w-full text-sm transition-colors"
         :class="[
-          $slots.startContent ? 'pl-9' : '',
-          $slots.endContent ? 'pr-9' : '',
+          inlineLabel && label ? 'pt-5 pb-1.5 px-3' : 'p-3',
+          $slots.startContent ? 'pl-9!' : '',
+          $slots.endContent ? 'pr-9!' : '',
           roundedClasses[props.rounded],
           props.error ? errorVariants[props.variant] : variants[props.variant],
           props.disabled ? 'opacity-70' : '',
@@ -96,6 +111,7 @@ const props = withDefaults(
     type?: string
     label?: string
     labelClass?: string
+    inlineLabel?: boolean
     placeholder?: string
     description?: string
     rounded?: InputRounded
@@ -108,6 +124,7 @@ const props = withDefaults(
   {
     type: 'text',
     labelClass: 'text-sm font-semibold',
+    inlineLabel: false,
     rounded: 'xl',
     variant: 'default',
     required: false,

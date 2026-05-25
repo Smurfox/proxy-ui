@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-1">
     <div
-      v-if="label"
+      v-if="label && !inlineLabel"
       class="flex items-start gap-1"
     >
       <label
@@ -28,19 +28,34 @@
 
       <button
         type="button"
-        class="w-full p-3 text-sm text-left transition-colors flex items-center justify-between gap-3"
+        class="w-full text-sm text-left transition-colors flex items-center justify-between gap-3"
         :class="[
+          inlineLabel && label ? 'pt-2 pb-2.5 px-3' : 'p-3',
           $slots.startContent ? 'pl-9' : '',
           $slots.endContent ? 'pr-9' : '',
           roundedClasses[props.rounded],
           props.error ? errorVariants[props.variant] : variants[props.variant],
           props.disabled ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer',
-          !displayValue ? 'text-gray-500 dark:text-white/50' : '',
         ]"
         :disabled="props.disabled"
         @click.stop="toggle"
       >
-        <span class="truncate">{{ displayValue || placeholder }}</span>
+        <div class="flex flex-col items-start min-w-0 flex-1 leading-tight">
+          <span
+            v-if="inlineLabel && label"
+            class="text-xs font-medium"
+            :class="props.error ? 'text-danger' : 'text-gray-600 dark:text-white/60'"
+          >
+            {{ label }}<span
+              v-if="props.required"
+              class="text-danger ml-0.5"
+            >*</span>
+          </span>
+          <span
+            class="truncate w-full"
+            :class="!displayValue ? 'text-gray-500 dark:text-white/50' : ''"
+          >{{ displayValue || placeholder }}</span>
+        </div>
         <Icon
           v-if="!$slots.endContent"
           name="lucide:calendar"
@@ -255,6 +270,7 @@ const props = withDefaults(
     modelValue?: string
     label?: string
     labelClass?: string
+    inlineLabel?: boolean
     placeholder?: string
     description?: string
     rounded?: InputRounded
@@ -271,6 +287,7 @@ const props = withDefaults(
   {
     modelValue: '',
     labelClass: 'text-sm font-semibold',
+    inlineLabel: false,
     placeholder: 'dd/mm/aaaa',
     rounded: 'xl',
     variant: 'default',

@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-1">
     <div
-      v-if="label"
+      v-if="label && !inlineLabel"
       class="flex items-start gap-1"
     >
       <label
@@ -18,14 +18,25 @@
       ref="selectRef"
       class="relative w-full text-left"
     >
+      <label
+        v-if="inlineLabel && label"
+        class="absolute top-1.5 left-3 text-xs font-medium leading-tight pointer-events-none z-10"
+        :class="props.error ? 'text-danger' : 'text-gray-600 dark:text-white/60'"
+      >
+        {{ label }}<span
+          v-if="props.required"
+          class="text-danger ml-0.5"
+        >*</span>
+      </label>
       <input
         ref="inputRef"
         type="text"
         :value="searchQuery"
         :placeholder="props.placeholder"
         :disabled="props.disabled"
-        class="w-full p-3 pr-10 text-sm transition-colors"
+        class="w-full pr-10 text-sm transition-colors"
         :class="[
+          inlineLabel && label ? 'pt-5 pb-1.5 px-3' : 'p-3',
           roundedVariants[props.rounded],
           props.error ? errorVariants[props.variant] : variants[props.variant],
           props.disabled ? 'opacity-70 cursor-not-allowed' : 'cursor-text',
@@ -173,6 +184,7 @@ const props = withDefaults(
     options?: AutocompleteOption[]
     label?: string
     labelClass?: string
+    inlineLabel?: boolean
     placeholder?: string
     description?: string
     rounded?: InputRounded
@@ -185,6 +197,7 @@ const props = withDefaults(
     modelValue: null,
     options: () => [],
     labelClass: 'text-sm font-semibold',
+    inlineLabel: false,
     placeholder: 'Search...',
     rounded: 'xl',
     variant: 'default',

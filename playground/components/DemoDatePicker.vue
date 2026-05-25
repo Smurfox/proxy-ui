@@ -66,6 +66,42 @@
 
     <div class="w-200 mx-auto flex flex-col gap-3">
       <h1 class="font-semibold text-lg">
+        Inline Label
+      </h1>
+      <p class="text-sm text-gray-600 dark:text-gray-400 -mt-2">
+        Floating label inside the trigger — useful for compact filter rows.
+      </p>
+      <div
+        class="border border-gray-300 flex flex-col gap-4 p-9 w-full rounded-xl"
+      >
+        <p class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+          Filtro por fecha
+        </p>
+        <div class="grid grid-cols-2 gap-4">
+          <PUDatePicker
+            v-model="inlineStart"
+            label="Fecha inicial"
+            inline-label
+          />
+          <PUDatePicker
+            v-model="inlineEnd"
+            label="Fecha final"
+            inline-label
+            :min="inlineStart || undefined"
+          />
+        </div>
+        <PUDatePicker
+          v-model="inlineBirth"
+          label="Fecha de nacimiento"
+          variant="secondary"
+          inline-label
+          required
+        />
+      </div>
+    </div>
+
+    <div class="w-200 mx-auto flex flex-col gap-3">
+      <h1 class="font-semibold text-lg">
         Disabled State
       </h1>
       <div
@@ -95,4 +131,7 @@ const endDate = ref('2026-05-28')
 const requiredDate = ref('')
 const blockedDate = ref('2025-12-31')
 const disabledDate = ref('2026-07-10')
+const inlineStart = ref('2026-01-01')
+const inlineEnd = ref('2026-05-25')
+const inlineBirth = ref('')
 </script>

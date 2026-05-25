@@ -121,6 +121,53 @@
     </div>
     <div class="w-200 mx-auto flex flex-col gap-3">
       <h1 class="font-semibold text-lg">
+        Inline Label
+      </h1>
+      <p class="text-sm text-gray-600 dark:text-gray-400 -mt-2">
+        Floating label inside the field for compact layouts.
+      </p>
+      <div
+        class="border border-gray-300 flex flex-col gap-4 p-9 w-full rounded-xl"
+      >
+        <div class="grid grid-cols-2 gap-4">
+          <PUInput
+            v-model="inlineName"
+            label="Nombre"
+            placeholder="Tu nombre"
+            inline-label
+          />
+          <PUInput
+            v-model="inlineEmail"
+            label="Correo electrónico"
+            type="email"
+            placeholder="tu@correo.com"
+            variant="secondary"
+            inline-label
+            required
+          />
+        </div>
+        <PUInput
+          v-model="inlineWithIcon"
+          label="Buscar"
+          placeholder="Escribe para filtrar"
+          inline-label
+        >
+          <template #startContent>
+            <Icon name="ion:search" />
+          </template>
+        </PUInput>
+        <PUTextArea
+          v-model="inlineMessage"
+          label="Mensaje"
+          placeholder="Escribe tu mensaje"
+          inline-label
+          :rows="4"
+        />
+      </div>
+    </div>
+
+    <div class="w-200 mx-auto flex flex-col gap-3">
+      <h1 class="font-semibold text-lg">
         Disabled State
       </h1>
       <div
@@ -174,6 +221,10 @@ import { ref } from 'vue'
 
 const focusValue = ref('ORD-1024')
 const focusValueSecondary = ref('SUMMER-25')
+const inlineName = ref('Alan')
+const inlineEmail = ref('')
+const inlineWithIcon = ref('')
+const inlineMessage = ref('')
 </script>
 
 <style scoped></style>
