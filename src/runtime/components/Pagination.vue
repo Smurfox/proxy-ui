@@ -21,21 +21,22 @@
       </h2>
     </div>
     <div class="flex items-center gap-2">
-      <!-- <Button variant="outline" startIcon="ion:chevron-back" label="Back" /> -->
-      <Button
-        is-icon-only
-        variant="outline"
-        icon="material-symbols:keyboard-double-arrow-left"
-        :disabled="!canGoPrev"
-        @click="goToFirst"
-      />
-      <Button
-        is-icon-only
-        variant="outline"
-        icon="material-symbols:keyboard-arrow-left"
-        :disabled="!canGoPrev"
-        @click="goToPrev"
-      />
+      <span :class="disabledWrapperClass(!canGoPrev)">
+        <Button
+          is-icon-only
+          variant="outline"
+          icon="material-symbols:keyboard-double-arrow-left"
+          @click="goToFirst"
+        />
+      </span>
+      <span :class="disabledWrapperClass(!canGoPrev)">
+        <Button
+          is-icon-only
+          variant="outline"
+          icon="material-symbols:keyboard-arrow-left"
+          @click="goToPrev"
+        />
+      </span>
       <div
         v-if="pageRange.length > 0"
         class="flex items-center gap-1"
@@ -50,27 +51,28 @@
           @click="goToPage(p)"
         />
       </div>
-      <Button
-        variant="outline"
-        icon="material-symbols:keyboard-arrow-right"
-        is-icon-only
-        :disabled="!canGoNext"
-        @click="goToNext"
-      />
-      <Button
-        is-icon-only
-        variant="outline"
-        icon="material-symbols:keyboard-double-arrow-right"
-        :disabled="!canGoNext"
-        @click="goToLast"
-      />
-      <!-- <Button variant="outline" endIcon="ion:chevron-forward" label="Next" /> -->
+      <span :class="disabledWrapperClass(!canGoNext)">
+        <Button
+          variant="outline"
+          icon="material-symbols:keyboard-arrow-right"
+          is-icon-only
+          @click="goToNext"
+        />
+      </span>
+      <span :class="disabledWrapperClass(!canGoNext)">
+        <Button
+          is-icon-only
+          variant="outline"
+          icon="material-symbols:keyboard-double-arrow-right"
+          @click="goToLast"
+        />
+      </span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, nextTick } from 'vue'
 import Button from './Button.vue'
 
 const emit = defineEmits<{
@@ -101,8 +103,19 @@ const currentPage = computed(() => {
   return Math.min(Math.max(props.page, 1), totalPages.value)
 })
 
-const canGoPrev = computed(() => currentPage.value > 1)
-const canGoNext = computed(() => currentPage.value < totalPages.value)
+// Disabled state lives on a <span> wrapper, NOT on PUButton. motion-v inside
+// PUButton crashes when its :disabled prop changes reactively during a page
+// transition (any cascade — even with nextTick deferral — triggers the bug).
+// The wrapper uses pointer-events-none to block clicks and opacity to look
+// disabled, with zero motion-v involvement.
+const canGoPrev = computed(() => props.totalItems > 0 && currentPage.value > 1)
+const canGoNext = computed(
+  () => props.totalItems > 0 && currentPage.value < totalPages.value,
+)
+
+function disabledWrapperClass(isDisabled: boolean) {
+  return isDisabled ? 'pointer-events-none opacity-50 cursor-not-allowed' : ''
+}
 
 const startItem = computed(() => {
   if (props.totalItems === 0) return 0
@@ -134,9 +147,13 @@ const pageRange = computed(() => {
   return range
 })
 
-function emitPage(page: number) {
+async function emitPage(page: number) {
   const nextPage = Math.min(Math.max(page, 1), totalPages.value)
   if (nextPage === props.page) return
+  // Defer the emit so the click frame finishes before the parent re-renders.
+  // Otherwise the consumer's watchers (Pinia fetches, etc.) cascade synchronously
+  // into row remounts and motion-v crashes on the new buttons' init.
+  await nextTick()
   emit('update:page', nextPage)
   emit('page-change', nextPage)
 }
