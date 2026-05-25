@@ -61,6 +61,37 @@
     </div>
     <div class="w-200 mx-auto flex flex-col gap-3">
       <h1 class="font-semibold text-lg">
+        Inline Label
+      </h1>
+      <p class="text-sm text-gray-600 dark:text-gray-400 -mt-2">
+        Floating label inside the search input.
+      </p>
+      <div
+        class="border border-gray-300 flex flex-col gap-4 p-9 w-full rounded-xl"
+      >
+        <div class="grid grid-cols-2 gap-4">
+          <PUAutocomplete
+            v-model="inlineFramework"
+            label="Framework"
+            placeholder="Search..."
+            :options="frameworkOptions"
+            inline-label
+          />
+          <PUAutocomplete
+            v-model="inlineCountry"
+            label="Country"
+            placeholder="Search..."
+            variant="secondary"
+            :options="countryOptions"
+            inline-label
+            required
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="w-200 mx-auto flex flex-col gap-3">
+      <h1 class="font-semibold text-lg">
         Disabled State
       </h1>
       <div
@@ -110,6 +141,8 @@ const selectedStatus = ref<string | number | null>(null)
 const selectedPriority = ref<string | number | null>('high')
 const selectedDisabledFramework = ref<string | number | null>('vue')
 const selectedDisabledRole = ref<string | number | null>('admin')
+const inlineFramework = ref<string | number | null>('nuxt')
+const inlineCountry = ref<string | number | null>(null)
 
 const frameworkOptions = [
   { label: 'Nuxt', value: 'nuxt' },

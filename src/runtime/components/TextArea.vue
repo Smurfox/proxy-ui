@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-1">
     <div
-      v-if="label"
+      v-if="label && !inlineLabel"
       class="flex items-start gap-1"
     >
       <label
@@ -17,17 +17,34 @@
       <div
         v-if="$slots.startContent"
         class="absolute left-3 top-3 flex items-center pointer-events-none"
-        :class="props.error ? 'text-danger' : ''"
+        :class="[
+          inlineLabel && label ? 'top-7' : 'top-3',
+          props.error ? 'text-danger' : '',
+        ]"
       >
         <slot name="startContent" />
       </div>
+      <label
+        v-if="inlineLabel && label"
+        class="absolute top-1.5 text-xs font-medium leading-tight pointer-events-none z-10"
+        :class="[
+          $slots.startContent ? 'left-9' : 'left-3',
+          props.error ? 'text-danger' : 'text-gray-600 dark:text-white/60',
+        ]"
+      >
+        {{ label }}<span
+          v-if="props.required"
+          class="text-danger ml-0.5"
+        >*</span>
+      </label>
       <textarea
         :placeholder="placeholder"
         :rows="rows"
-        class="w-full p-3 text-sm transition-[background-color,border-color]"
+        class="w-full text-sm transition-[background-color,border-color]"
         :class="[
-          $slots.startContent ? 'pl-9' : '',
-          $slots.endContent ? 'pr-9' : '',
+          inlineLabel && label ? 'pt-6 pb-3 px-3' : 'p-3',
+          $slots.startContent ? 'pl-9!' : '',
+          $slots.endContent ? 'pr-9!' : '',
           resizeVariants[props.resize],
           roundedVariants[props.rounded],
           props.error ? errorVariants[props.variant] : variants[props.variant],
@@ -108,6 +125,7 @@ const props = withDefaults(
     modelValue?: string | number
     label?: string
     labelClass?: string
+    inlineLabel?: boolean
     placeholder?: string
     description?: string
     rounded?: InputRounded
@@ -120,6 +138,7 @@ const props = withDefaults(
   }>(),
   {
     labelClass: 'text-sm font-semibold',
+    inlineLabel: false,
     rounded: 'xl',
     variant: 'default',
     required: false,

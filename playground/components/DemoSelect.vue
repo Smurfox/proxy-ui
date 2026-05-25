@@ -61,6 +61,35 @@
     </div>
     <div class="w-200 mx-auto flex flex-col gap-3">
       <h1 class="font-semibold text-lg">
+        Inline Label
+      </h1>
+      <p class="text-sm text-gray-600 dark:text-gray-400 -mt-2">
+        Floating label inside the trigger.
+      </p>
+      <div
+        class="border border-gray-300 flex flex-col gap-4 p-9 w-full rounded-xl"
+      >
+        <div class="grid grid-cols-2 gap-4">
+          <PUSelect
+            v-model="inlineFramework"
+            label="Framework"
+            :options="frameworkOptions"
+            inline-label
+          />
+          <PUSelect
+            v-model="inlineRole"
+            label="Role"
+            variant="secondary"
+            :options="roleOptions"
+            inline-label
+            required
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="w-200 mx-auto flex flex-col gap-3">
+      <h1 class="font-semibold text-lg">
         Disabled State
       </h1>
       <div
@@ -110,6 +139,8 @@ const selectedStatus = ref()
 const selectedPriority = ref('high')
 const selectedDisabledFramework = ref('vue')
 const selectedDisabledRole = ref('admin')
+const inlineFramework = ref('nuxt')
+const inlineRole = ref()
 
 const frameworkOptions = [
   { label: 'Nuxt', value: 'nuxt' },
