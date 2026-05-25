@@ -181,7 +181,7 @@ A flexible input component with validation and state management.
 | `placeholder` | `string`                                                    | —                         | Placeholder text inside the input.                   |
 | `description` | `string`                                                    | —                         | Helper text displayed below the input.               |
 | `rounded`     | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| 'full'` | `'xl'`                    | Border radius.                                       |
-| `variant`     | `'default' \| 'secondary'`                                  | `'default'`               | Visual style of the input.                           |
+| `variant`     | `'default' \| 'secondary'`                                  | `'default'`               | Visual style. `default` = subtle gray fill, `secondary` = white fill (dark surface in dark mode). |
 | `required`    | `boolean`                                                   | `false`                   | Shows a red asterisk on the label.                   |
 | `error`       | `string`                                                    | —                         | Error message to display. Changes styling to danger. |
 | `disabled`    | `boolean`                                                   | `false`                   | Disables the input.                                  |
@@ -247,7 +247,7 @@ A multi-line text input. Shares the look and feel of `PUInput`, with extra props
 | `placeholder` | `string`                                                    | —                         | Placeholder text.                                    |
 | `description` | `string`                                                    | —                         | Helper text displayed below.                         |
 | `rounded`     | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| 'full'` | `'xl'`                    | Border radius.                                       |
-| `variant`     | `'default' \| 'secondary'`                                  | `'default'`               | Visual style.                                        |
+| `variant`     | `'default' \| 'secondary'`                                  | `'default'`               | Visual style. `default` = subtle gray fill, `secondary` = white fill (dark surface in dark mode). |
 | `rows`        | `number \| string`                                          | `4`                       | Initial number of visible rows.                      |
 | `resize`      | `'none' \| 'both' \| 'horizontal' \| 'vertical'`            | `'vertical'`              | Resize behavior.                                     |
 | `required`    | `boolean`                                                   | `false`                   | Shows a red asterisk on the label.                   |
@@ -310,7 +310,7 @@ A custom select with an animated dropdown panel teleported to `body`. Dark-mode 
 | `placeholder` | `string`                                                    | `'Seleccionar'`           | Text shown when nothing is selected.                 |
 | `description` | `string`                                                    | —                         | Helper text displayed below.                         |
 | `rounded`     | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| 'full'` | `'xl'`                    | Border radius.                                       |
-| `variant`     | `'default' \| 'secondary'`                                  | `'default'`               | Visual style.                                        |
+| `variant`     | `'default' \| 'secondary'`                                  | `'default'`               | Visual style. `default` = subtle gray fill, `secondary` = white fill (dark surface in dark mode). |
 | `required`    | `boolean`                                                   | `false`                   | Shows a red asterisk on the label.                   |
 | `error`       | `string`                                                    | `''`                      | Error message to display. Changes styling to danger. |
 | `disabled`    | `boolean`                                                   | `false`                   | Disables the select.                                 |
@@ -375,7 +375,7 @@ Filtering is case-insensitive and matches `label`. When the input text matches t
 | `placeholder` | `string`                                                    | `'Search...'`             | Placeholder text shown when the input is empty.      |
 | `description` | `string`                                                    | —                         | Helper text displayed below.                         |
 | `rounded`     | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| 'full'` | `'xl'`                    | Border radius.                                       |
-| `variant`     | `'default' \| 'secondary'`                                  | `'default'`               | Visual style.                                        |
+| `variant`     | `'default' \| 'secondary'`                                  | `'default'`               | Visual style. `default` = subtle gray fill, `secondary` = white fill (dark surface in dark mode). |
 | `required`    | `boolean`                                                   | `false`                   | Shows a red asterisk on the label.                   |
 | `error`       | `string`                                                    | `''`                      | Error message to display. Changes styling to danger. |
 | `disabled`    | `boolean`                                                   | `false`                   | Disables the input.                                  |
@@ -448,7 +448,7 @@ The `modelValue` is an ISO date string (`YYYY-MM-DD`). The trigger shows the dat
 | `placeholder` | `string`                                                    | `'dd/mm/aaaa'`            | Text shown when no date is selected.                                                              |
 | `description` | `string`                                                    | —                         | Helper text displayed below.                                                                      |
 | `rounded`     | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| 'full'` | `'xl'`                    | Border radius of the trigger.                                                                     |
-| `variant`     | `'default' \| 'secondary'`                                  | `'default'`               | Visual style of the trigger.                                                                      |
+| `variant`     | `'default' \| 'secondary'`                                  | `'default'`               | Visual style. `default` = subtle gray fill, `secondary` = white fill (dark surface in dark mode). |
 | `required`    | `boolean`                                                   | `false`                   | Shows a red asterisk on the label.                                                                |
 | `error`       | `string`                                                    | —                         | Error message to display. Changes styling to danger.                                              |
 | `disabled`    | `boolean`                                                   | `false`                   | Disables the trigger.                                                                             |
