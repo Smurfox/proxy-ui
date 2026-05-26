@@ -17,7 +17,8 @@
     ".": {
       "types": "./dist/types.d.mts",
       "import": "./dist/module.mjs"
-    }
+    },
+    "./theme.css": "./dist/runtime/assets/theme.css"
   },
   "main": "./dist/module.mjs",
   "typesVersions": {
