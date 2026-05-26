@@ -6,8 +6,21 @@
 
 @theme {
   --font-sans: "Inter", sans-serif;
-  --color-primary: #376fff;
+
+  --color-primary: #fa5839;
   --color-success: #2bd994;
   --color-warning: #f3a952;
   --color-danger: #fb2c56;
+  --color-card: var(--color-card);
+  --color-default: var(--color-default);
+}
+
+:root {
+  --color-card: #ffffff;
+  --color-default: #eaecef;
+}
+
+.dark {
+  --color-card: #14171c;
+  --color-default: #242830;
 }
