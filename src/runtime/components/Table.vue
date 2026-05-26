@@ -290,7 +290,7 @@ const props = withDefaults(
     rounded: 'lg',
     isBordered: false,
     isSelectable: false,
-    headerColor: 'bg-default text-[#71717A] dark:text-[#9CA3AF]',
+    headerColor: 'bg-default text-gray-600 dark:text-white/70',
     isBodyColored: false,
     bodyColor: 'bg-card',
     itemsSize: 'md',

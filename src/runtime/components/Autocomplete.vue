@@ -158,9 +158,9 @@ const roundedVariants = {
 
 const variants = {
   default:
-    'border border-default bg-default dark:text-white dark:placeholder:text-[#6B7280] enabled:hover:brightness-95 dark:enabled:hover:brightness-110 focus:ring-2 focus:ring-primary focus:outline-none',
+    'border border-default bg-default dark:text-white placeholder:text-gray-500 dark:placeholder:text-white/50 enabled:hover:brightness-95 dark:enabled:hover:brightness-110 focus:ring-2 focus:ring-primary focus:outline-none',
   secondary:
-    'border border-default bg-card enabled:hover:bg-default dark:text-white dark:placeholder:text-[#6B7280] focus:bg-card focus:ring-2 focus:ring-primary focus:outline-none',
+    'border border-default bg-card enabled:hover:bg-default dark:text-white placeholder:text-gray-500 dark:placeholder:text-white/50 focus:bg-card focus:ring-2 focus:ring-primary focus:outline-none',
 } as const
 
 const errorVariants = {

@@ -124,25 +124,21 @@ const props = withDefaults(
 // #region Color Logic
 const defaultColorClasses = {
   default:
-    'bg-default text-black dark:text-white hover:bg-gray-300/80 dark:hover:bg-[#2D323B]',
+    'bg-default text-black dark:text-white hover:brightness-95 dark:hover:brightness-125',
   ios: 'bg-blue-500 text-white hover:brightness-110',
-  primary: 'bg-primary text-white hover:brightness-110',
+  primary: 'bg-primary text-white hover:brightness-120',
   danger: 'bg-danger text-black hover:brightness-110',
   success: 'bg-success text-black hover:brightness-110',
   warning: 'bg-warning text-black hover:brightness-110',
 } as const
 
 const secondaryColorClasses = {
-  default:
-    'bg-default/60 text-black dark:text-white hover:bg-gray-200/80 dark:hover:bg-[#22262E]',
-  ios: 'bg-gray-200/60 dark:bg-[#242830] text-blue-500 hover:bg-gray-200 dark:hover:bg-white/10',
-  primary: 'bg-default text-primary hover:bg-gray-200 dark:hover:bg-white/10',
-  danger:
-    'bg-gray-200/60 dark:bg-[#242830] text-danger hover:bg-gray-200 dark:hover:bg-white/10',
-  success:
-    'bg-gray-200/60 dark:bg-[#242830] text-success hover:bg-gray-200 dark:hover:bg-white/10',
-  warning:
-    'bg-gray-200/60 dark:bg-[#242830] text-warning hover:bg-gray-200 dark:hover:bg-white/10',
+  default: 'bg-default/60 text-black dark:text-white hover:bg-default',
+  ios: 'bg-default/60 text-blue-500 hover:bg-default',
+  primary: 'bg-default/60 text-primary hover:bg-default',
+  danger: 'bg-default/60 text-danger hover:bg-default',
+  success: 'bg-default/60 text-success hover:bg-default',
+  warning: 'bg-default/60 text-warning hover:bg-default',
 } as const
 
 const outlineColorClasses = {
@@ -161,7 +157,7 @@ const outlineColorClasses = {
 
 const ghostColorClasses = {
   default: 'text-black dark:text-white hover:bg-default/80',
-  ios: 'text-blue-500 hover:bg-blue-100 dark:hover:bg-blue-500/20',
+  ios: 'text-blue-500 hover:bg-blue-500/20 dark:hover:bg-blue-500/30',
   primary: 'text-primary hover:bg-primary/20 dark:hover:bg-primary/30',
   danger: 'text-danger hover:bg-danger/20 dark:hover:bg-danger/30',
   success: 'text-success hover:bg-success/20 dark:hover:bg-success/30',
