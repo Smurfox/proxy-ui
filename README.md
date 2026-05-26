@@ -72,40 +72,17 @@ The three tokens are layered from back to front: `background` (the page) → `ca
 
 ### Setting it up in your project
 
-Brand colors live inside `@theme`. Surface tokens are declared in `@theme` (so Tailwind generates the `bg-card` / `bg-default` / `border-default` utilities), and the actual light/dark values are set on `:root` and `.dark`:
+All tokens — brand colors and surface tokens — ship with sensible defaults in the package. You only need a single `@import` in your Tailwind entry CSS:
 
 ```css
 @import "tailwindcss";
 @source "../node_modules/@smurfox/proxy-ui/dist";
-
 @custom-variant dark (&:where(.dark, .dark *));
 
-@theme {
-  --color-primary: #376fff;
-  --color-success: #2bd994;
-  --color-warning: #f3a952;
-  --color-danger: #fb2c56;
-
-  /* Surface tokens — declare them in @theme so Tailwind
-     generates bg-background / bg-card / bg-default / border-default,
-     but resolve them through :root / .dark below. */
-  --color-background: var(--color-background);
-  --color-card: var(--color-card);
-  --color-default: var(--color-default);
-}
-
-:root {
-  --color-background: #f5f5f7;
-  --color-card: #ffffff;
-  --color-default: #eaecef;
-}
-
-.dark {
-  --color-background: #08090c;
-  --color-card: #14171c;
-  --color-default: #242830;
-}
+@import "@smurfox/proxy-ui/theme.css";
 ```
+
+That brings the `@theme` registration (so utilities like `bg-primary`, `bg-card`, `bg-default`, `border-default` get generated) plus the light/dark default values for surface tokens. Components work out of the box.
 
 Apply `bg-background` to your root layout so the page picks up the token:
 
@@ -119,11 +96,30 @@ Apply `bg-background` to your root layout so the page picks up the token:
 </template>
 ```
 
+> The `@import "@smurfox/proxy-ui/theme.css"` must live in the same file as `@import "tailwindcss"` so Tailwind processes the `@theme` block inside it. Loading it as a separate stylesheet (a `<link>`, a Vue `<style>`, etc.) sets the runtime values but does **not** register the design tokens, and the `bg-primary` / `bg-card` / `bg-default` / `border-default` utilities won't be generated.
+
 ### Customizing the look
 
-To re-skin the library, override the values in `:root` / `.dark`. Every component that uses the tokens picks up the change automatically:
+All defaults can be overridden **after** the `@import`. CSS cascade makes your declarations win — every component picks up the change automatically.
+
+**Brand colors** are flat values, so override them inside `@theme`:
 
 ```css
+@import "@smurfox/proxy-ui/theme.css";
+
+@theme {
+  --color-primary: #6366f1;     /* indigo accent */
+  --color-success: #16a34a;
+  --color-warning: #ea580c;
+  --color-danger: #dc2626;
+}
+```
+
+**Surface tokens** switch between light and dark, so override them in `:root` / `.dark`:
+
+```css
+@import "@smurfox/proxy-ui/theme.css";
+
 :root {
   --color-background: #fafafa;  /* warmer page bg */
   --color-card: #ffffff;
@@ -136,8 +132,6 @@ To re-skin the library, override the values in `:root` / `.dark`. Every componen
   --color-default: #1c2027;
 }
 ```
-
-> The `--color-card: var(--color-card)` line inside `@theme` is intentional. Tailwind v4 only generates the `bg-card` / `border-card` / etc. utilities when the variable is registered under `@theme`, but the actual light/dark switching has to live on `:root` / `.dark`. The self-reference keeps both pieces in sync.
 
 > The `@custom-variant dark` line is what makes the `dark:` Tailwind variant respond to a `.dark` class on a parent element (instead of `prefers-color-scheme`). All ProxyUI components assume this setup.
 
