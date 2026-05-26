@@ -63,7 +63,7 @@
             :initial="{ scale: 0.96, opacity: 0, y: -6 }"
             :animate="{ scale: 1, opacity: 1, y: 0 }"
             :exit="{ scale: 0.96, opacity: 0, y: -6 }"
-            class="fixed p-2 max-h-56 overflow-y-auto origin-top border rounded-xl shadow-xl bg-card border-gray-100 dark:border-[#2D323B] text-black dark:text-white"
+            class="fixed p-2 max-h-56 overflow-y-auto origin-top border border-default rounded-xl shadow-xl bg-card text-black dark:text-white"
             :class="{ dark: isDarkMode }"
             :style="dropdownStyle"
             @click.stop
@@ -147,9 +147,9 @@ const roundedVariants = {
 
 const variants = {
   default:
-    'border border-gray-200 dark:border-[#2D323B] bg-default dark:text-white enabled:hover:brightness-95 dark:enabled:hover:brightness-110 focus:ring-2 focus:ring-primary focus:outline-none',
+    'border border-default bg-default dark:text-white enabled:hover:brightness-95 dark:enabled:hover:brightness-110 focus:ring-2 focus:ring-primary focus:outline-none',
   secondary:
-    'border border-gray-200 dark:border-[#2D323B] bg-card enabled:hover:bg-default dark:text-white focus:bg-card focus:ring-2 focus:ring-primary focus:outline-none',
+    'border border-default bg-card enabled:hover:bg-default dark:text-white focus:bg-card focus:ring-2 focus:ring-primary focus:outline-none',
 } as const
 
 const errorVariants = {

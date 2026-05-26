@@ -19,7 +19,7 @@
           :animate="{ scale: 1, opacity: 1, y: 0 }"
           :style="menuStyle"
           :class="[
-            'fixed z-50 origin-top-right bg-card border border-gray-100 rounded-xl shadow-xl dark:border-[#2D323B] text-black dark:text-white',
+            'fixed z-50 origin-top-right bg-card border border-default rounded-xl shadow-xl text-black dark:text-white',
             props.menuMinWidth,
             { dark: isDarkMode },
           ]"

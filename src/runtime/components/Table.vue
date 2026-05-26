@@ -6,7 +6,7 @@
       :class="[
         roundedClasses[props.rounded],
         hasShadow ? 'pu-shadow-ios' : '',
-        isBordered ? 'border border-gray-200 dark:border-[#23272F] ' : '',
+        isBordered ? 'border border-default' : '',
       ]"
     >
       <table class="w-full text-sm text-left rtl:text-right table-fixed">
@@ -97,7 +97,7 @@
 
         <tfoot
           v-if="props.withPagination"
-          class="border-t border-gray-200/70 dark:border-[#23272F]"
+          class="border-t border-default"
           :class="[props.isBodyColored ? props.bodyColor : '']"
         >
           <tr>
@@ -125,7 +125,7 @@
         v-for="item in items"
         :key="item.id"
         :data-row-id="item.id"
-        class="bg-card border border-gray-200 dark:border-[#23272F] rounded-lg p-4 shadow-sm"
+        class="bg-card border border-default rounded-lg p-4 shadow-sm"
         :class="
           props.isSelectable
             ? 'cursor-pointer transition-all duration-150 hover:bg-default hover:shadow-md hover:-translate-y-0.5'

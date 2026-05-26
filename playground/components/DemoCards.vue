@@ -8,6 +8,7 @@
         <h1 class="font-bold text-6xl dark:text-white">Hello World</h1>
       </PUCard>
       <PUCard
+        :is-bordered="false"
         custom-class="relative h-95 w-full bg-white flex flex-col justify-end"
       >
         <img

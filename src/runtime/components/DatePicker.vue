@@ -251,9 +251,9 @@ const roundedClasses = {
 
 const variants = {
   default:
-    'border border-gray-200 dark:border-[#2D323B] bg-default dark:text-white enabled:hover:brightness-95 dark:enabled:hover:brightness-110 focus:ring-2 focus:ring-primary focus:outline-none',
+    'border border-default bg-default dark:text-white enabled:hover:brightness-95 dark:enabled:hover:brightness-110 focus:ring-2 focus:ring-primary focus:outline-none',
   secondary:
-    'border border-gray-200 dark:border-[#2D323B] bg-card enabled:hover:bg-default dark:text-white focus:bg-card focus:ring-2 focus:ring-primary focus:outline-none',
+    'border border-default bg-card enabled:hover:bg-default dark:text-white focus:bg-card focus:ring-2 focus:ring-primary focus:outline-none',
 } as const
 
 const errorVariants = {
