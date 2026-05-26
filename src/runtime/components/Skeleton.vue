@@ -6,7 +6,7 @@
       props.variant === 'rectangular' ? 'rounded-xl' : '',
       'overflow-hidden',
       'relative',
-      'bg-gray-200 dark:bg-[#2D323B]',
+      'bg-default',
       heightClass,
       widthClass,
     ]"
@@ -17,43 +17,43 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed } from "vue";
 
 interface Props {
-  height?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string
-  width?: 'full' | 'auto' | string
-  variant?: 'rectangular' | 'circular' | 'text'
+  height?: "xs" | "sm" | "md" | "lg" | "xl" | string;
+  width?: "full" | "auto" | string;
+  variant?: "rectangular" | "circular" | "text";
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  height: 'md',
-  width: 'full',
-  variant: 'rectangular',
-})
+  height: "md",
+  width: "full",
+  variant: "rectangular",
+});
 
 const heightClass = computed(() => {
   if (
-    typeof props.height === 'string'
-    && !['xs', 'sm', 'md', 'lg', 'xl'].includes(props.height)
+    typeof props.height === "string" &&
+    !["xs", "sm", "md", "lg", "xl"].includes(props.height)
   ) {
-    return props.height
+    return props.height;
   }
 
   const heights = {
-    xs: 'h-4',
-    sm: 'h-6',
-    md: 'h-12',
-    lg: 'h-16',
-    xl: 'h-20',
-  }
-  return heights[props.height as keyof typeof heights]
-})
+    xs: "h-4",
+    sm: "h-6",
+    md: "h-12",
+    lg: "h-16",
+    xl: "h-20",
+  };
+  return heights[props.height as keyof typeof heights];
+});
 
 const widthClass = computed(() => {
-  if (props.width === 'full') return 'w-full'
-  if (props.width === 'auto') return 'w-auto'
-  return props.width
-})
+  if (props.width === "full") return "w-full";
+  if (props.width === "auto") return "w-auto";
+  return props.width;
+});
 </script>
 
 <style scoped>

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex items-center justify-center bg-gray-200 dark:bg-[#242830]"
+    class="flex items-center justify-center bg-default"
     :class="[
       !hasText ? 'text-black dark:text-white' : '',
       sizes[props.size],

@@ -74,19 +74,14 @@
             :initial="{ scale: 0.96, opacity: 0, y: -6 }"
             :animate="{ scale: 1, opacity: 1, y: 0 }"
             :exit="{ scale: 0.96, opacity: 0, y: -6 }"
-            class="fixed p-2 max-h-56 overflow-y-auto origin-top border rounded-xl shadow-xl"
-            :class="
-              isDarkMode
-                ? 'bg-[#242830] border-[#2D323B] text-white'
-                : 'bg-white border-gray-100'
-            "
+            class="fixed p-2 max-h-56 overflow-y-auto origin-top border rounded-xl shadow-xl bg-card border-gray-100 dark:border-[#2D323B] text-black dark:text-white"
+            :class="{ dark: isDarkMode }"
             :style="dropdownStyle"
             @click.stop
           >
             <div
               v-if="filteredOptions.length === 0"
-              class="px-4 py-2 text-sm text-center"
-              :class="isDarkMode ? 'text-[#8B92A0]' : 'text-black/50'"
+              class="px-4 py-2 text-sm text-center text-black/50 dark:text-[#8B92A0]"
             >
               No available options
             </div>
@@ -95,11 +90,8 @@
                 v-for="option in filteredOptions"
                 :key="String(option.value)"
                 type="button"
-                class="w-full flex items-center justify-between gap-3 px-3 py-2 mb-1 text-left cursor-pointer rounded-lg transition-colors"
-                :class="[
-                  isDarkMode ? 'hover:bg-[#2A2F37]' : 'hover:bg-gray-100',
-                  option.value === props.modelValue ? selectedOptionClass : '',
-                ]"
+                class="w-full flex items-center justify-between gap-3 px-3 py-2 mb-1 text-left cursor-pointer rounded-lg transition-colors hover:bg-default"
+                :class="option.value === props.modelValue ? 'bg-primary/10 dark:bg-primary/15' : ''"
                 @click.stop="selectOption(option)"
               >
                 <span
@@ -107,7 +99,7 @@
                   :class="
                     option.value === props.modelValue
                       ? 'text-primary'
-                      : unselectedOptionClass
+                      : 'text-black dark:text-white'
                   "
                 >
                   {{ option.label }}
@@ -166,9 +158,9 @@ const roundedVariants = {
 
 const variants = {
   default:
-    'border border-gray-200 dark:border-[#2D323B] bg-gray-100 dark:bg-[#1C2026] dark:text-white dark:placeholder:text-[#6B7280] enabled:hover:bg-[#E0E0E1] dark:enabled:hover:bg-[#22272F] focus:bg-[#EBEBEC] dark:focus:bg-[#1C2026] focus:ring-2 focus:ring-primary focus:outline-none',
+    'border border-gray-200 dark:border-[#2D323B] bg-default dark:text-white dark:placeholder:text-[#6B7280] enabled:hover:brightness-95 dark:enabled:hover:brightness-110 focus:ring-2 focus:ring-primary focus:outline-none',
   secondary:
-    'border border-gray-200 dark:border-[#2D323B] bg-white dark:bg-[#242830] enabled:hover:bg-gray-100 dark:enabled:hover:bg-[#2A2F37] dark:text-white dark:placeholder:text-[#6B7280] focus:bg-white dark:focus:bg-[#242830] focus:ring-2 focus:ring-primary focus:outline-none',
+    'border border-gray-200 dark:border-[#2D323B] bg-card enabled:hover:bg-default dark:text-white dark:placeholder:text-[#6B7280] focus:bg-card focus:ring-2 focus:ring-primary focus:outline-none',
 } as const
 
 const errorVariants = {
@@ -244,14 +236,6 @@ const dropdownStyle = computed(() => ({
   width: `${dropdownPosition.value.width}px`,
   zIndex: 9999,
 }))
-
-const selectedOptionClass = computed(() => {
-  return isDarkMode.value ? 'bg-primary/15' : 'bg-primary/10'
-})
-
-const unselectedOptionClass = computed(() => {
-  return isDarkMode.value ? 'text-white' : 'text-black'
-})
 
 watch(
   () => props.modelValue,

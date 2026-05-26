@@ -44,7 +44,7 @@
               :data-row-id="item.id"
               :class="
                 props.isSelectable
-                  ? 'cursor-pointer transition-colors duration-150 hover:bg-gray-100 dark:hover:bg-[#1C2026]'
+                  ? 'cursor-pointer transition-colors duration-150 hover:bg-default'
                   : ''
               "
               @click="onRowClick"
@@ -125,10 +125,10 @@
         v-for="item in items"
         :key="item.id"
         :data-row-id="item.id"
-        class="bg-white dark:bg-[#18181B] border border-gray-200 dark:border-white/10 rounded-lg p-4 shadow-sm"
+        class="bg-card border border-gray-200 dark:border-[#23272F] rounded-lg p-4 shadow-sm"
         :class="
           props.isSelectable
-            ? 'cursor-pointer transition-all duration-150 hover:bg-gray-50 dark:hover:bg-white/5 hover:shadow-md hover:-translate-y-0.5'
+            ? 'cursor-pointer transition-all duration-150 hover:bg-default hover:shadow-md hover:-translate-y-0.5'
             : ''
         "
         @click="onRowClick"
@@ -290,10 +290,9 @@ const props = withDefaults(
     rounded: 'lg',
     isBordered: false,
     isSelectable: false,
-    headerColor:
-      'bg-[#F4F4F5] text-[#71717A] dark:bg-[#20242C] dark:text-[#9CA3AF]',
+    headerColor: 'bg-default text-[#71717A] dark:text-[#9CA3AF]',
     isBodyColored: false,
-    bodyColor: 'bg-white dark:bg-[#14171C]',
+    bodyColor: 'bg-card',
     itemsSize: 'md',
     hasShadow: true,
     emptyStateTitle: 'No results found',
