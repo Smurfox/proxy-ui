@@ -14,14 +14,14 @@
       <AnimatePresence>
         <motion.div
           v-if="isOpen"
-          ref="menuRef"
           :initial="{ scale: 0.9, opacity: 0, y: -10 }"
           :exit="{ opacity: 0 }"
           :animate="{ scale: 1, opacity: 1, y: 0 }"
           :style="menuStyle"
           :class="[
-            'fixed z-50 origin-top-right bg-white border border-gray-100 rounded-xl shadow-xl dark:bg-[#18181B] dark:border-black/40',
+            'fixed z-50 origin-top-right bg-card border border-default rounded-xl shadow-xl text-black dark:text-white',
             props.menuMinWidth,
+            { dark: isDarkMode },
           ]"
           @click="handleContentClick"
         >
@@ -51,17 +51,22 @@ const props = withDefaults(
 )
 
 const isOpen = ref(false)
+const isDarkMode = ref(false)
 const dropdownRef = ref<HTMLDivElement | null>(null)
 const activatorRef = ref<HTMLDivElement | null>(null)
-const menuRef = ref<HTMLElement | null>(null)
 
 const menuStyle = reactive<Record<string, string>>({
   top: '0px',
   right: '0px',
 })
 
+const syncDarkMode = () => {
+  isDarkMode.value = Boolean(dropdownRef.value?.closest('.dark'))
+}
+
 const updatePosition = () => {
   if (!activatorRef.value) return
+  syncDarkMode()
   const rect = activatorRef.value.getBoundingClientRect()
   menuStyle.top = `${rect.bottom + 8}px`
   menuStyle.right = `${window.innerWidth - rect.right}px`
@@ -85,11 +90,10 @@ const toggle = () => {
 provide('closeDropdown', close)
 
 const onClickOutside = (event: MouseEvent) => {
+  if (!isOpen.value) return
   const target = event.target as Node
-  const insideActivator = dropdownRef.value?.contains(target)
-  const insideMenu = menuRef.value?.contains(target)
-  if (!insideActivator && !insideMenu) {
-    setTimeout(() => close(), 10)
+  if (!dropdownRef.value?.contains(target)) {
+    close()
   }
 }
 
@@ -109,6 +113,7 @@ watch(isOpen, (open) => {
 })
 
 onMounted(() => {
+  syncDarkMode()
   document.addEventListener('click', onClickOutside)
 })
 

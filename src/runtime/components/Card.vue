@@ -1,12 +1,12 @@
 <template>
   <div
     :class="[
-      !hasBg ? 'bg-white dark:bg-[#14171C]' : '',
+      !hasBg ? 'bg-card' : '',
       !hasPadding ? 'p-4' : '',
       !hasShadow ? 'pu-shadow-ios' : '',
       !hasRounded ? 'rounded-2xl' : '',
       customClass,
-      isBordered ? 'border border-gray-200 dark:border-[#23272F]' : '',
+      isBordered ? 'border border-default' : '',
     ]"
   >
     <slot />

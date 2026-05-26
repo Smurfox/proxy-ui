@@ -124,7 +124,7 @@ const props = withDefaults(
 // #region Color Logic
 const defaultColorClasses = {
   default:
-    'bg-gray-200/80 dark:bg-[#242830] text-black dark:text-white hover:bg-gray-300/80 dark:hover:bg-[#2D323B]',
+    'bg-default text-black dark:text-white hover:bg-gray-300/80 dark:hover:bg-[#2D323B]',
   ios: 'bg-blue-500 text-white hover:brightness-110',
   primary: 'bg-primary text-white hover:brightness-110',
   danger: 'bg-danger text-black hover:brightness-110',
@@ -134,10 +134,9 @@ const defaultColorClasses = {
 
 const secondaryColorClasses = {
   default:
-    'bg-gray-100 dark:bg-[#1A1D23] text-black dark:text-white hover:bg-gray-200/80 dark:hover:bg-[#22262E]',
+    'bg-default/60 text-black dark:text-white hover:bg-gray-200/80 dark:hover:bg-[#22262E]',
   ios: 'bg-gray-200/60 dark:bg-[#242830] text-blue-500 hover:bg-gray-200 dark:hover:bg-white/10',
-  primary:
-    'bg-gray-200/60 dark:bg-[#242830] text-primary hover:bg-gray-200 dark:hover:bg-white/10',
+  primary: 'bg-default text-primary hover:bg-gray-200 dark:hover:bg-white/10',
   danger:
     'bg-gray-200/60 dark:bg-[#242830] text-danger hover:bg-gray-200 dark:hover:bg-white/10',
   success:
@@ -148,7 +147,7 @@ const secondaryColorClasses = {
 
 const outlineColorClasses = {
   default:
-    'border border-gray-200 text-black dark:border-[#2D323B] dark:text-white hover:bg-gray-100/80 dark:hover:bg-[#1A1D23]',
+    'border-2 border-default/80 text-black dark:text-white hover:bg-default/80',
   ios: 'border border-blue-500 text-blue-500 hover:bg-blue-500/15 dark:hover:bg-blue-500/25',
   primary:
     'border border-primary text-primary hover:bg-primary/15 dark:hover:bg-primary/25',
@@ -161,8 +160,7 @@ const outlineColorClasses = {
 } as const
 
 const ghostColorClasses = {
-  default:
-    'text-black dark:text-white hover:bg-gray-200/60 dark:hover:bg-[#1F232B]',
+  default: 'text-black dark:text-white hover:bg-default/80',
   ios: 'text-blue-500 hover:bg-blue-100 dark:hover:bg-blue-500/20',
   primary: 'text-primary hover:bg-primary/20 dark:hover:bg-primary/30',
   danger: 'text-danger hover:bg-danger/20 dark:hover:bg-danger/30',
@@ -171,8 +169,7 @@ const ghostColorClasses = {
 } as const
 
 const flatColorClasses = {
-  default:
-    'bg-gray-100 dark:bg-[#1C1F26] text-black dark:text-white hover:bg-gray-200/80 dark:hover:bg-[#242830]',
+  default: 'bg-default/50 text-black dark:text-white hover:bg-default/80',
   ios: 'bg-blue-500/15 text-blue-500 hover:bg-blue-500/25',
   primary:
     'bg-primary/15 text-primary hover:bg-primary/25 dark:hover:bg-primary/30',

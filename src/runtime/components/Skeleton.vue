@@ -6,7 +6,7 @@
       props.variant === 'rectangular' ? 'rounded-xl' : '',
       'overflow-hidden',
       'relative',
-      'bg-gray-200 dark:bg-[#2D323B]',
+      'bg-default',
       heightClass,
       widthClass,
     ]"
