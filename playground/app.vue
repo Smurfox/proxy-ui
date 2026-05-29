@@ -3,9 +3,7 @@
     :class="{ dark: isDark }"
     class="min-h-screen"
   >
-    <div
-      class="bg-background min-h-screen p-8 transition-colors duration-300"
-    >
+    <div class="bg-background min-h-screen p-8 transition-colors duration-300">
       <!-- Toggle button -->
       <button
         class="fixed top-4 right-4 p-2 rounded-lg bg-gray-100 dark:bg-white/10 text-gray-800 dark:text-white cursor-pointer"
@@ -27,7 +25,7 @@
         </p>
       </div>
 
-      <div class="grid grid-cols-6 gap-6 max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-6 gap-6 max-w-7xl mx-auto">
         <PUTabs
           v-model="activeTab"
           :tabs="demoTabs"
@@ -36,7 +34,7 @@
           :is-vertical="true"
           class="col-span-1 w-full"
         />
-        <div class="col-span-5 max-h-[85vh] overflow-y-auto">
+        <div class="col-span-1 md:col-span-5 max-h-[85vh] overflow-y-auto">
           <DemoButtons v-if="activeTab === 'buttons'" />
           <DemoChips v-else-if="activeTab === 'chips'" />
           <DemoAvatars v-else-if="activeTab === 'avatars'" />

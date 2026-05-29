@@ -185,6 +185,20 @@
           {{ props.emptyStateDescription }}
         </p>
       </div>
+
+      <div
+        v-if="props.withPagination"
+        class="pt-2"
+      >
+        <Pagination
+          :page="props.paginationPage"
+          :total-items="resolvedPaginationTotalItems"
+          :items-per-page="resolvedPaginationItemsPerPage"
+          :show-items-count="props.paginationShowItemsCount"
+          @update:page="onPaginationPageUpdate"
+          @page-change="onPaginationPageChange"
+        />
+      </div>
     </div>
   </div>
 </template>
