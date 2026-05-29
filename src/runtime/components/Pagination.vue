@@ -1,27 +1,25 @@
 <template>
-  <div class="flex justify-between items-center">
-    <div>
-      <h2
-        v-if="showItemsCount"
-        class="hidden md:block text-xs text-black/40 dark:text-white/40"
-      >
-        Mostrando
-        <span class="font-semibold text-black dark:text-white">{{
-          startItem
-        }}</span>
-        -
-        <span class="font-semibold text-black dark:text-white">{{
-          endItem
-        }}</span>
-        de
-        <span class="font-semibold text-black dark:text-white">{{
-          totalItems
-        }}</span>
-        registros
-      </h2>
-    </div>
-    <div class="flex items-center gap-2">
-      <span :class="disabledWrapperClass(!canGoPrev)">
+  <div class="flex flex-wrap justify-end md:justify-between items-center gap-2">
+    <h2
+      v-if="showItemsCount"
+      class="hidden md:block text-xs text-black/40 dark:text-white/40"
+    >
+      Mostrando
+      <span class="font-semibold text-black dark:text-white">{{
+        startItem
+      }}</span>
+      -
+      <span class="font-semibold text-black dark:text-white">{{
+        endItem
+      }}</span>
+      de
+      <span class="font-semibold text-black dark:text-white">{{
+        totalItems
+      }}</span>
+      registros
+    </h2>
+    <div class="flex items-center gap-1 md:gap-2">
+      <span :class="['hidden md:inline-flex', disabledWrapperClass(!canGoPrev)]">
         <Button
           is-icon-only
           variant="outline"
@@ -59,7 +57,7 @@
           @click="goToNext"
         />
       </span>
-      <span :class="disabledWrapperClass(!canGoNext)">
+      <span :class="['hidden md:inline-flex', disabledWrapperClass(!canGoNext)]">
         <Button
           is-icon-only
           variant="outline"
