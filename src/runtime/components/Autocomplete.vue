@@ -71,11 +71,14 @@
         <AnimatePresence>
           <motion.div
             v-if="isOpen && !props.disabled"
-            :initial="{ scale: 0.96, opacity: 0, y: -6 }"
+            :initial="{ scale: 0.96, opacity: 0, y: dropdownMotionOffset }"
             :animate="{ scale: 1, opacity: 1, y: 0 }"
-            :exit="{ scale: 0.96, opacity: 0, y: -6 }"
-            class="fixed p-2 max-h-56 overflow-y-auto origin-top border border-default rounded-xl shadow-xl bg-card text-black dark:text-white"
-            :class="{ dark: isDarkMode }"
+            :exit="{ scale: 0.96, opacity: 0, y: dropdownMotionOffset }"
+            class="fixed p-2 max-h-56 overflow-y-auto border border-default rounded-xl shadow-xl bg-card text-black dark:text-white"
+            :class="[
+              { dark: isDarkMode },
+              dropdownPlacement === 'top' ? 'origin-bottom' : 'origin-top',
+            ]"
             :style="dropdownStyle"
             @click.stop
           >
@@ -209,7 +212,8 @@ const selectRef = ref<HTMLDivElement | null>(null)
 const inputRef = ref<HTMLInputElement | null>(null)
 const isOpen = ref(false)
 const isDarkMode = ref(false)
-const dropdownPosition = ref({ top: 0, left: 0, width: 0 })
+const dropdownPosition = ref({ top: 0, bottom: 0, left: 0, width: 0 })
+const dropdownPlacement = ref<'bottom' | 'top'>('bottom')
 const searchQuery = ref('')
 
 const selectedOption = computed(() => {
@@ -230,12 +234,26 @@ const filteredOptions = computed(() => {
   )
 })
 
-const dropdownStyle = computed(() => ({
-  top: `${dropdownPosition.value.top}px`,
-  left: `${dropdownPosition.value.left}px`,
-  width: `${dropdownPosition.value.width}px`,
-  zIndex: 9999,
-}))
+const dropdownStyle = computed(() => {
+  const pos = dropdownPosition.value
+  const style: Record<string, string | number> = {
+    left: `${pos.left}px`,
+    width: `${pos.width}px`,
+    zIndex: 9999,
+  }
+  if (dropdownPlacement.value === 'top') {
+    style.bottom = `${pos.bottom}px`
+  }
+  else {
+    style.top = `${pos.top}px`
+  }
+  return style
+})
+
+// Animate from the side the dropdown actually opens toward.
+const dropdownMotionOffset = computed(() =>
+  dropdownPlacement.value === 'top' ? 6 : -6,
+)
 
 watch(
   () => props.modelValue,
@@ -253,9 +271,25 @@ function calculateDropdownPosition() {
   if (!selectRef.value) return
   syncDarkMode()
   const rect = selectRef.value.getBoundingClientRect()
+  const gap = 8
+  const viewportHeight = window.innerHeight
+
+  // The panel is position: fixed, so coordinates are viewport-relative — never
+  // add scroll offsets. Flip it above the input when there isn't enough room
+  // below, so the options stay on-screen and clickable.
+  const rows = Math.max(filteredOptions.value.length, 1)
+  const estimatedHeight = Math.min(rows * 44 + 16, 224)
+  const spaceBelow = viewportHeight - rect.bottom
+  const spaceAbove = rect.top
+  dropdownPlacement.value
+    = spaceBelow < estimatedHeight + gap && spaceAbove > spaceBelow
+      ? 'top'
+      : 'bottom'
+
   dropdownPosition.value = {
-    top: rect.bottom + window.scrollY + 8,
-    left: rect.left + window.scrollX,
+    top: rect.bottom + gap,
+    bottom: viewportHeight - rect.top + gap,
+    left: rect.left,
     width: rect.width,
   }
 }

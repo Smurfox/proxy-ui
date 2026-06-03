@@ -80,11 +80,14 @@
         <AnimatePresence>
           <motion.div
             v-if="isOpen && !props.disabled"
-            :initial="{ scale: 0.96, opacity: 0, y: -6 }"
+            :initial="{ scale: 0.96, opacity: 0, y: popoverMotionOffset }"
             :animate="{ scale: 1, opacity: 1, y: 0 }"
-            :exit="{ scale: 0.96, opacity: 0, y: -6 }"
-            class="fixed origin-top w-72"
-            :class="{ dark: isDarkMode }"
+            :exit="{ scale: 0.96, opacity: 0, y: popoverMotionOffset }"
+            class="fixed w-72"
+            :class="[
+              { dark: isDarkMode },
+              popoverPlacement === 'top' ? 'origin-bottom' : 'origin-top',
+            ]"
             :style="popoverStyle"
             @click.stop
           >
@@ -308,7 +311,8 @@ const yearButtonRefs = new Map<number, HTMLButtonElement>()
 const isOpen = ref(false)
 const isDarkMode = ref(false)
 const showYearView = ref(false)
-const popoverPosition = ref({ top: 0, left: 0 })
+const popoverPosition = ref({ top: 0, bottom: 0, left: 0 })
+const popoverPlacement = ref<'bottom' | 'top'>('bottom')
 
 const today = new Date()
 const todayParts = {
@@ -468,11 +472,25 @@ function isYearAvailable(year: number) {
   return true
 }
 
-const popoverStyle = computed(() => ({
-  top: `${popoverPosition.value.top}px`,
-  left: `${popoverPosition.value.left}px`,
-  zIndex: 9999,
-}))
+const popoverStyle = computed(() => {
+  const pos = popoverPosition.value
+  const style: Record<string, string | number> = {
+    left: `${pos.left}px`,
+    zIndex: 9999,
+  }
+  if (popoverPlacement.value === 'top') {
+    style.bottom = `${pos.bottom}px`
+  }
+  else {
+    style.top = `${pos.top}px`
+  }
+  return style
+})
+
+// Animate from the side the calendar actually opens toward.
+const popoverMotionOffset = computed(() =>
+  popoverPlacement.value === 'top' ? 6 : -6,
+)
 
 function syncDarkMode() {
   isDarkMode.value = Boolean(datePickerRef.value?.closest('.dark'))
@@ -485,13 +503,27 @@ function calculatePosition() {
   const rect = datePickerRef.value.getBoundingClientRect()
   const popoverWidth = 288
   const margin = 8
-  let left = rect.left + window.scrollX
-  const viewportRight = window.scrollX + window.innerWidth
+  // The popover is position: fixed, so coordinates are viewport-relative —
+  // never add scroll offsets.
+  let left = rect.left
+  const viewportRight = window.innerWidth
   if (left + popoverWidth + margin > viewportRight) {
     left = Math.max(margin, viewportRight - popoverWidth - margin)
   }
+
+  // Flip the calendar above the trigger when there isn't enough room below
+  // (e.g. the field sits near the bottom of the viewport).
+  const estimatedHeight = 360
+  const spaceBelow = window.innerHeight - rect.bottom
+  const spaceAbove = rect.top
+  popoverPlacement.value
+    = spaceBelow < estimatedHeight + margin && spaceAbove > spaceBelow
+      ? 'top'
+      : 'bottom'
+
   popoverPosition.value = {
-    top: rect.bottom + window.scrollY + 8,
+    top: rect.bottom + margin,
+    bottom: window.innerHeight - rect.top + margin,
     left,
   }
 }
