@@ -170,14 +170,17 @@
       </h1>
       <p class="text-sm text-gray-600 dark:text-gray-400">
         Set <code>with-pagination</code> to render the table footer with the
-        pagination controls. This example has 15 records and displays 5 rows.
+        pagination controls. Add <code>pagination-show-page-size</code> to let
+        the user choose how many rows are shown per page.
       </p>
       <PUTable
+        v-model:pagination-items-per-page="itemsPerPage"
         :items="paginatedItemsPreview"
         :columns="columnsCustom"
         :pagination-page="currentPage"
         :pagination-total-items="paginatedItemsCustom.length"
-        :pagination-items-per-page="5"
+        pagination-show-page-size
+        :pagination-page-size-options="[5, 10, 25]"
         rounded="2xl"
         is-bordered
         is-body-colored
@@ -301,11 +304,11 @@ const paginatedItemsCustom = Array.from({ length: 50 }, (_, index) => {
 })
 
 const currentPage = ref(1)
-const itemsPerPage = 5
+const itemsPerPage = ref(5)
 
 const paginatedItemsPreview = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage
-  const end = start + itemsPerPage
+  const start = (currentPage.value - 1) * itemsPerPage.value
+  const end = start + itemsPerPage.value
   return paginatedItemsCustom.slice(start, end)
 })
 </script>

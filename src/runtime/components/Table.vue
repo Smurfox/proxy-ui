@@ -110,8 +110,13 @@
                 :total-items="resolvedPaginationTotalItems"
                 :items-per-page="resolvedPaginationItemsPerPage"
                 :show-items-count="props.paginationShowItemsCount"
+                :show-page-size="props.paginationShowPageSize"
+                :page-size-options="props.paginationPageSizeOptions"
+                :page-size-label="props.paginationPageSizeLabel"
                 @update:page="onPaginationPageUpdate"
                 @page-change="onPaginationPageChange"
+                @update:items-per-page="onPaginationItemsPerPageUpdate"
+                @page-size-change="onPaginationPageSizeChange"
               />
             </td>
           </tr>
@@ -195,8 +200,13 @@
           :total-items="resolvedPaginationTotalItems"
           :items-per-page="resolvedPaginationItemsPerPage"
           :show-items-count="props.paginationShowItemsCount"
+          :show-page-size="props.paginationShowPageSize"
+          :page-size-options="props.paginationPageSizeOptions"
+          :page-size-label="props.paginationPageSizeLabel"
           @update:page="onPaginationPageUpdate"
           @page-change="onPaginationPageChange"
+          @update:items-per-page="onPaginationItemsPerPageUpdate"
+          @page-size-change="onPaginationPageSizeChange"
         />
       </div>
     </div>
@@ -297,6 +307,9 @@ const props = withDefaults(
     paginationTotalItems?: number
     paginationItemsPerPage?: number
     paginationShowItemsCount?: boolean
+    paginationShowPageSize?: boolean
+    paginationPageSizeOptions?: number[]
+    paginationPageSizeLabel?: string
   }>(),
   {
     items: () => [],
@@ -320,6 +333,9 @@ const props = withDefaults(
     paginationTotalItems: undefined,
     paginationItemsPerPage: undefined,
     paginationShowItemsCount: true,
+    paginationShowPageSize: false,
+    paginationPageSizeOptions: () => [10, 20, 50, 100],
+    paginationPageSizeLabel: 'Filas por página',
   },
 )
 
@@ -336,6 +352,8 @@ const emit = defineEmits<{
   'row-click': [item: TItem]
   'update:paginationPage': [page: number]
   'pagination-page-change': [page: number]
+  'update:paginationItemsPerPage': [itemsPerPage: number]
+  'pagination-page-size-change': [itemsPerPage: number]
 }>()
 
 function getCellValue(item: TItem, key: string): unknown {
@@ -357,6 +375,14 @@ function onPaginationPageUpdate(page: number) {
 
 function onPaginationPageChange(page: number) {
   emit('pagination-page-change', page)
+}
+
+function onPaginationItemsPerPageUpdate(itemsPerPage: number) {
+  emit('update:paginationItemsPerPage', itemsPerPage)
+}
+
+function onPaginationPageSizeChange(itemsPerPage: number) {
+  emit('pagination-page-size-change', itemsPerPage)
 }
 </script>
 
