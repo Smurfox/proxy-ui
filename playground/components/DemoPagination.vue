@@ -61,6 +61,29 @@
 
     <div class="w-200 mx-auto flex flex-col gap-3">
       <h1 class="font-semibold text-lg dark:text-white">
+        With page-size selector
+      </h1>
+      <p class="text-xs text-gray-600 dark:text-gray-400">
+        Set <code class="text-xs px-1 rounded bg-black/5 dark:bg-white/10">show-page-size</code>
+        to let the user pick how many rows are shown. Bind it with
+        <code class="text-xs px-1 rounded bg-black/5 dark:bg-white/10">v-model:items-per-page</code>.
+      </p>
+      <PUCard class="p-6! flex flex-col gap-4">
+        <PUPagination
+          v-model:page="sizePage"
+          v-model:items-per-page="sizePerPage"
+          :total-items="350"
+          show-page-size
+          :page-size-options="[10, 20, 50, 100]"
+        />
+        <p class="text-xs font-mono text-gray-600 dark:text-gray-400">
+          page = {{ sizePage }} · itemsPerPage = {{ sizePerPage }}
+        </p>
+      </PUCard>
+    </div>
+
+    <div class="w-200 mx-auto flex flex-col gap-3">
+      <h1 class="font-semibold text-lg dark:text-white">
         Inside a PUTable
       </h1>
       <p class="text-xs text-gray-600 dark:text-gray-400">
@@ -71,11 +94,13 @@
       <PUCard class="p-6!">
         <PUTable
           v-model:pagination-page="tablePage"
+          v-model:pagination-items-per-page="tablePageSize"
           :columns="tableColumns"
           :items="pagedTableItems"
           with-pagination
           :pagination-total-items="allTableItems.length"
-          :pagination-items-per-page="tablePageSize"
+          pagination-show-page-size
+          :pagination-page-size-options="[5, 10, 20]"
           rounded="xl"
           is-bordered
           :has-shadow="false"
@@ -92,8 +117,13 @@ const basicPage = ref(1)
 const noCounterPage = ref(2)
 const smallPage = ref(1)
 
+const sizePage = ref(1)
+// Manual value that isn't in pageSizeOptions — it should still show up in the
+// selector and remain selectable.
+const sizePerPage = ref(8)
+
 const tablePage = ref(1)
-const tablePageSize = 5
+const tablePageSize = ref(5)
 
 const allTableItems = Array.from({ length: 23 }, (_, i) => ({
   id: i + 1,
@@ -109,8 +139,8 @@ const tableColumns = [
 ]
 
 const pagedTableItems = computed(() => {
-  const start = (tablePage.value - 1) * tablePageSize
-  return allTableItems.slice(start, start + tablePageSize)
+  const start = (tablePage.value - 1) * tablePageSize.value
+  return allTableItems.slice(start, start + tablePageSize.value)
 })
 </script>
 

@@ -210,6 +210,9 @@ export interface TableProps {
   paginationTotalItems?: number
   paginationItemsPerPage?: number
   paginationShowItemsCount?: boolean
+  paginationShowPageSize?: boolean
+  paginationPageSizeOptions?: number[]
+  paginationPageSizeLabel?: string
 }
 
 export interface PaginationProps {
@@ -217,6 +220,9 @@ export interface PaginationProps {
   totalItems?: number
   itemsPerPage?: number
   showItemsCount?: boolean
+  showPageSize?: boolean
+  pageSizeOptions?: number[]
+  pageSizeLabel?: string
 }
 
 export type SkeletonHeight = 'xs' | 'sm' | 'md' | 'lg' | 'xl'

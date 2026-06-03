@@ -962,16 +962,21 @@ A responsive data table that renders as a normal `<table>` on `md+` viewports an
 | `withPagination`         | `boolean`                                                                  | `false`                                                                                  | Renders a `PUPagination` inside the table footer.                                           |
 | `paginationPage`         | `number`                                                                   | `1`                                                                                      | Current page (use with `v-model:paginationPage`).                                           |
 | `paginationTotalItems`   | `number \| undefined`                                                      | `items.length`                                                                           | Total number of items across all pages. Defaults to the length of `items`.                  |
-| `paginationItemsPerPage` | `number \| undefined`                                                      | `items.length` (or `10` if empty)                                                        | Items per page. Defaults to the current `items` length so client-paginated tables work out of the box. |
+| `paginationItemsPerPage` | `number \| undefined`                                                      | `items.length` (or `10` if empty)                                                        | Items per page. Defaults to the current `items` length so client-paginated tables work out of the box. Use with `v-model:paginationItemsPerPage` when `paginationShowPageSize` is on. |
 | `paginationShowItemsCount` | `boolean`                                                                | `true`                                                                                   | Show the "Mostrando X-Y de Z registros" label on the left.                                  |
+| `paginationShowPageSize`   | `boolean`                                                                | `false`                                                                                  | Turns the footer items-count label into a toggle that reveals a page-size selector on click, so it stays collapsed until needed. |
+| `paginationPageSizeOptions`| `number[]`                                                               | `[10, 20, 50, 100]`                                                                      | Options offered in the page-size selector.                                                  |
+| `paginationPageSizeLabel`  | `string`                                                                 | `'Filas por página'`                                                                     | Toggle label used when the count is hidden and on mobile.                                   |
 
 **Events**
 
-| Event                     | Payload          | Description                                                                                            |
-| ------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------ |
-| `row-click`               | `item: TItem`    | Emitted when a row is clicked (only when `isSelectable` is `true`). `TItem` is inferred from `items`.  |
-| `update:paginationPage`   | `page: number`   | Emitted when the user changes the page (enables `v-model:paginationPage`).                             |
-| `pagination-page-change`  | `page: number`   | Emitted alongside `update:paginationPage` for non-v-model listeners.                                   |
+| Event                            | Payload                | Description                                                                                            |
+| -------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------ |
+| `row-click`                      | `item: TItem`          | Emitted when a row is clicked (only when `isSelectable` is `true`). `TItem` is inferred from `items`.  |
+| `update:paginationPage`          | `page: number`         | Emitted when the user changes the page (enables `v-model:paginationPage`).                             |
+| `pagination-page-change`         | `page: number`         | Emitted alongside `update:paginationPage` for non-v-model listeners.                                   |
+| `update:paginationItemsPerPage`  | `itemsPerPage: number` | Emitted when the page size changes (enables `v-model:paginationItemsPerPage`). The page also resets to `1`. |
+| `pagination-page-size-change`    | `itemsPerPage: number` | Emitted alongside `update:paginationItemsPerPage` for non-v-model listeners.                           |
 
 **Slots**
 
@@ -1046,17 +1051,22 @@ A pagination control with first/prev/next/last buttons and a numeric page range 
 
 | Prop             | Type      | Default | Description                                                                |
 | ---------------- | --------- | ------- | -------------------------------------------------------------------------- |
-| `page`           | `number`  | `1`     | Current page (use with `v-model:page`).                                    |
-| `totalItems`     | `number`  | `0`     | Total number of items across all pages. Used to compute `totalPages`.      |
-| `itemsPerPage`   | `number`  | `10`    | Items per page.                                                            |
-| `showItemsCount` | `boolean` | `true`  | Show the "Mostrando X-Y de Z registros" label on the left (md+ viewports). |
+| `page`            | `number`   | `1`                    | Current page (use with `v-model:page`).                                    |
+| `totalItems`      | `number`   | `0`                    | Total number of items across all pages. Used to compute `totalPages`.      |
+| `itemsPerPage`    | `number`   | `10`                   | Items per page (use with `v-model:items-per-page` when `showPageSize` is on). |
+| `showItemsCount`  | `boolean`  | `true`                 | Show the "Mostrando X-Y de Z registros" label on the left (md+ viewports). |
+| `showPageSize`    | `boolean`  | `false`                | Turns the items-count label into a toggle (with a chevron) that reveals a page-size `PUSelect` on click, so the selector stays collapsed until needed. |
+| `pageSizeOptions` | `number[]` | `[10, 20, 50, 100]`    | Options offered in the page-size selector.                                 |
+| `pageSizeLabel`   | `string`   | `'Filas por página'`   | Toggle label used when the items count is hidden (`showItemsCount: false`) and on mobile. |
 
 **Events**
 
-| Event           | Payload        | Description                                                       |
-| --------------- | -------------- | ----------------------------------------------------------------- |
-| `update:page`   | `page: number` | Emitted when the page changes (enables `v-model:page`).           |
-| `page-change`   | `page: number` | Emitted alongside `update:page` for non-v-model listeners.        |
+| Event                   | Payload                | Description                                                                          |
+| ----------------------- | ---------------------- | ------------------------------------------------------------------------------------ |
+| `update:page`           | `page: number`         | Emitted when the page changes (enables `v-model:page`).                              |
+| `page-change`           | `page: number`         | Emitted alongside `update:page` for non-v-model listeners.                          |
+| `update:itemsPerPage`   | `itemsPerPage: number` | Emitted when the page size changes (enables `v-model:items-per-page`). The page also resets to `1`. |
+| `page-size-change`      | `itemsPerPage: number` | Emitted alongside `update:itemsPerPage` for non-v-model listeners.                  |
 
 **Examples**
 
@@ -1070,6 +1080,15 @@ A pagination control with first/prev/next/last buttons and a numeric page range 
   :total-items="350"
   :items-per-page="20"
   :show-items-count="false"
+/>
+
+<!-- With a page-size selector -->
+<PUPagination
+  v-model:page="page"
+  v-model:items-per-page="perPage"
+  :total-items="350"
+  show-page-size
+  :page-size-options="[10, 20, 50, 100]"
 />
 
 <!-- Inside a PUTable -->
