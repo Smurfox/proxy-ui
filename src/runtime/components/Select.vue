@@ -42,9 +42,16 @@
             >*</span>
           </span>
           <span
-            class="truncate w-full"
-            :class="!selectedOption ? 'text-gray-500 dark:text-white/50' : ''"
-          >{{ displayText }}</span>
+            v-if="!selectedOption"
+            class="truncate w-full text-gray-500 dark:text-white/50"
+          >{{ placeholder }}</span>
+          <slot
+            v-else
+            name="selected"
+            :option="selectedOption"
+          >
+            <span class="truncate w-full">{{ selectedOption.label }}</span>
+          </slot>
         </div>
         <Icon
           name="mdi:chevron-down"
@@ -86,16 +93,22 @@
                 :class="option.value === props.modelValue ? 'bg-primary/10 dark:bg-primary/15' : ''"
                 @click.stop="selectOption(option)"
               >
-                <span
-                  class="text-sm truncate"
-                  :class="
-                    option.value === props.modelValue
-                      ? 'text-primary'
-                      : 'text-black dark:text-white'
-                  "
+                <slot
+                  name="option"
+                  :option="option"
+                  :selected="option.value === props.modelValue"
                 >
-                  {{ option.label }}
-                </span>
+                  <span
+                    class="text-sm truncate"
+                    :class="
+                      option.value === props.modelValue
+                        ? 'text-primary'
+                        : 'text-black dark:text-white'
+                    "
+                  >
+                    {{ option.label }}
+                  </span>
+                </slot>
                 <Icon
                   v-if="option.value === props.modelValue"
                   name="mdi:check"
@@ -126,18 +139,13 @@
 <script lang="ts">
 import { AnimatePresence, motion } from 'motion-v'
 import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
-import type { InputRounded, InputVariant } from '../types'
+import type { InputRounded, InputVariant, SelectOption } from '../types'
 import { createPopoverGroup } from '../composables/popoverGroup'
 
 const popoverGroup = createPopoverGroup()
 </script>
 
 <script setup lang="ts">
-interface SelectOption {
-  label: string
-  value: string | number
-}
-
 const roundedVariants = {
   'none': 'rounded-none',
   'sm': 'rounded-sm',
@@ -196,6 +204,11 @@ const emit = defineEmits<{
   'change': [value: string | number]
 }>()
 
+defineSlots<{
+  selected?: (props: { option: SelectOption }) => unknown
+  option?: (props: { option: SelectOption, selected: boolean }) => unknown
+}>()
+
 const selectRef = ref<HTMLDivElement | null>(null)
 const isOpen = ref(false)
 const isDarkMode = ref(false)
@@ -204,10 +217,6 @@ const dropdownPlacement = ref<'bottom' | 'top'>('bottom')
 
 const selectedOption = computed(() => {
   return props.options.find(option => option.value === props.modelValue)
-})
-
-const displayText = computed(() => {
-  return selectedOption.value?.label || props.placeholder
 })
 
 const dropdownStyle = computed(() => {
