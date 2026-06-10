@@ -92,6 +92,49 @@
 
     <div class="w-200 mx-auto flex flex-col gap-3">
       <h1 class="font-semibold text-lg">
+        Custom Rendering
+      </h1>
+      <p class="text-sm text-gray-600 dark:text-gray-400 -mt-2">
+        Use the <code>#option</code> and <code>#selected</code> slots to render custom content.
+        The selected overlay hides while typing so the input stays filterable.
+      </p>
+      <div
+        class="border border-gray-300 flex flex-col gap-6 p-9 w-full rounded-xl"
+      >
+        <PUAutocomplete
+          v-model="selectedClient"
+          label="Cliente"
+          placeholder="Busca un cliente"
+          :options="clientOptions"
+        >
+          <template #selected="{ option }">
+            <div class="flex items-center gap-2 min-w-0">
+              <span
+                class="size-6 shrink-0 rounded-full bg-primary/15 text-primary text-xs font-semibold flex items-center justify-center"
+              >{{ String(option.label).charAt(0) }}</span>
+              <span class="truncate">{{ option.label }}</span>
+            </div>
+          </template>
+          <template #option="{ option, selected }">
+            <div class="flex items-center gap-3 min-w-0">
+              <span
+                class="size-8 shrink-0 rounded-full bg-primary/15 text-primary text-sm font-semibold flex items-center justify-center"
+              >{{ String(option.label).charAt(0) }}</span>
+              <div class="flex flex-col min-w-0 leading-tight">
+                <span
+                  class="text-sm truncate"
+                  :class="selected ? 'text-primary' : 'text-black dark:text-white'"
+                >{{ option.label }}</span>
+                <span class="text-xs text-gray-500 dark:text-white/50 truncate">{{ option.email }}</span>
+              </div>
+            </div>
+          </template>
+        </PUAutocomplete>
+      </div>
+    </div>
+
+    <div class="w-200 mx-auto flex flex-col gap-3">
+      <h1 class="font-semibold text-lg">
         Disabled State
       </h1>
       <div
@@ -182,5 +225,13 @@ const priorityOptions = [
   { label: 'Low', value: 'low' },
   { label: 'Medium', value: 'medium' },
   { label: 'High', value: 'high' },
+]
+
+const selectedClient = ref<string | number | null>(null)
+
+const clientOptions = [
+  { label: 'Proveedor por defecto', value: 'default', email: 'proveedor@empresa.com' },
+  { label: 'Ferretería Central', value: 'central', email: 'ventas@ferrecentral.com' },
+  { label: 'Distribuidora Norte', value: 'norte', email: 'contacto@disnorte.com' },
 ]
 </script>

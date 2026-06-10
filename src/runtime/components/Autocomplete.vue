@@ -28,11 +28,15 @@
           class="text-danger ml-0.5"
         >*</span>
       </label>
+      <!-- While the selected overlay is visible the input renders no text at
+        all (value and placeholder are emptied) instead of using
+        text-transparent — `transition-colors` would fade the old text out and
+        briefly show it under the overlay. -->
       <input
         ref="inputRef"
         type="text"
-        :value="searchQuery"
-        :placeholder="props.placeholder"
+        :value="showSelectedOverlay ? '' : searchQuery"
+        :placeholder="showSelectedOverlay ? '' : props.placeholder"
         :disabled="props.disabled"
         class="w-full pr-10 text-sm transition-colors"
         :class="[
@@ -40,11 +44,26 @@
           roundedVariants[props.rounded],
           props.error ? errorVariants[props.variant] : variants[props.variant],
           props.disabled ? 'opacity-70 cursor-not-allowed' : 'cursor-text',
+          showSelectedOverlay ? 'caret-transparent' : '',
         ]"
         @input="onInput"
         @focus="open"
         @click.stop="open"
       >
+
+      <!-- Rich display of the selected option. An <input> can't render HTML, so
+        the slot content overlays it and only hides while the user is typing,
+        so it survives merely opening the dropdown. -->
+      <div
+        v-if="showSelectedOverlay && selectedOption"
+        class="absolute inset-y-0 left-0 right-10 flex items-center overflow-hidden pointer-events-none text-sm text-black dark:text-white"
+        :class="inlineLabel && label ? 'pt-4 px-3' : 'px-3'"
+      >
+        <slot
+          name="selected"
+          :option="selectedOption"
+        />
+      </div>
 
       <button
         v-if="searchQuery && !props.disabled"
@@ -97,16 +116,22 @@
                 :class="option.value === props.modelValue ? 'bg-primary/10 dark:bg-primary/15' : ''"
                 @click.stop="selectOption(option)"
               >
-                <span
-                  class="text-sm truncate"
-                  :class="
-                    option.value === props.modelValue
-                      ? 'text-primary'
-                      : 'text-black dark:text-white'
-                  "
+                <slot
+                  name="option"
+                  :option="option"
+                  :selected="option.value === props.modelValue"
                 >
-                  {{ option.label }}
-                </span>
+                  <span
+                    class="text-sm truncate"
+                    :class="
+                      option.value === props.modelValue
+                        ? 'text-primary'
+                        : 'text-black dark:text-white'
+                    "
+                  >
+                    {{ option.label }}
+                  </span>
+                </slot>
                 <Icon
                   v-if="option.value === props.modelValue"
                   name="mdi:check"
@@ -137,18 +162,13 @@
 <script lang="ts">
 import { AnimatePresence, motion } from 'motion-v'
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
-import type { InputRounded, InputVariant } from '../types'
+import type { AutocompleteOption, InputRounded, InputVariant } from '../types'
 import { createPopoverGroup } from '../composables/popoverGroup'
 
 const popoverGroup = createPopoverGroup()
 </script>
 
 <script setup lang="ts">
-interface AutocompleteOption {
-  label: string
-  value: string | number
-}
-
 const roundedVariants = {
   'none': 'rounded-none',
   'sm': 'rounded-sm',
@@ -208,6 +228,11 @@ const emit = defineEmits<{
   'search': [value: string]
 }>()
 
+const slots = defineSlots<{
+  selected?: (props: { option: AutocompleteOption }) => unknown
+  option?: (props: { option: AutocompleteOption, selected: boolean }) => unknown
+}>()
+
 const selectRef = ref<HTMLDivElement | null>(null)
 const inputRef = ref<HTMLInputElement | null>(null)
 const isOpen = ref(false)
@@ -215,10 +240,15 @@ const isDarkMode = ref(false)
 const dropdownPosition = ref({ top: 0, bottom: 0, left: 0, width: 0 })
 const dropdownPlacement = ref<'bottom' | 'top'>('bottom')
 const searchQuery = ref('')
+const isTyping = ref(false)
 
 const selectedOption = computed(() => {
   return props.options.find(option => option.value === props.modelValue)
 })
+
+const showSelectedOverlay = computed(() =>
+  Boolean(slots.selected && selectedOption.value && !isTyping.value),
+)
 
 const filteredOptions = computed(() => {
   const q = searchQuery.value.trim().toLowerCase()
@@ -307,10 +337,12 @@ function close() {
   isOpen.value = false
   popoverGroup.release(close)
   searchQuery.value = selectedOption.value?.label ?? ''
+  isTyping.value = false
 }
 
 function onInput(event: Event) {
   const value = (event.target as HTMLInputElement).value
+  isTyping.value = true
   searchQuery.value = value
   emit('search', value)
   if (!isOpen.value) open()
@@ -320,6 +352,7 @@ function selectOption(option: AutocompleteOption) {
   emit('update:modelValue', option.value)
   emit('change', option.value)
   searchQuery.value = option.label
+  isTyping.value = false
   isOpen.value = false
   popoverGroup.release(close)
 }

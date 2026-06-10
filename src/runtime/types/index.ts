@@ -82,6 +82,19 @@ export interface CardProps {
 export type AvatarSize = 'sm' | 'md' | 'lg' | 'full'
 export type AvatarRounded = 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full'
 
+export type CheckboxSize = 'sm' | 'md' | 'lg'
+export type CheckboxRounded = 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full'
+export type CheckboxLabelPosition = 'left' | 'right'
+
+export interface CheckboxProps {
+  modelValue?: boolean
+  label?: string
+  labelPosition?: CheckboxLabelPosition
+  labelClass?: string
+  size?: CheckboxSize
+  rounded?: CheckboxRounded
+}
+
 export type InputVariant = 'default' | 'secondary'
 export type InputRounded = 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full'
 
@@ -118,9 +131,31 @@ export interface DatePickerProps {
   maxYear?: number
 }
 
+export interface SelectOption {
+  label: string
+  value: string | number
+  [key: string]: unknown
+}
+
+export interface SelectProps {
+  modelValue?: string | number | null
+  options?: SelectOption[]
+  label?: string
+  labelClass?: string
+  inlineLabel?: boolean
+  placeholder?: string
+  description?: string
+  rounded?: InputRounded
+  variant?: InputVariant
+  required?: boolean
+  error?: string
+  disabled?: boolean
+}
+
 export interface AutocompleteOption {
   label: string
   value: string | number
+  [key: string]: unknown
 }
 
 export interface AutocompleteProps {
