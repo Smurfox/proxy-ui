@@ -14,6 +14,16 @@ export default defineNuxtModule<ModuleOptions>({
   async setup(options, nuxt) {
     const resolver = createResolver(import.meta.url)
 
+    // lottie-web es CJS: hay que pre-empaquetarlo en el Vite del consumidor
+    // para que el `import default` de vue3-lottie tenga interop ESM en dev
+    nuxt.options.vite = nuxt.options.vite ?? {}
+    nuxt.options.vite.optimizeDeps = nuxt.options.vite.optimizeDeps ?? {}
+    nuxt.options.vite.optimizeDeps.include = [
+      ...(nuxt.options.vite.optimizeDeps.include ?? []),
+      'vue3-lottie',
+      'lottie-web',
+    ]
+
     // Fuente Inter via @nuxt/fonts
     if (nuxt.options.fonts !== false) {
       nuxt.options.fonts = nuxt.options.fonts ?? {}
