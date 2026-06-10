@@ -1,4 +1,4 @@
-# ProxyUI
+﻿# ProxyUI
 
 A component library built for **Nuxt 4**, designed with a clean and consistent API. All components are prefixed with `PU`.
 
@@ -348,6 +348,53 @@ A multi-line text input. Shares the look and feel of `PUInput`, with extra props
 
 ---
 
+### PUCheckbox
+
+An animated checkbox powered by `motion-v` — the filled box and check mark pop in with a scale animation and shrink away when unchecked. Supports `v-model` with a boolean value; clicking the box or the label toggles it.
+
+```vue
+<PUCheckbox v-model="acceptTerms" label="Accept terms and conditions" />
+```
+
+**Props**
+
+| Prop            | Type                                                | Default     | Description                                                            |
+| --------------- | --------------------------------------------------- | ----------- | ---------------------------------------------------------------------- |
+| `modelValue`    | `boolean`                                           | `false`     | Checked state (v-model).                                               |
+| `label`         | `string`                                            | —           | Text rendered next to the box. Omit it for a standalone checkbox.      |
+| `labelPosition` | `'left' \| 'right'`                                 | `'right'`   | Side of the box where the label renders.                               |
+| `labelClass`    | `string`                                            | `'text-sm'` | Custom classes for the label.                                          |
+| `size`          | `'sm' \| 'md' \| 'lg'`                              | `'md'`      | Box size. The check icon scales along with it.                         |
+| `rounded`       | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| 'full'`  | `'md'`      | Border radius. `full` gives it a radio-button look.                    |
+
+**Events**
+
+| Event               | Payload   | Description                     |
+| ------------------- | --------- | ------------------------------- |
+| `update:modelValue` | `boolean` | Emitted when the state toggles. |
+
+**Examples**
+
+```vue
+<!-- Basic -->
+<PUCheckbox v-model="newsletter" label="Subscribe to the newsletter" />
+
+<!-- Label on the left -->
+<PUCheckbox v-model="darkMode" label="Dark mode" label-position="left" />
+
+<!-- Sizes -->
+<PUCheckbox v-model="small" label="Small" size="sm" />
+<PUCheckbox v-model="large" label="Large" size="lg" />
+
+<!-- Round, radio-button look -->
+<PUCheckbox v-model="enabled" label="Enabled" rounded="full" />
+
+<!-- Without label -->
+<PUCheckbox v-model="standalone" />
+```
+
+---
+
 ### PUSelect
 
 A custom select with an animated dropdown panel teleported to `body`. Dark-mode aware, supports `v-model`, and emits both `update:modelValue` and `change`. Only one `PUSelect` can be open at a time across the page — opening a new one automatically closes any other open select.
@@ -369,7 +416,7 @@ A custom select with an animated dropdown panel teleported to `body`. Dark-mode 
 | Prop          | Type                                                        | Default                   | Description                                          |
 | ------------- | ----------------------------------------------------------- | ------------------------- | ---------------------------------------------------- |
 | `modelValue`  | `string \| number \| null`                                  | `null`                    | Selected value (v-model).                            |
-| `options`     | `{ label: string, value: string \| number }[]`              | `[]`                      | Items shown in the dropdown.                         |
+| `options`     | `SelectOption[]` (`{ label, value, ...extra }`)             | `[]`                      | Items shown in the dropdown. Extra fields are allowed and exposed to the slots. |
 | `label`       | `string`                                                    | —                         | Label displayed above the select.                    |
 | `labelClass`  | `string`                                                    | `'text-sm font-semibold'` | Custom classes for the label.                        |
 | `inlineLabel` | `boolean`                                                   | `false`                   | Render `label` as a floating label inside the trigger. |
@@ -387,6 +434,13 @@ A custom select with an animated dropdown panel teleported to `body`. Dark-mode 
 | ------------------- | ------------------ | -------------------------------------- |
 | `update:modelValue` | `string \| number` | Emitted when an option is picked.      |
 | `change`            | `string \| number` | Emitted alongside `update:modelValue`. |
+
+**Slots**
+
+| Slot       | Scope                                        | Description                                                                 |
+| ---------- | -------------------------------------------- | --------------------------------------------------------------------------- |
+| `selected` | `{ option: SelectOption }`                   | Custom content for the trigger when a value is selected (placeholder still renders by default). |
+| `option`   | `{ option: SelectOption, selected: boolean }` | Custom content for each item in the dropdown list. The check icon for the selected item is kept automatically. |
 
 **Examples**
 
@@ -407,6 +461,24 @@ A custom select with an animated dropdown panel teleported to `body`. Dark-mode 
 
 <!-- Disabled -->
 <PUSelect :options="statuses" disabled label="Locked" />
+
+<!-- Custom rendering: options can carry extra fields (e.g. email, avatar) -->
+<PUSelect v-model="clientId" label="Client" :options="clients">
+  <template #selected="{ option }">
+    <div class="flex items-center gap-2 min-w-0">
+      <span class="size-6 shrink-0 rounded-full bg-primary/15 text-primary text-xs font-semibold flex items-center justify-center">
+        {{ String(option.label).charAt(0) }}
+      </span>
+      <span class="truncate">{{ option.label }}</span>
+    </div>
+  </template>
+  <template #option="{ option, selected }">
+    <div class="flex flex-col min-w-0 leading-tight">
+      <span class="text-sm truncate" :class="selected ? 'text-primary' : ''">{{ option.label }}</span>
+      <span class="text-xs text-gray-500 truncate">{{ option.email }}</span>
+    </div>
+  </template>
+</PUSelect>
 ```
 
 ---
@@ -435,7 +507,7 @@ Filtering is case-insensitive and matches `label`. When the input text matches t
 | Prop          | Type                                                        | Default                   | Description                                          |
 | ------------- | ----------------------------------------------------------- | ------------------------- | ---------------------------------------------------- |
 | `modelValue`  | `string \| number \| null`                                  | `null`                    | Selected value (v-model).                            |
-| `options`     | `{ label: string, value: string \| number }[]`              | `[]`                      | Items shown in the dropdown.                         |
+| `options`     | `AutocompleteOption[]` (`{ label, value, ...extra }`)       | `[]`                      | Items shown in the dropdown. Extra fields are allowed and exposed to the `option` slot. |
 | `label`       | `string`                                                    | —                         | Label displayed above the input.                     |
 | `labelClass`  | `string`                                                    | `'text-sm font-semibold'` | Custom classes for the label.                        |
 | `inlineLabel` | `boolean`                                                   | `false`                   | Render `label` as a floating label inside the input. |
@@ -454,6 +526,13 @@ Filtering is case-insensitive and matches `label`. When the input text matches t
 | `update:modelValue` | `string \| number \| null`       | Emitted when an option is picked, or `null` when the clear button is used. |
 | `change`            | `string \| number \| null`       | Emitted alongside `update:modelValue`.                                   |
 | `search`            | `string`                         | Emitted on every keystroke with the current input text. Useful for remote search. |
+
+**Slots**
+
+| Slot       | Scope                                              | Description                                                                 |
+| ---------- | -------------------------------------------------- | --------------------------------------------------------------------------- |
+| `selected` | `{ option: AutocompleteOption }`                    | Rich display of the selected option, rendered as an overlay on top of the input. It stays visible while the dropdown is merely open and only hides once the user starts typing, so the input can be used to filter. |
+| `option`   | `{ option: AutocompleteOption, selected: boolean }` | Custom content for each item in the dropdown list. The check icon for the selected item is kept automatically. |
 
 **Examples**
 
@@ -487,6 +566,24 @@ Filtering is case-insensitive and matches `label`. When the input text matches t
   placeholder="Type to search users"
   @search="onSearch"
 />
+
+<!-- Custom rendering: options can carry extra fields (e.g. email) -->
+<PUAutocomplete v-model="clientId" label="Client" :options="clients">
+  <template #selected="{ option }">
+    <div class="flex items-center gap-2 min-w-0">
+      <span class="size-6 shrink-0 rounded-full bg-primary/15 text-primary text-xs font-semibold flex items-center justify-center">
+        {{ String(option.label).charAt(0) }}
+      </span>
+      <span class="truncate">{{ option.label }}</span>
+    </div>
+  </template>
+  <template #option="{ option, selected }">
+    <div class="flex flex-col min-w-0 leading-tight">
+      <span class="text-sm truncate" :class="selected ? 'text-primary' : ''">{{ option.label }}</span>
+      <span class="text-xs text-gray-500 truncate">{{ option.email }}</span>
+    </div>
+  </template>
+</PUAutocomplete>
 ```
 
 ---
@@ -1170,6 +1267,10 @@ import type {
   InputProps,
   InputVariant,
   InputRounded,
+  CheckboxProps,
+  CheckboxSize,
+  CheckboxRounded,
+  CheckboxLabelPosition,
   ChipProps,
   ChipSize,
   ChipVariant,
@@ -1193,13 +1294,15 @@ import type {
   SkeletonVariant,
   SkeletonHeight,
   SkeletonWidth,
+  SelectOption,
+  SelectProps,
   AutocompleteOption,
   AutocompleteProps,
   DatePickerProps,
 } from "@smurfox/proxy-ui";
 ```
 
-> `PUTextArea`, `PUSelect`, and `PUDropdown` define their props inline and do not export dedicated `Props` types. They reuse `InputVariant` and `InputRounded` from the same package. `PUAutocomplete` and `PUDatePicker` do export `AutocompleteProps`/`AutocompleteOption` and `DatePickerProps` respectively.
+> `PUTextArea` and `PUDropdown` define their props inline and do not export dedicated `Props` types. They reuse `InputVariant` and `InputRounded` from the same package. `PUSelect`, `PUAutocomplete`, and `PUDatePicker` do export `SelectProps`/`SelectOption`, `AutocompleteProps`/`AutocompleteOption`, and `DatePickerProps` respectively. `SelectOption` and `AutocompleteOption` accept arbitrary extra fields, which are exposed to the rendering slots.
 
 ---
 
