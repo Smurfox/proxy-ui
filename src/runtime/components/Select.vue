@@ -42,15 +42,16 @@
             >*</span>
           </span>
           <span
-            v-if="!selectedOption"
+            v-if="selectedOptions.length === 0"
             class="truncate w-full text-gray-500 dark:text-white/50"
           >{{ placeholder }}</span>
           <slot
             v-else
             name="selected"
-            :option="selectedOption"
+            :option="selectedOptions[0]!"
+            :options="selectedOptions"
           >
-            <span class="truncate w-full">{{ selectedOption.label }}</span>
+            <span class="truncate w-full">{{ displayText }}</span>
           </slot>
         </div>
         <Icon
@@ -90,18 +91,18 @@
                 :key="String(option.value)"
                 type="button"
                 class="w-full flex items-center justify-between gap-3 px-3 py-2 mb-1 text-left cursor-pointer rounded-lg transition-colors hover:bg-default"
-                :class="option.value === props.modelValue ? 'bg-primary/10 dark:bg-primary/15' : ''"
+                :class="isSelected(option) ? 'bg-primary/10 dark:bg-primary/15' : ''"
                 @click.stop="selectOption(option)"
               >
                 <slot
                   name="option"
                   :option="option"
-                  :selected="option.value === props.modelValue"
+                  :selected="isSelected(option)"
                 >
                   <span
                     class="text-sm truncate"
                     :class="
-                      option.value === props.modelValue
+                      isSelected(option)
                         ? 'text-primary'
                         : 'text-black dark:text-white'
                     "
@@ -110,7 +111,7 @@
                   </span>
                 </slot>
                 <Icon
-                  v-if="option.value === props.modelValue"
+                  v-if="isSelected(option)"
                   name="mdi:check"
                   class="text-primary text-sm shrink-0"
                 />
@@ -172,8 +173,9 @@ const errorVariants = {
 
 const props = withDefaults(
   defineProps<{
-    modelValue?: string | number | null
+    modelValue?: string | number | null | (string | number)[]
     options?: SelectOption[]
+    multiple?: boolean
     label?: string
     labelClass?: string
     inlineLabel?: boolean
@@ -188,6 +190,7 @@ const props = withDefaults(
   {
     modelValue: null,
     options: () => [],
+    multiple: false,
     labelClass: 'text-sm font-semibold',
     inlineLabel: false,
     placeholder: 'Seleccionar',
@@ -200,12 +203,12 @@ const props = withDefaults(
 )
 
 const emit = defineEmits<{
-  'update:modelValue': [value: string | number]
-  'change': [value: string | number]
+  'update:modelValue': [value: string | number | (string | number)[]]
+  'change': [value: string | number | (string | number)[]]
 }>()
 
 defineSlots<{
-  selected?: (props: { option: SelectOption }) => unknown
+  selected?: (props: { option: SelectOption, options: SelectOption[] }) => unknown
   option?: (props: { option: SelectOption, selected: boolean }) => unknown
 }>()
 
@@ -215,9 +218,31 @@ const isDarkMode = ref(false)
 const dropdownPosition = ref({ top: 0, bottom: 0, left: 0, width: 0 })
 const dropdownPlacement = ref<'bottom' | 'top'>('bottom')
 
-const selectedOption = computed(() => {
-  return props.options.find(option => option.value === props.modelValue)
+const selectedValues = computed<(string | number)[]>(() =>
+  Array.isArray(props.modelValue) ? props.modelValue : [],
+)
+
+const selectedOptions = computed(() => {
+  if (props.multiple) {
+    return props.options.filter(option =>
+      selectedValues.value.includes(option.value),
+    )
+  }
+  const selected = props.options.find(
+    option => option.value === props.modelValue,
+  )
+  return selected ? [selected] : []
 })
+
+const displayText = computed(() =>
+  selectedOptions.value.map(option => option.label).join(', '),
+)
+
+function isSelected(option: SelectOption) {
+  return props.multiple
+    ? selectedValues.value.includes(option.value)
+    : option.value === props.modelValue
+}
 
 const dropdownStyle = computed(() => {
   const pos = dropdownPosition.value
@@ -297,6 +322,15 @@ function close() {
 }
 
 function selectOption(option: SelectOption) {
+  if (props.multiple) {
+    // Toggle membership and keep the dropdown open for further picks.
+    const next = isSelected(option)
+      ? selectedValues.value.filter(value => value !== option.value)
+      : [...selectedValues.value, option.value]
+    emit('update:modelValue', next)
+    emit('change', next)
+    return
+  }
   emit('update:modelValue', option.value)
   emit('change', option.value)
   close()

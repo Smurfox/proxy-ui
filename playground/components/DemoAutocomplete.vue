@@ -103,8 +103,8 @@
       >
         <PUAutocomplete
           v-model="selectedClient"
-          label="Cliente"
-          placeholder="Busca un cliente"
+          label="Client"
+          placeholder="Search a client"
           :options="clientOptions"
         >
           <template #selected="{ option }">
@@ -130,6 +130,29 @@
             </div>
           </template>
         </PUAutocomplete>
+      </div>
+    </div>
+
+    <div class="w-200 mx-auto flex flex-col gap-3">
+      <h1 class="font-semibold text-lg">
+        Multiple
+      </h1>
+      <p class="text-sm text-gray-600 dark:text-gray-400 -mt-2">
+        With the <code>multiple</code> prop, <code>v-model</code> is an array. Type to filter, pick several — the dropdown stays open and the filter is kept.
+      </p>
+      <div
+        class="border border-gray-300 flex flex-col gap-6 p-9 w-full rounded-xl"
+      >
+        <PUAutocomplete
+          v-model="selectedCountries"
+          label="Countries"
+          placeholder="Search countries"
+          :options="countryOptions"
+          multiple
+        />
+        <p class="text-xs text-gray-500 dark:text-white/50">
+          countries: <code>{{ selectedCountries }}</code>
+        </p>
       </div>
     </div>
 
@@ -228,10 +251,11 @@ const priorityOptions = [
 ]
 
 const selectedClient = ref<string | number | null>(null)
+const selectedCountries = ref<(string | number)[]>(['mx'])
 
 const clientOptions = [
-  { label: 'Proveedor por defecto', value: 'default', email: 'proveedor@empresa.com' },
-  { label: 'Ferretería Central', value: 'central', email: 'ventas@ferrecentral.com' },
-  { label: 'Distribuidora Norte', value: 'norte', email: 'contacto@disnorte.com' },
+  { label: 'Default supplier', value: 'default', email: 'supplier@company.com' },
+  { label: 'Central Hardware', value: 'central', email: 'sales@centralhw.com' },
+  { label: 'North Distribution', value: 'north', email: 'contact@northdist.com' },
 ]
 </script>
