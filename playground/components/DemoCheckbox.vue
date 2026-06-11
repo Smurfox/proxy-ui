@@ -17,11 +17,11 @@
       >
         <PUCheckbox
           v-model="acceptTerms"
-          label="Acepto los términos y condiciones"
+          label="Accept the terms and conditions"
         />
         <PUCheckbox
           v-model="newsletter"
-          label="Quiero recibir el newsletter"
+          label="Subscribe to the newsletter"
         />
         <p class="text-xs text-gray-500 dark:text-white/50">
           acceptTerms: <code>{{ acceptTerms }}</code> · newsletter:
@@ -134,10 +134,10 @@ const roundedChecks = ref<Record<(typeof roundedOptions)[number], boolean>>({
 })
 
 const toppings = ref([
-  { id: 'cheese', label: 'Queso extra', checked: true },
-  { id: 'bacon', label: 'Tocino', checked: false },
-  { id: 'mushroom', label: 'Champiñones', checked: false },
-  { id: 'onion', label: 'Cebolla', checked: false },
+  { id: 'cheese', label: 'Extra cheese', checked: true },
+  { id: 'bacon', label: 'Bacon', checked: false },
+  { id: 'mushroom', label: 'Mushrooms', checked: false },
+  { id: 'onion', label: 'Onion', checked: false },
 ])
 
 const selectedToppings = computed(() =>

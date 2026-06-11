@@ -82,7 +82,7 @@ function toggleDark() {
   isDark.value = !isDark.value
 }
 
-// Keyboard shortcut — presiona D para toggle
+// Keyboard shortcut — press D to toggle
 onMounted(() => {
   window.addEventListener('keydown', (e) => {
     const tag = (e.target as HTMLElement)?.tagName

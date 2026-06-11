@@ -54,7 +54,7 @@
           <span
             class="truncate w-full"
             :class="!displayValue ? 'text-gray-500 dark:text-white/50' : ''"
-          >{{ displayValue || placeholder }}</span>
+          >{{ displayValue || placeholderText }}</span>
         </div>
         <Icon
           v-if="!$slots.endContent"
@@ -134,7 +134,7 @@
               <div v-if="!showYearView">
                 <div class="grid grid-cols-7 gap-1 mb-1">
                   <div
-                    v-for="d in weekdayLabels"
+                    v-for="d in texts.weekdays"
                     :key="d"
                     class="uppercase text-center text-[11px] font-medium py-1"
                     :class="isDarkMode ? 'text-white/50' : 'text-gray-500'"
@@ -164,7 +164,7 @@
                   :class="isDarkMode ? 'border-[#2D323B]' : 'border-gray-100'"
                 >
                   <PUButton
-                    label="Borrar"
+                    :label="texts.clear"
                     variant="ghost"
                     color="primary"
                     size="sm"
@@ -172,7 +172,7 @@
                     @click="clearDate"
                   />
                   <PUButton
-                    label="Hoy"
+                    :label="texts.today"
                     variant="ghost"
                     color="primary"
                     size="sm"
@@ -226,7 +226,7 @@
 <script lang="ts">
 import { AnimatePresence, motion } from 'motion-v'
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
-import type { InputRounded, InputVariant } from '../types'
+import type { DatePickerLang, InputRounded, InputVariant } from '../types'
 import { createPopoverGroup } from '../composables/popoverGroup'
 import PUButton from './Button.vue'
 
@@ -266,7 +266,20 @@ const errorVariants = {
     'border border-danger bg-danger/22 dark:bg-danger/10 text-black dark:text-white enabled:hover:bg-[#E0E0E1] dark:enabled:hover:bg-white/30 focus:bg-[#EBEBEC] dark:focus:bg-white/20 focus:ring-2 focus:ring-danger focus:outline-none',
 } as const
 
-const weekdayLabels = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb']
+const langTexts = {
+  en: {
+    weekdays: ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'],
+    clear: 'Clear',
+    today: 'Today',
+    placeholder: 'mm/dd/yyyy',
+  },
+  es: {
+    weekdays: ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'],
+    clear: 'Borrar',
+    today: 'Hoy',
+    placeholder: 'dd/mm/aaaa',
+  },
+} as const
 
 const props = withDefaults(
   defineProps<{
@@ -283,6 +296,7 @@ const props = withDefaults(
     disabled?: boolean
     min?: string
     max?: string
+    lang?: DatePickerLang
     locale?: string
     minYear?: number
     maxYear?: number
@@ -291,13 +305,22 @@ const props = withDefaults(
     modelValue: '',
     labelClass: 'text-sm font-semibold',
     inlineLabel: false,
-    placeholder: 'dd/mm/aaaa',
     rounded: 'xl',
     variant: 'default',
     required: false,
     disabled: false,
-    locale: 'es',
+    lang: 'en',
   },
+)
+
+const texts = computed(() => langTexts[props.lang])
+
+// `locale` overrides the Intl formatting (month names, date order) without
+// touching the UI texts; when omitted it follows `lang`.
+const dateLocale = computed(() => props.locale ?? props.lang)
+
+const placeholderText = computed(
+  () => props.placeholder ?? texts.value.placeholder,
 )
 
 const emit = defineEmits<{
@@ -355,7 +378,7 @@ const selectedParts = computed(() => parseISODate(props.modelValue))
 const displayValue = computed(() => {
   const parsed = selectedParts.value
   if (!parsed) return ''
-  return new Intl.DateTimeFormat(props.locale, {
+  return new Intl.DateTimeFormat(dateLocale.value, {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
@@ -363,7 +386,7 @@ const displayValue = computed(() => {
 })
 
 const monthLabel = computed(() => {
-  return new Intl.DateTimeFormat(props.locale, {
+  return new Intl.DateTimeFormat(dateLocale.value, {
     month: 'long',
     year: 'numeric',
   }).format(new Date(viewYear.value, viewMonth.value - 1, 1))

@@ -55,18 +55,21 @@
         the slot content overlays it and only hides while the user is typing,
         so it survives merely opening the dropdown. -->
       <div
-        v-if="showSelectedOverlay && selectedOption"
+        v-if="showSelectedOverlay && selectedOptions.length > 0"
         class="absolute inset-y-0 left-0 right-10 flex items-center overflow-hidden pointer-events-none text-sm text-black dark:text-white"
         :class="inlineLabel && label ? 'pt-4 px-3' : 'px-3'"
       >
         <slot
           name="selected"
-          :option="selectedOption"
-        />
+          :option="selectedOptions[0]!"
+          :options="selectedOptions"
+        >
+          <span class="truncate">{{ displayText }}</span>
+        </slot>
       </div>
 
       <button
-        v-if="searchQuery && !props.disabled"
+        v-if="(searchQuery || selectedOptions.length > 0) && !props.disabled"
         type="button"
         class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-white cursor-pointer"
         @click.stop="clear"
@@ -113,18 +116,18 @@
                 :key="String(option.value)"
                 type="button"
                 class="w-full flex items-center justify-between gap-3 px-3 py-2 mb-1 text-left cursor-pointer rounded-lg transition-colors hover:bg-default"
-                :class="option.value === props.modelValue ? 'bg-primary/10 dark:bg-primary/15' : ''"
+                :class="isSelected(option) ? 'bg-primary/10 dark:bg-primary/15' : ''"
                 @click.stop="selectOption(option)"
               >
                 <slot
                   name="option"
                   :option="option"
-                  :selected="option.value === props.modelValue"
+                  :selected="isSelected(option)"
                 >
                   <span
                     class="text-sm truncate"
                     :class="
-                      option.value === props.modelValue
+                      isSelected(option)
                         ? 'text-primary'
                         : 'text-black dark:text-white'
                     "
@@ -133,7 +136,7 @@
                   </span>
                 </slot>
                 <Icon
-                  v-if="option.value === props.modelValue"
+                  v-if="isSelected(option)"
                   name="mdi:check"
                   class="text-primary text-sm shrink-0"
                 />
@@ -195,8 +198,9 @@ const errorVariants = {
 
 const props = withDefaults(
   defineProps<{
-    modelValue?: string | number | null
+    modelValue?: string | number | null | (string | number)[]
     options?: AutocompleteOption[]
+    multiple?: boolean
     label?: string
     labelClass?: string
     inlineLabel?: boolean
@@ -211,6 +215,7 @@ const props = withDefaults(
   {
     modelValue: null,
     options: () => [],
+    multiple: false,
     labelClass: 'text-sm font-semibold',
     inlineLabel: false,
     placeholder: 'Search...',
@@ -223,13 +228,13 @@ const props = withDefaults(
 )
 
 const emit = defineEmits<{
-  'update:modelValue': [value: string | number | null]
-  'change': [value: string | number | null]
+  'update:modelValue': [value: string | number | null | (string | number)[]]
+  'change': [value: string | number | null | (string | number)[]]
   'search': [value: string]
 }>()
 
 const slots = defineSlots<{
-  selected?: (props: { option: AutocompleteOption }) => unknown
+  selected?: (props: { option: AutocompleteOption, options: AutocompleteOption[] }) => unknown
   option?: (props: { option: AutocompleteOption, selected: boolean }) => unknown
 }>()
 
@@ -242,12 +247,41 @@ const dropdownPlacement = ref<'bottom' | 'top'>('bottom')
 const searchQuery = ref('')
 const isTyping = ref(false)
 
+const selectedValues = computed<(string | number)[]>(() =>
+  Array.isArray(props.modelValue) ? props.modelValue : [],
+)
+
 const selectedOption = computed(() => {
   return props.options.find(option => option.value === props.modelValue)
 })
 
+const selectedOptions = computed(() => {
+  if (props.multiple) {
+    return props.options.filter(option =>
+      selectedValues.value.includes(option.value),
+    )
+  }
+  return selectedOption.value ? [selectedOption.value] : []
+})
+
+const displayText = computed(() =>
+  selectedOptions.value.map(option => option.label).join(', '),
+)
+
+function isSelected(option: AutocompleteOption) {
+  return props.multiple
+    ? selectedValues.value.includes(option.value)
+    : option.value === props.modelValue
+}
+
+// In multiple mode the input can't represent the selection as editable text,
+// so the overlay is also used as the default (slot-less) display.
 const showSelectedOverlay = computed(() =>
-  Boolean(slots.selected && selectedOption.value && !isTyping.value),
+  Boolean(
+    (slots.selected || props.multiple)
+    && selectedOptions.value.length > 0
+    && !isTyping.value,
+  ),
 )
 
 const filteredOptions = computed(() => {
@@ -288,6 +322,9 @@ const dropdownMotionOffset = computed(() =>
 watch(
   () => props.modelValue,
   () => {
+    // In multiple mode the selection is displayed by the overlay, not the
+    // input text — and the active filter must survive toggling options.
+    if (props.multiple) return
     searchQuery.value = selectedOption.value?.label ?? ''
   },
   { immediate: true },
@@ -336,7 +373,7 @@ function close() {
   if (!isOpen.value) return
   isOpen.value = false
   popoverGroup.release(close)
-  searchQuery.value = selectedOption.value?.label ?? ''
+  searchQuery.value = props.multiple ? '' : (selectedOption.value?.label ?? '')
   isTyping.value = false
 }
 
@@ -349,6 +386,16 @@ function onInput(event: Event) {
 }
 
 function selectOption(option: AutocompleteOption) {
+  if (props.multiple) {
+    // Toggle membership; keep the dropdown open and the filter intact so the
+    // user can pick several options in a row.
+    const next = isSelected(option)
+      ? selectedValues.value.filter(value => value !== option.value)
+      : [...selectedValues.value, option.value]
+    emit('update:modelValue', next)
+    emit('change', next)
+    return
+  }
   emit('update:modelValue', option.value)
   emit('change', option.value)
   searchQuery.value = option.label
@@ -359,8 +406,9 @@ function selectOption(option: AutocompleteOption) {
 
 function clear() {
   searchQuery.value = ''
-  emit('update:modelValue', null)
-  emit('change', null)
+  const cleared = props.multiple ? [] : null
+  emit('update:modelValue', cleared)
+  emit('change', cleared)
   emit('search', '')
   inputRef.value?.focus()
 }

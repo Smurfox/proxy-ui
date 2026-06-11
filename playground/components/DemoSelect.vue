@@ -100,8 +100,8 @@
       >
         <PUSelect
           v-model="selectedClient"
-          label="Selecciona un proveedor"
-          placeholder="Selecciona un proveedor"
+          label="Select a supplier"
+          placeholder="Select a supplier"
           :options="clientOptions"
         >
           <template #selected="{ option }">
@@ -127,6 +127,52 @@
             </div>
           </template>
         </PUSelect>
+      </div>
+    </div>
+
+    <div class="w-200 mx-auto flex flex-col gap-3">
+      <h1 class="font-semibold text-lg">
+        Multiple
+      </h1>
+      <p class="text-sm text-gray-600 dark:text-gray-400 -mt-2">
+        With the <code>multiple</code> prop, <code>v-model</code> is an array, picking toggles the option and the dropdown stays open.
+      </p>
+      <div
+        class="border border-gray-300 flex flex-col gap-6 p-9 w-full rounded-xl"
+      >
+        <PUSelect
+          v-model="selectedFrameworks"
+          label="Frameworks"
+          placeholder="Select frameworks"
+          :options="frameworkOptions"
+          multiple
+        />
+        <PUSelect
+          v-model="selectedClients"
+          label="Suppliers"
+          placeholder="Select suppliers"
+          :options="clientOptions"
+          multiple
+        >
+          <template #selected="{ options }">
+            <div class="flex flex-wrap gap-1.5 min-w-0">
+              <span
+                v-for="opt in options"
+                :key="String(opt.value)"
+                class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-medium"
+              >
+                <span
+                  class="size-4 shrink-0 rounded-full bg-primary/20 text-[9px] font-semibold flex items-center justify-center"
+                >{{ String(opt.label).charAt(0) }}</span>
+                {{ opt.label }}
+              </span>
+            </div>
+          </template>
+        </PUSelect>
+        <p class="text-xs text-gray-500 dark:text-white/50">
+          frameworks: <code>{{ selectedFrameworks }}</code> · suppliers:
+          <code>{{ selectedClients }}</code>
+        </p>
       </div>
     </div>
 
@@ -210,11 +256,13 @@ const priorityOptions = [
 ]
 
 const selectedClient = ref('default')
+const selectedFrameworks = ref<(string | number)[]>(['nuxt', 'vue'])
+const selectedClients = ref<(string | number)[]>(['default'])
 
 const clientOptions = [
-  { label: 'Proveedor por defecto', value: 'default', email: 'proveedor@empresa.com' },
-  { label: 'Ferretería Central', value: 'central', email: 'ventas@ferrecentral.com' },
-  { label: 'Distribuidora Norte', value: 'norte', email: 'contacto@disnorte.com' },
+  { label: 'Default supplier', value: 'default', email: 'supplier@company.com' },
+  { label: 'Central Hardware', value: 'central', email: 'sales@centralhw.com' },
+  { label: 'North Distribution', value: 'north', email: 'contact@northdist.com' },
 ]
 </script>
 

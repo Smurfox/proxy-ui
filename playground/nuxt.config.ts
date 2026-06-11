@@ -1,7 +1,7 @@
 import tailwindcss from '@tailwindcss/vite'
 import { defineNuxtConfig } from 'nuxt/config'
 
-// Importa los tipos de tu módulo
+// Import the module types
 import type {} from '../src/module'
 
 export default defineNuxtConfig({

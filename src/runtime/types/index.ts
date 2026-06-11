@@ -112,6 +112,8 @@ export interface InputProps {
   disabled?: boolean
 }
 
+export type DatePickerLang = 'en' | 'es'
+
 export interface DatePickerProps {
   modelValue?: string
   label?: string
@@ -126,6 +128,7 @@ export interface DatePickerProps {
   disabled?: boolean
   min?: string
   max?: string
+  lang?: DatePickerLang
   locale?: string
   minYear?: number
   maxYear?: number
@@ -138,8 +141,9 @@ export interface SelectOption {
 }
 
 export interface SelectProps {
-  modelValue?: string | number | null
+  modelValue?: string | number | null | (string | number)[]
   options?: SelectOption[]
+  multiple?: boolean
   label?: string
   labelClass?: string
   inlineLabel?: boolean
@@ -159,8 +163,9 @@ export interface AutocompleteOption {
 }
 
 export interface AutocompleteProps {
-  modelValue?: string | number | null
+  modelValue?: string | number | null | (string | number)[]
   options?: AutocompleteOption[]
+  multiple?: boolean
   label?: string
   labelClass?: string
   inlineLabel?: boolean
