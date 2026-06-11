@@ -598,7 +598,7 @@ Filtering is case-insensitive and matches `label`. When the input text matches t
 
 ### PUDatePicker
 
-A custom date picker that replaces the native `<input type="date">` with a calendar popover. The popover is teleported to `body` (so it escapes any `overflow` ancestor) and includes a year scroller so the user can jump decades without arrow-clicking month by month. Like `PUSelect`/`PUAutocomplete`, only one popover can be open at a time across the page, and the panel re-positions itself on scroll and resize.
+A custom date picker that replaces the native `<input type="date">` with a calendar popover. The popover is teleported to `body` (so it escapes any `overflow` ancestor) and renders a [`PUCalendar`](#pucalendar) inside, so both components always look and behave the same. It includes a year scroller so the user can jump decades without arrow-clicking month by month. Like `PUSelect`/`PUAutocomplete`, only one popover can be open at a time across the page, and the panel re-positions itself on scroll and resize.
 
 ```vue
 <PUDatePicker v-model="birthDate" label="Birth date" required>
@@ -699,6 +699,47 @@ The `modelValue` is an ISO date string (`YYYY-MM-DD`). The trigger shows the dat
 > **Inline label** is supported by all form components (`PUInput`, `PUTextArea`, `PUSelect`, `PUAutocomplete`, `PUDatePicker`). When `inlineLabel` is `true`, the external `<label>` above the field is hidden and the label renders as a small floating label inside the field — ideal for compact filter rows or dense forms. The `required` asterisk follows the label automatically.
 
 > The popover renders inside a wrapper that mirrors the host's `.dark` ancestor so all child `PUButton`/`PUCard` instances stay in sync with the app's theme — even though they are teleported to `body`. Dark-mode is captured on open; if the theme is toggled while the popover is open, close and reopen it to refresh.
+
+---
+
+### PUCalendar
+
+The inline calendar from `PUDatePicker`, without the input trigger — it renders directly in the page (inside a `PUCard`), so you can build always-visible pickers, sidebars, or booking UIs. Same date API as the date picker: ISO `v-model`, `min`/`max` bounds, year scroller, and the `lang`/`locale` pair. Today's date is marked with a thin `primary` border (hidden while today is the selected day, since the filled style already highlights it).
+
+```vue
+<PUCalendar v-model="date" />
+```
+
+**Props**
+
+| Prop         | Type           | Default             | Description                                                                                        |
+| ------------ | -------------- | ------------------- | -------------------------------------------------------------------------------------------------- |
+| `modelValue` | `string`       | `''`                | Selected date as an ISO string (`YYYY-MM-DD`). v-model.                                            |
+| `min`        | `string`       | —                   | Minimum selectable date (`YYYY-MM-DD`). Days, months, and years before it are disabled.            |
+| `max`        | `string`       | —                   | Maximum selectable date (`YYYY-MM-DD`). Days, months, and years after it are disabled.             |
+| `lang`       | `'en' \| 'es'` | `'en'`              | Language for the weekday labels, Clear/Today buttons, and month names.                             |
+| `locale`     | `string`       | follows `lang`      | BCP 47 locale tag that overrides only the `Intl` month-name formatting. UI texts come from `lang`. |
+| `minYear`    | `number`       | `currentYear - 100` | Lower bound of the year scroller. Clamped further by `min` if present.                             |
+| `maxYear`    | `number`       | `currentYear + 10`  | Upper bound of the year scroller. Clamped further by `max` if present.                             |
+
+**Events**
+
+| Event               | Payload  | Description                                                              |
+| ------------------- | -------- | ------------------------------------------------------------------------ |
+| `update:modelValue` | `string` | Emitted when a day, Today, or Clear is picked (`''` when cleared).        |
+
+**Examples**
+
+```vue
+<!-- Basic -->
+<PUCalendar v-model="date" />
+
+<!-- Bounded range -->
+<PUCalendar v-model="date" min="2026-06-01" max="2026-07-31" />
+
+<!-- Spanish -->
+<PUCalendar v-model="date" lang="es" />
+```
 
 ---
 
@@ -1312,6 +1353,7 @@ import type {
   AutocompleteProps,
   DatePickerProps,
   DatePickerLang,
+  CalendarProps,
 } from "@smurfox/proxy-ui";
 ```
 
