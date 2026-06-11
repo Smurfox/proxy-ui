@@ -415,8 +415,9 @@ A custom select with an animated dropdown panel teleported to `body`. Dark-mode 
 
 | Prop          | Type                                                        | Default                   | Description                                          |
 | ------------- | ----------------------------------------------------------- | ------------------------- | ---------------------------------------------------- |
-| `modelValue`  | `string \| number \| null`                                  | `null`                    | Selected value (v-model).                            |
+| `modelValue`  | `string \| number \| null \| (string \| number)[]`         | `null`                    | Selected value (v-model). An array when `multiple` is set. |
 | `options`     | `SelectOption[]` (`{ label, value, ...extra }`)             | `[]`                      | Items shown in the dropdown. Extra fields are allowed and exposed to the slots. |
+| `multiple`    | `boolean`                                                   | `false`                   | Multi-select mode: picking an option toggles it, the dropdown stays open, and the trigger shows the selected labels comma-separated (or the `selected` slot). |
 | `label`       | `string`                                                    | —                         | Label displayed above the select.                    |
 | `labelClass`  | `string`                                                    | `'text-sm font-semibold'` | Custom classes for the label.                        |
 | `inlineLabel` | `boolean`                                                   | `false`                   | Render `label` as a floating label inside the trigger. |
@@ -432,14 +433,14 @@ A custom select with an animated dropdown panel teleported to `body`. Dark-mode 
 
 | Event               | Payload            | Description                            |
 | ------------------- | ------------------ | -------------------------------------- |
-| `update:modelValue` | `string \| number` | Emitted when an option is picked.      |
-| `change`            | `string \| number` | Emitted alongside `update:modelValue`. |
+| `update:modelValue` | `string \| number \| (string \| number)[]` | Emitted when an option is picked. An array in `multiple` mode. |
+| `change`            | `string \| number \| (string \| number)[]` | Emitted alongside `update:modelValue`. |
 
 **Slots**
 
 | Slot       | Scope                                        | Description                                                                 |
 | ---------- | -------------------------------------------- | --------------------------------------------------------------------------- |
-| `selected` | `{ option: SelectOption }`                   | Custom content for the trigger when a value is selected (placeholder still renders by default). |
+| `selected` | `{ option: SelectOption, options: SelectOption[] }` | Custom content for the trigger when a value is selected (placeholder still renders by default). `option` is the first selected option; `options` holds all of them (a single-item array unless `multiple`). |
 | `option`   | `{ option: SelectOption, selected: boolean }` | Custom content for each item in the dropdown list. The check icon for the selected item is kept automatically. |
 
 **Examples**
@@ -461,6 +462,9 @@ A custom select with an animated dropdown panel teleported to `body`. Dark-mode 
 
 <!-- Disabled -->
 <PUSelect :options="statuses" disabled label="Locked" />
+
+<!-- Multiple: v-model is an array, picking toggles, dropdown stays open -->
+<PUSelect v-model="tags" :options="tagOptions" label="Tags" multiple />
 
 <!-- Custom rendering: options can carry extra fields (e.g. email, avatar) -->
 <PUSelect v-model="clientId" label="Client" :options="clients">
@@ -506,8 +510,9 @@ Filtering is case-insensitive and matches `label`. When the input text matches t
 
 | Prop          | Type                                                        | Default                   | Description                                          |
 | ------------- | ----------------------------------------------------------- | ------------------------- | ---------------------------------------------------- |
-| `modelValue`  | `string \| number \| null`                                  | `null`                    | Selected value (v-model).                            |
+| `modelValue`  | `string \| number \| null \| (string \| number)[]`         | `null`                    | Selected value (v-model). An array when `multiple` is set. |
 | `options`     | `AutocompleteOption[]` (`{ label, value, ...extra }`)       | `[]`                      | Items shown in the dropdown. Extra fields are allowed and exposed to the `option` slot. |
+| `multiple`    | `boolean`                                                   | `false`                   | Multi-select mode: picking toggles the option, the dropdown stays open and the active filter is kept. While idle, the input shows the selected labels comma-separated (or the `selected` slot). The clear button resets to `[]`. |
 | `label`       | `string`                                                    | —                         | Label displayed above the input.                     |
 | `labelClass`  | `string`                                                    | `'text-sm font-semibold'` | Custom classes for the label.                        |
 | `inlineLabel` | `boolean`                                                   | `false`                   | Render `label` as a floating label inside the input. |
@@ -523,15 +528,15 @@ Filtering is case-insensitive and matches `label`. When the input text matches t
 
 | Event               | Payload                          | Description                                                              |
 | ------------------- | -------------------------------- | ------------------------------------------------------------------------ |
-| `update:modelValue` | `string \| number \| null`       | Emitted when an option is picked, or `null` when the clear button is used. |
-| `change`            | `string \| number \| null`       | Emitted alongside `update:modelValue`.                                   |
+| `update:modelValue` | `string \| number \| null \| (string \| number)[]` | Emitted when an option is picked, or `null` when the clear button is used. An array in `multiple` mode. |
+| `change`            | `string \| number \| null \| (string \| number)[]` | Emitted alongside `update:modelValue`.                                   |
 | `search`            | `string`                         | Emitted on every keystroke with the current input text. Useful for remote search. |
 
 **Slots**
 
 | Slot       | Scope                                              | Description                                                                 |
 | ---------- | -------------------------------------------------- | --------------------------------------------------------------------------- |
-| `selected` | `{ option: AutocompleteOption }`                    | Rich display of the selected option, rendered as an overlay on top of the input. It stays visible while the dropdown is merely open and only hides once the user starts typing, so the input can be used to filter. |
+| `selected` | `{ option: AutocompleteOption, options: AutocompleteOption[] }` | Rich display of the selection, rendered as an overlay on top of the input. It stays visible while the dropdown is merely open and only hides once the user starts typing, so the input can be used to filter. `option` is the first selected option; `options` holds all of them (a single-item array unless `multiple`). |
 | `option`   | `{ option: AutocompleteOption, selected: boolean }` | Custom content for each item in the dropdown list. The check icon for the selected item is kept automatically. |
 
 **Examples**
@@ -567,6 +572,9 @@ Filtering is case-insensitive and matches `label`. When the input text matches t
   @search="onSearch"
 />
 
+<!-- Multiple: v-model is an array; type to filter, pick several in a row -->
+<PUAutocomplete v-model="countryCodes" :options="countries" label="Countries" multiple />
+
 <!-- Custom rendering: options can carry extra fields (e.g. email) -->
 <PUAutocomplete v-model="clientId" label="Client" :options="clients">
   <template #selected="{ option }">
@@ -600,7 +608,7 @@ A custom date picker that replaces the native `<input type="date">` with a calen
 </PUDatePicker>
 ```
 
-The `modelValue` is an ISO date string (`YYYY-MM-DD`). The trigger shows the date formatted via `Intl.DateTimeFormat` with the component's `locale` (Spanish by default). Click the month/year label in the popover header to open the year scroller — it auto-scrolls to the current view year. The "Borrar" button clears the value without closing the popover, so you can pick a new date immediately. The "Hoy" button picks today (and is disabled if today is outside `min`/`max`).
+The `modelValue` is an ISO date string (`YYYY-MM-DD`). The trigger shows the date formatted via `Intl.DateTimeFormat`. All calendar texts (weekday labels, the Clear/Today buttons, the default placeholder and the month names) follow the `lang` prop — English by default, Spanish with `lang="es"`. Click the month/year label in the popover header to open the year scroller — it auto-scrolls to the current view year. The Clear button clears the value, and the Today button picks today (disabled if today is outside `min`/`max`).
 
 **Props**
 
@@ -610,7 +618,7 @@ The `modelValue` is an ISO date string (`YYYY-MM-DD`). The trigger shows the dat
 | `label`       | `string`                                                    | —                         | Label displayed above the trigger.                                                                |
 | `labelClass`  | `string`                                                    | `'text-sm font-semibold'` | Custom classes for the label.                                                                     |
 | `inlineLabel` | `boolean`                                                   | `false`                   | Render `label` as a floating label inside the trigger (compact dual-line layout).                 |
-| `placeholder` | `string`                                                    | `'dd/mm/aaaa'`            | Text shown when no date is selected.                                                              |
+| `placeholder` | `string`                                                    | per `lang`                | Text shown when no date is selected. Defaults to `'mm/dd/yyyy'` (`en`) or `'dd/mm/aaaa'` (`es`).  |
 | `description` | `string`                                                    | —                         | Helper text displayed below.                                                                      |
 | `rounded`     | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| 'full'` | `'xl'`                    | Border radius of the trigger.                                                                     |
 | `variant`     | `'default' \| 'secondary'`                                  | `'default'`               | Visual style. `default` = subtle gray fill, `secondary` = white fill (dark surface in dark mode). |
@@ -619,7 +627,8 @@ The `modelValue` is an ISO date string (`YYYY-MM-DD`). The trigger shows the dat
 | `disabled`    | `boolean`                                                   | `false`                   | Disables the trigger.                                                                             |
 | `min`         | `string`                                                    | —                         | Minimum selectable date (`YYYY-MM-DD`). Days, months, and years before it are disabled.           |
 | `max`         | `string`                                                    | —                         | Maximum selectable date (`YYYY-MM-DD`). Days, months, and years after it are disabled.            |
-| `locale`      | `string`                                                    | `'es'`                    | BCP 47 locale tag for the displayed date format and the month name in the header.                 |
+| `lang`        | `'en' \| 'es'`                                              | `'en'`                    | Language for all calendar texts: weekday labels, Clear/Today buttons, default placeholder, and date/month formatting. |
+| `locale`      | `string`                                                    | follows `lang`            | BCP 47 locale tag that overrides only the `Intl` formatting (date format and month names) — e.g. `'en-GB'` for `dd/mm/yyyy` order. UI texts still come from `lang`. |
 | `minYear`     | `number`                                                    | `currentYear - 100`       | Lower bound of the year scroller. Clamped further by `min` if present.                            |
 | `maxYear`     | `number`                                                    | `currentYear + 10`        | Upper bound of the year scroller. Clamped further by `max` if present.                            |
 
@@ -659,7 +668,10 @@ The `modelValue` is an ISO date string (`YYYY-MM-DD`). The trigger shows the dat
   required
 />
 
-<!-- Different locale (English short format) -->
+<!-- Spanish calendar (weekdays, buttons, placeholder and month names) -->
+<PUDatePicker v-model="date" label="Fecha" lang="es" />
+
+<!-- English texts but day-first format -->
 <PUDatePicker v-model="date" label="Date" locale="en-GB" />
 
 <!-- Linked range — end date can't be before start date -->
@@ -1299,6 +1311,7 @@ import type {
   AutocompleteOption,
   AutocompleteProps,
   DatePickerProps,
+  DatePickerLang,
 } from "@smurfox/proxy-ui";
 ```
 

@@ -39,6 +39,30 @@
 
     <div class="w-200 mx-auto flex flex-col gap-3">
       <h1 class="font-semibold text-lg">
+        Language
+      </h1>
+      <p class="text-sm text-gray-600 dark:text-gray-400 -mt-2">
+        The <code>lang</code> prop switches every calendar text: weekdays, Clear/Today buttons, placeholder and month names. Default is <code>en</code>.
+      </p>
+      <div
+        class="border border-gray-300 flex flex-col gap-6 p-9 w-full rounded-xl"
+      >
+        <div class="grid grid-cols-2 gap-4">
+          <PUDatePicker
+            v-model="langEnglish"
+            label="English (default)"
+          />
+          <PUDatePicker
+            v-model="langSpanish"
+            label="Spanish"
+            lang="es"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="w-200 mx-auto flex flex-col gap-3">
+      <h1 class="font-semibold text-lg">
         Validation Field
       </h1>
       <div
@@ -75,24 +99,24 @@
         class="border border-gray-300 flex flex-col gap-4 p-9 w-full rounded-xl"
       >
         <p class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
-          Filtro por fecha
+          Filter by date
         </p>
         <div class="grid grid-cols-2 gap-4">
           <PUDatePicker
             v-model="inlineStart"
-            label="Fecha inicial"
+            label="Start date"
             inline-label
           />
           <PUDatePicker
             v-model="inlineEnd"
-            label="Fecha final"
+            label="End date"
             inline-label
             :min="inlineStart || undefined"
           />
         </div>
         <PUDatePicker
           v-model="inlineBirth"
-          label="Fecha de nacimiento"
+          label="Birth date"
           variant="secondary"
           inline-label
           required
@@ -128,6 +152,8 @@ import { ref } from 'vue'
 
 const startDate = ref('2026-05-21')
 const endDate = ref('2026-05-28')
+const langEnglish = ref('2026-06-11')
+const langSpanish = ref('2026-06-11')
 const requiredDate = ref('')
 const blockedDate = ref('2025-12-31')
 const disabledDate = ref('2026-07-10')
