@@ -43,6 +43,7 @@
           <DemoCheckbox v-else-if="activeTab === 'checkbox'" />
           <DemoSelect v-else-if="activeTab === 'select'" />
           <DemoDatePicker v-else-if="activeTab === 'datepicker'" />
+          <DemoCalendar v-else-if="activeTab === 'calendar'" />
           <DemoAutocomplete v-else-if="activeTab === 'autocomplete'" />
           <DemoTable v-else-if="activeTab === 'table'" />
           <DemoDropdown v-else-if="activeTab === 'dropdown'" />
@@ -70,6 +71,7 @@ const demoTabs = [
   { label: 'Checkbox', value: 'checkbox' },
   { label: 'Select', value: 'select' },
   { label: 'Date Picker', value: 'datepicker' },
+  { label: 'Calendar', value: 'calendar' },
   { label: 'Autocomplete', value: 'autocomplete' },
   { label: 'Table', value: 'table' },
   { label: 'Dropdown', value: 'dropdown' },

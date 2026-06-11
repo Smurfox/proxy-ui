@@ -114,6 +114,16 @@ export interface InputProps {
 
 export type DatePickerLang = 'en' | 'es'
 
+export interface CalendarProps {
+  modelValue?: string
+  min?: string
+  max?: string
+  lang?: DatePickerLang
+  locale?: string
+  minYear?: number
+  maxYear?: number
+}
+
 export interface DatePickerProps {
   modelValue?: string
   label?: string
