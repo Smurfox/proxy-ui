@@ -132,15 +132,15 @@
         <div class="grid grid-cols-2 gap-4">
           <PUInput
             v-model="inlineName"
-            label="Nombre"
-            placeholder="Tu nombre"
+            label="Name"
+            placeholder="Your name"
             inline-label
           />
           <PUInput
             v-model="inlineEmail"
-            label="Correo electrónico"
+            label="Email"
             type="email"
-            placeholder="tu@correo.com"
+            placeholder="you@email.com"
             variant="secondary"
             inline-label
             required
@@ -148,8 +148,8 @@
         </div>
         <PUInput
           v-model="inlineWithIcon"
-          label="Buscar"
-          placeholder="Escribe para filtrar"
+          label="Search"
+          placeholder="Type to filter"
           inline-label
         >
           <template #startContent>
@@ -158,8 +158,8 @@
         </PUInput>
         <PUTextArea
           v-model="inlineMessage"
-          label="Mensaje"
-          placeholder="Escribe tu mensaje"
+          label="Message"
+          placeholder="Write your message"
           inline-label
           :rows="4"
         />
