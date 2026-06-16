@@ -1,5 +1,6 @@
 <template>
   <motion.button
+    :type="props.type"
     :class="buttonClass"
     :while-press="disabled || loading ? {} : { scale: 0.95 }"
     @click="emit('click', $event)"
@@ -96,6 +97,7 @@ const emit = defineEmits<{
 
 const props = withDefaults(
   defineProps<{
+    type?: 'button' | 'submit' | 'reset'
     label?: string
     size?: ButtonSize
     variant?: ButtonVariant
@@ -114,6 +116,7 @@ const props = withDefaults(
     customClass?: string
   }>(),
   {
+    type: 'button',
     size: 'md',
     variant: 'default',
     color: 'default',
