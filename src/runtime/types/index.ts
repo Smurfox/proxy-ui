@@ -35,6 +35,7 @@ export type ButtonRounded
     | 'full'
 
 export interface ButtonProps {
+  type?: 'button' | 'submit' | 'reset'
   label?: string
   size?: ButtonSize
   variant?: ButtonVariant

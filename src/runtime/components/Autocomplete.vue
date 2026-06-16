@@ -49,6 +49,7 @@
         @input="onInput"
         @focus="open"
         @click.stop="open"
+        @keydown="onKeydown"
       >
 
       <!-- Rich display of the selected option. An <input> can't render HTML, so
@@ -112,12 +113,18 @@
             </div>
             <template v-else>
               <button
-                v-for="option in filteredOptions"
+                v-for="(option, index) in filteredOptions"
                 :key="String(option.value)"
                 type="button"
+                data-pu-autocomplete-option
+                :data-highlighted="index === highlightedIndex"
                 class="w-full flex items-center justify-between gap-3 px-3 py-2 mb-1 text-left cursor-pointer rounded-lg transition-colors hover:bg-default"
-                :class="isSelected(option) ? 'bg-primary/10 dark:bg-primary/15' : ''"
+                :class="[
+                  isSelected(option) ? 'bg-primary/10 dark:bg-primary/15' : '',
+                  index === highlightedIndex ? 'bg-default' : '',
+                ]"
                 @click.stop="selectOption(option)"
+                @mousemove="highlightedIndex = index"
               >
                 <slot
                   name="option"
@@ -246,6 +253,7 @@ const dropdownPosition = ref({ top: 0, bottom: 0, left: 0, width: 0 })
 const dropdownPlacement = ref<'bottom' | 'top'>('bottom')
 const searchQuery = ref('')
 const isTyping = ref(false)
+const highlightedIndex = ref(0)
 
 const selectedValues = computed<(string | number)[]>(() =>
   Array.isArray(props.modelValue) ? props.modelValue : [],
@@ -296,6 +304,12 @@ const filteredOptions = computed(() => {
   return props.options.filter(option =>
     option.label.toLowerCase().includes(q),
   )
+})
+
+// Keep the first match highlighted as the user types, so Enter selects the
+// most relevant option without any arrow-key navigation.
+watch(filteredOptions, () => {
+  highlightedIndex.value = 0
 })
 
 const dropdownStyle = computed(() => {
@@ -367,6 +381,58 @@ async function open() {
   await nextTick()
   calculateDropdownPosition()
   isOpen.value = true
+  // Highlight the current selection on open so keyboard users start there.
+  const selectedIdx = filteredOptions.value.findIndex(option => isSelected(option))
+  highlightedIndex.value = selectedIdx >= 0 ? selectedIdx : 0
+  scrollHighlightedIntoView()
+}
+
+function scrollHighlightedIntoView() {
+  nextTick(() => {
+    const el = document.querySelector<HTMLElement>(
+      '[data-pu-autocomplete-option][data-highlighted="true"]',
+    )
+    el?.scrollIntoView({ block: 'nearest' })
+  })
+}
+
+function moveHighlight(delta: number) {
+  const count = filteredOptions.value.length
+  if (count === 0) return
+  highlightedIndex.value = (highlightedIndex.value + delta + count) % count
+  scrollHighlightedIntoView()
+}
+
+function onKeydown(event: KeyboardEvent) {
+  if (props.disabled) return
+  switch (event.key) {
+    case 'ArrowDown':
+      event.preventDefault()
+      if (!isOpen.value) open()
+      else moveHighlight(1)
+      break
+    case 'ArrowUp':
+      event.preventDefault()
+      if (!isOpen.value) open()
+      else moveHighlight(-1)
+      break
+    case 'Enter': {
+      if (!isOpen.value) return
+      const option = filteredOptions.value[highlightedIndex.value]
+      if (option) {
+        // Prevent submitting a surrounding form when picking an option.
+        event.preventDefault()
+        selectOption(option)
+      }
+      break
+    }
+    case 'Escape':
+      if (isOpen.value) {
+        event.preventDefault()
+        close()
+      }
+      break
+  }
 }
 
 function close() {

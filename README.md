@@ -151,6 +151,7 @@ A button component powered by `motion-v` for smooth press animations.
 
 | Prop          | Type                                                                                | Default     | Description                                                      |
 | ------------- | ----------------------------------------------------------------------------------- | ----------- | ---------------------------------------------------------------- |
+| `type`        | `'button' \| 'submit' \| 'reset'`                                                   | `'button'`  | Native button type. Use `'submit'` to submit a surrounding `<form>` or `'reset'` to reset it. |
 | `label`       | `string`                                                                            | —           | Text shown inside the button. If omitted, uses the default slot. |
 | `size`        | `'sm' \| 'md' \| 'lg'`                                                              | `'md'`      | Controls padding and font size.                                  |
 | `variant`     | `'default' \| 'secondary' \| 'outline' \| 'ghost' \| 'flat'`                        | `'default'` | Visual style of the button.                                      |
@@ -505,6 +506,8 @@ A searchable variant of `PUSelect` — same look and dropdown behavior, but the 
 ```
 
 Filtering is case-insensitive and matches `label`. When the input text matches the currently-selected option's label exactly, the list is shown unfiltered so the user can browse all options again without clearing first. On close without selection, the input reverts to the selected option's label (or empty if nothing was selected).
+
+The dropdown is keyboard-navigable: the first match is highlighted as you type, so pressing **Enter** selects it without touching the mouse. **↑ / ↓** move the highlight (and scroll it into view), and **Escape** closes the dropdown. Reopening highlights the current selection. In `multiple` mode, Enter toggles the highlighted option and keeps the dropdown open.
 
 **Props**
 
