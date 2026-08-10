@@ -40,6 +40,7 @@
           <DemoAvatars v-else-if="activeTab === 'avatars'" />
           <DemoCards v-else-if="activeTab === 'cards'" />
           <DemoInputs v-else-if="activeTab === 'inputs'" />
+          <DemoInputOTP v-else-if="activeTab === 'inputotp'" />
           <DemoCheckbox v-else-if="activeTab === 'checkbox'" />
           <DemoSelect v-else-if="activeTab === 'select'" />
           <DemoDatePicker v-else-if="activeTab === 'datepicker'" />
@@ -68,6 +69,7 @@ const demoTabs = [
   { label: 'Avatars', value: 'avatars' },
   { label: 'Cards', value: 'cards' },
   { label: 'Inputs', value: 'inputs' },
+  { label: 'Input OTP', value: 'inputotp' },
   { label: 'Checkbox', value: 'checkbox' },
   { label: 'Select', value: 'select' },
   { label: 'Date Picker', value: 'datepicker' },

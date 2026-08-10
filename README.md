@@ -294,6 +294,99 @@ A flexible input component with validation and state management.
 
 ---
 
+### PUInputOTP
+
+A one-time-code input rendered as a row of single-character cells. Each character animates in with `motion-v` (spring scale + blur), the focused cell pops and shows a blinking caret, and completing the code gives the whole row a subtle bounce.
+
+Typing advances to the next cell, `Backspace` clears and walks back, arrows / `Home` / `End` navigate, and pasting (or an SMS autofill that lands the whole code in one cell) fills every cell at once.
+
+```vue
+<PUInputOTP v-model="code" label="Verification code" @complete="verify" />
+```
+
+**Props**
+
+| Prop             | Type                                                        | Default                   | Description                                          |
+| ---------------- | ----------------------------------------------------------- | ------------------------- | ---------------------------------------------------- |
+| `modelValue`     | `string \| number`                                          | —                         | Bound value (v-model). Always emitted as a `string`. |
+| `length`         | `number`                                                    | `6`                       | Number of cells.                                     |
+| `type`           | `'text' \| 'number' \| 'password'`                          | `'number'`                | `number` accepts digits only, `password` masks each character with a dot (the model value stays readable). |
+| `size`           | `'sm' \| 'md' \| 'lg'`                                      | `'md'`                    | Cell size.                                           |
+| `shape`          | `'rect' \| 'circle'`                                        | `'rect'`                  | `circle` makes every cell a perfect circle (equal width and height) and ignores `rounded`. |
+| `rounded`        | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| 'full'` | `'xl'`                    | Border radius of each cell. Ignored when `shape="circle"`. |
+| `variant`        | `'default' \| 'secondary'`                                  | `'default'`               | Visual style, same tokens as `PUInput`.              |
+| `label`          | `string`                                                    | —                         | Label displayed above the field.                     |
+| `labelClass`     | `string`                                                    | `'text-sm font-semibold'` | Custom classes for the label.                        |
+| `description`    | `string`                                                    | —                         | Helper text displayed below.                         |
+| `error`          | `string`                                                    | —                         | Error message to display. Changes styling to danger. |
+| `required`       | `boolean`                                                   | `false`                   | Shows a red asterisk on the label.                   |
+| `disabled`       | `boolean`                                                   | `false`                   | Disables every cell.                                 |
+| `autofocus`      | `boolean`                                                   | `false`                   | Focuses the first cell on mount.                     |
+| `placeholder`    | `string`                                                    | `''`                      | Character shown in empty, unfocused cells.           |
+| `separator`      | `string`                                                    | `'-'`                     | Separator rendered between groups.                   |
+| `separatorEvery` | `number`                                                    | `0`                       | Insert a separator every N cells. `0` disables it.   |
+
+**Events**
+
+| Event               | Payload  | Description                                       |
+| ------------------- | -------- | ------------------------------------------------- |
+| `update:modelValue` | `string` | Fires on every change.                            |
+| `complete`          | `string` | Fires when every cell is filled.                  |
+
+**Exposed methods**
+
+| Method    | Description                                        |
+| --------- | -------------------------------------------------- |
+| `focus()` | Focuses the first empty cell.                      |
+| `clear()` | Clears the value and focuses the first cell.       |
+
+**Examples**
+
+```vue
+<!-- Basic -->
+<PUInputOTP v-model="code" label="Verification code" required />
+
+<!-- Verify as soon as the last cell is filled -->
+<PUInputOTP v-model="code" :error="error" @complete="verify" />
+
+<!-- Grouped 123-456 -->
+<PUInputOTP v-model="code" :separator-every="3" />
+
+<!-- Custom separator -->
+<PUInputOTP v-model="code" :separator-every="2" separator="•" />
+
+<!-- Letters and digits -->
+<PUInputOTP v-model="code" type="text" :length="5" />
+
+<!-- Masked -->
+<PUInputOTP v-model="pin" type="password" :length="4" />
+
+<!-- Sizes and shapes -->
+<PUInputOTP v-model="code" size="lg" rounded="full" variant="secondary" />
+
+<!-- Circular cells -->
+<PUInputOTP v-model="code" shape="circle" :length="4" />
+<PUInputOTP v-model="code" shape="circle" size="lg" variant="secondary" />
+
+<!-- With placeholder -->
+<PUInputOTP v-model="code" :length="4" placeholder="0" />
+
+<!-- With error -->
+<PUInputOTP v-model="code" error="That code is expired. Request a new one." />
+
+<!-- Disabled -->
+<PUInputOTP model-value="4821" :length="4" disabled />
+```
+
+```ts
+// Imperative control
+const otp = ref()
+otp.value?.focus()
+otp.value?.clear()
+```
+
+---
+
 ### PUTextArea
 
 A multi-line text input. Shares the look and feel of `PUInput`, with extra props for `rows` and resize behavior.
@@ -1323,6 +1416,10 @@ import type {
   InputProps,
   InputVariant,
   InputRounded,
+  InputOTPProps,
+  InputOTPType,
+  InputOTPSize,
+  InputOTPShape,
   CheckboxProps,
   CheckboxSize,
   CheckboxRounded,
