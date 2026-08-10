@@ -113,6 +113,30 @@ export interface InputProps {
   disabled?: boolean
 }
 
+export type InputOTPType = 'text' | 'number' | 'password'
+export type InputOTPSize = 'sm' | 'md' | 'lg'
+export type InputOTPShape = 'rect' | 'circle'
+
+export interface InputOTPProps {
+  modelValue?: string | number
+  length?: number
+  type?: InputOTPType
+  size?: InputOTPSize
+  shape?: InputOTPShape
+  rounded?: InputRounded
+  variant?: InputVariant
+  label?: string
+  labelClass?: string
+  description?: string
+  error?: string
+  required?: boolean
+  disabled?: boolean
+  autofocus?: boolean
+  placeholder?: string
+  separator?: string
+  separatorEvery?: number
+}
+
 export type DatePickerLang = 'en' | 'es'
 
 export interface CalendarProps {
