@@ -51,6 +51,7 @@
           <DemoSkeleton v-else-if="activeTab === 'skeleton'" />
           <DemoPagination v-else-if="activeTab === 'pagination'" />
           <DemoLottie v-else-if="activeTab === 'lottie'" />
+          <DemoTabs v-else-if="activeTab === 'tabs'" />
         </div>
       </div>
     </div>
@@ -80,6 +81,7 @@ const demoTabs = [
   { label: 'Skeleton', value: 'skeleton' },
   { label: 'Pagination', value: 'pagination' },
   { label: 'Lottie', value: 'lottie' },
+  { label: 'Tabs', value: 'tabs' },
 ]
 
 function toggleDark() {

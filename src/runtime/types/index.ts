@@ -223,6 +223,8 @@ export type TabsRounded
     | '2xl'
     | 'full'
 
+export type TabsSize = 'sm' | 'md' | 'lg'
+
 export interface TabItem {
   label: string
   value: string
@@ -233,6 +235,7 @@ export interface TabItem {
 export interface TabsProps {
   modelValue: string
   tabs: TabItem[]
+  size?: TabsSize
   iconSize?: number
   rounded?: TabsRounded
   bgColor?: string

@@ -1006,7 +1006,8 @@ A tabbed interface component with smooth animations.
 | ------------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------- | ----------------------------- |
 | `modelValue`        | `string`                                                            | `''`                                                                        | Active tab value (v-model).   |
 | `tabs`              | `TabItem[]`                                                         | —                                                                           | Array of tab items.           |
-| `iconSize`          | `number`                                                            | `15`                                                                        | Size of tab icons.            |
+| `size`              | `'sm' \| 'md' \| 'lg'`                                              | `'md'`                                                                      | Tab size (padding, text and icon). |
+| `iconSize`          | `number`                                                            | `13` / `15` / `17` (by `size`)                                              | Size of tab icons. Overrides the size-based default. |
 | `rounded`           | `'none' \| 'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| 'full'` | `'lg'`                                                                      | Border radius.                |
 | `bgColor`           | `string`                                                            | `'bg-black/5 dark:bg-white/10'`                                             | Background color classes.     |
 | `btnColor`          | `string`                                                            | `'bg-white dark:bg-white/10'`                                               | Active tab button color.      |
@@ -1065,6 +1066,10 @@ interface TabItem {
     ]"
     :disabled-tabs="['disabled']"
   />
+
+  <!-- Sizes -->
+  <PUTabs v-model="activeTab" :tabs="tabs" size="sm" />
+  <PUTabs v-model="activeTab" :tabs="tabs" size="lg" />
 
   <!-- Vertical layout -->
   <PUTabs v-model="activeTab" :tabs="tabs" is-vertical />
@@ -1436,6 +1441,7 @@ import type {
   TabItem,
   TabsProps,
   TabsRounded,
+  TabsSize,
   LottieProps,
   TableProps,
   TableColumn,
