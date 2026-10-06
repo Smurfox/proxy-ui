@@ -28,7 +28,7 @@
     >
       <motion.div
         v-if="modelValue === tab.value"
-        layout-id="tab-indicator"
+        :layout-id="layoutId"
         class="absolute inset-0 shadow-sm"
         :class="[btnColor, roundedClasses[rounded]]"
         :transition="{ type: 'spring', stiffness: 400, damping: 35 }"
@@ -45,6 +45,7 @@
 </template>
 
 <script setup lang="ts">
+import { useId } from 'vue'
 import { motion } from 'motion-v'
 import type { TabsProps } from '../types'
 
@@ -75,6 +76,9 @@ withDefaults(defineProps<TabsProps>(), {
 const emit = defineEmits<{
   'update:modelValue': [value: string]
 }>()
+
+// Per-instance layout id so multiple PUTabs on the same page don't share one indicator
+const layoutId = `tab-indicator-${useId()}`
 </script>
 
 <style scoped></style>
