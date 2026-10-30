@@ -225,23 +225,30 @@ export type TabsRounded
 
 export type TabsSize = 'sm' | 'md' | 'lg'
 
+export type TabsVariant = 'default' | 'underline'
+
 export interface TabItem {
   label: string
   value: string
   icon?: string
+  badge?: string | number
   disabled?: boolean
 }
 
 export interface TabsProps {
   modelValue: string
   tabs: TabItem[]
+  variant?: TabsVariant
   size?: TabsSize
   iconSize?: number
   rounded?: TabsRounded
   bgColor?: string
   btnColor?: string
+  borderColor?: string
   activeTextColor?: string
   inactiveTextColor?: string
+  activeBadgeColor?: string
+  inactiveBadgeColor?: string
   disabledTabs?: string[]
   isVertical?: boolean
 }
