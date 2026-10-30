@@ -1006,15 +1006,19 @@ A tabbed interface component with smooth animations.
 | ------------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------- | ----------------------------- |
 | `modelValue`        | `string`                                                            | `''`                                                                        | Active tab value (v-model).   |
 | `tabs`              | `TabItem[]`                                                         | —                                                                           | Array of tab items.           |
-| `size`              | `'sm' \| 'md' \| 'lg'`                                              | `'md'`                                                                      | Tab size (padding, text and icon). |
+| `variant`           | `'default' \| 'underline'`                                          | `'default'`                                                                 | `default` is a segmented pill; `underline` is a bottom border with an animated bar under the active tab. |
+| `size`              | `'sm' \| 'md' \| 'lg'`                                              | `'md'`                                                                      | Tab size (padding, text, icon and badge). |
 | `iconSize`          | `number`                                                            | `13` / `15` / `17` (by `size`)                                              | Size of tab icons. Overrides the size-based default. |
-| `rounded`           | `'none' \| 'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| 'full'` | `'lg'`                                                                      | Border radius.                |
-| `bgColor`           | `string`                                                            | `'bg-black/5 dark:bg-white/10'`                                             | Background color classes.     |
-| `btnColor`          | `string`                                                            | `'bg-white dark:bg-white/10'`                                               | Active tab button color.      |
-| `activeTextColor`   | `string`                                                            | `'text-black dark:text-white'`                                              | Active text color.            |
+| `rounded`           | `'none' \| 'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| 'full'` | `'lg'`                                                                      | Border radius (`default` variant only). |
+| `bgColor`           | `string`                                                            | `'bg-black/5 dark:bg-white/10'` (`underline`: none)                         | Container background classes. |
+| `btnColor`          | `string`                                                            | `'bg-white dark:bg-white/10'` (`underline`: `'bg-primary'`)                 | Active indicator color: the pill in `default`, the bar in `underline`. |
+| `borderColor`       | `string`                                                            | `'border-black/10 dark:border-white/10'`                                    | Container border color (`underline` variant only). |
+| `activeTextColor`   | `string`                                                            | `'text-black dark:text-white'` (`underline`: `'text-primary'`)              | Active text color.            |
 | `inactiveTextColor` | `string`                                                            | `'text-black/70 dark:text-white/70 hover:text-black dark:hover:text-white'` | Inactive text color.          |
+| `activeBadgeColor`  | `string`                                                            | `'bg-primary text-white'`                                                   | Badge classes on the active tab. |
+| `inactiveBadgeColor`| `string`                                                            | `'bg-black/10 text-black/70 dark:bg-white/15 dark:text-white/70'`           | Badge classes on inactive tabs. |
 | `disabledTabs`      | `string[]`                                                          | `[]`                                                                        | Array of disabled tab values. |
-| `isVertical`        | `boolean`                                                           | `false`                                                                     | Display tabs vertically.      |
+| `isVertical`        | `boolean`                                                           | `false`                                                                     | Display tabs vertically. With `underline`, the border and bar move to the left side. |
 
 **TabItem Interface**
 
@@ -1023,6 +1027,7 @@ interface TabItem {
   label: string;
   value: string;
   icon?: string;
+  badge?: string | number; // counter shown after the label
   disabled?: boolean;
 }
 ```
@@ -1065,6 +1070,18 @@ interface TabItem {
       { label: 'Disabled', value: 'disabled', disabled: true },
     ]"
     :disabled-tabs="['disabled']"
+  />
+
+  <!-- Underline variant with badges -->
+  <PUTabs
+    v-model="activeTab"
+    variant="underline"
+    :tabs="[
+      { label: 'All', value: 'all', badge: 2 },
+      { label: 'Requests', value: 'requests', icon: 'lucide:users', badge: 14 },
+      { label: 'Mentions', value: 'mentions', icon: 'lucide:at-sign', badge: 2 },
+      { label: 'Urgent', value: 'urgent', icon: 'lucide:clock' },
+    ]"
   />
 
   <!-- Sizes -->
@@ -1442,6 +1459,7 @@ import type {
   TabsProps,
   TabsRounded,
   TabsSize,
+  TabsVariant,
   LottieProps,
   TableProps,
   TableColumn,

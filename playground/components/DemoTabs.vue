@@ -35,7 +35,7 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 
-type TabItem = { label: string, value: string, icon?: string }
+type TabItem = { label: string, value: string, icon?: string, badge?: string | number, disabled?: boolean }
 
 type Section = {
   title: string
@@ -52,6 +52,13 @@ const audienceTabs: TabItem[] = [
   { label: 'New', value: 'upgrades' },
 ]
 
+const inboxTabs: TabItem[] = [
+  { label: 'All', value: 'all', badge: 2 },
+  { label: 'Requests', value: 'requests', icon: 'lucide:users', badge: 14 },
+  { label: 'Mentions', value: 'mentions', icon: 'lucide:at-sign', badge: 2 },
+  { label: 'Urgent', value: 'urgent', icon: 'lucide:clock' },
+]
+
 const tabSections: Section[] = [
   {
     title: 'Sizes',
@@ -59,6 +66,28 @@ const tabSections: Section[] = [
       { label: 'small', props: { size: 'sm' } },
       { label: 'medium', props: { size: 'md' } },
       { label: 'large', props: { size: 'lg' } },
+    ],
+  },
+  {
+    title: 'Underline',
+    items: [
+      { label: 'underline', tabs: inboxTabs, props: { variant: 'underline' } },
+      {
+        label: 'underline vertical',
+        tabs: inboxTabs,
+        props: { variant: 'underline', isVertical: true, size: 'sm' },
+      },
+    ],
+  },
+  {
+    title: 'Badges',
+    items: [
+      { label: 'default + badges', tabs: inboxTabs },
+      {
+        label: 'disabled badge',
+        tabs: [...inboxTabs.slice(0, 2), { ...inboxTabs[2]!, disabled: true }],
+        props: { variant: 'underline', size: 'sm' },
+      },
     ],
   },
   {
@@ -85,7 +114,7 @@ const tabSections: Section[] = [
 // One v-model per instance so each group keeps its own active tab
 const active = reactive<Record<string, string>>(
   Object.fromEntries(
-    tabSections.flatMap(s => s.items).map(i => [i.label, 'details']),
+    tabSections.flatMap(s => s.items).map(i => [i.label, (i.tabs ?? tabs)[0]?.value ?? '']),
   ),
 )
 </script>
