@@ -1020,6 +1020,10 @@ A tabbed interface component with smooth animations.
 | `disabledTabs`      | `string[]`                                                          | `[]`                                                                        | Array of disabled tab values. |
 | `isVertical`        | `boolean`                                                           | `false`                                                                     | Display tabs vertically. With `underline`, the border and bar move to the left side. |
 
+**Overflow**
+
+Horizontal tabs never wrap: labels stay on one line, and when the tabs don't fit their container (e.g. you pass `class="max-w-64"` or the parent is narrow) the strip scrolls sideways with the scrollbar hidden. When the active tab changes and is partly out of view, the strip scrolls just enough to reveal it — only the tab strip scrolls, never the page. Classes passed to `PUTabs` still land on the scrolling root element. Vertical tabs are unaffected.
+
 **TabItem Interface**
 
 ```ts
@@ -1090,6 +1094,9 @@ interface TabItem {
 
   <!-- Vertical layout -->
   <PUTabs v-model="activeTab" :tabs="tabs" is-vertical />
+
+  <!-- Overflow: scrolls horizontally when it doesn't fit -->
+  <PUTabs v-model="activeTab" :tabs="tabs" variant="underline" class="max-w-64" />
 
   <!-- Custom colors -->
   <PUTabs

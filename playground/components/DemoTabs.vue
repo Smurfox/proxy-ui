@@ -91,6 +91,17 @@ const tabSections: Section[] = [
     ],
   },
   {
+    title: 'Overflow (scrolls horizontally)',
+    items: [
+      {
+        label: 'underline overflow',
+        tabs: inboxTabs,
+        props: { variant: 'underline', class: 'max-w-64' },
+      },
+      { label: 'default overflow', tabs: inboxTabs, props: { class: 'max-w-56' } },
+    ],
+  },
+  {
     title: 'Custom colors',
     items: [
       {

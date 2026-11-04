@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="scroller"
     :class="
       variant === 'underline'
         ? [
@@ -7,23 +8,25 @@
           underlineContainerSizes[size],
           colors.bg,
           colors.border,
-          isVertical ? 'flex-col w-fit border-l' : 'flex-row w-full border-b',
+          isVertical ? 'flex-col w-fit border-l' : ['flex-row w-full border-b', scrollClasses],
         ]
         : [
           'inline-flex',
           containerSizes[size],
           colors.bg,
           roundedClasses[rounded],
-          isVertical ? 'flex-col w-fit' : 'flex-row w-fit',
+          isVertical ? 'flex-col w-fit' : ['flex-row w-fit', scrollClasses],
         ]
     "
   >
     <button
       v-for="tab in tabs"
       :key="tab.value"
+      :data-tab="tab.value"
       class="relative flex items-center"
       :disabled="isDisabled(tab)"
       :class="[
+        !isVertical && 'shrink-0 whitespace-nowrap',
         'font-medium transition-colors duration-200',
         variant === 'underline' ? underlineSizes[size] : sizes[size],
         variant === 'underline' ? 'rounded-none' : roundedClasses[rounded],
@@ -43,7 +46,7 @@
           variant === 'underline'
             ? isVertical
               ? 'absolute inset-y-0 -left-px w-0.5'
-              : 'absolute inset-x-0 -bottom-px h-0.5'
+              : 'absolute inset-x-0 bottom-0 h-0.5'
             : ['absolute inset-0 shadow-sm', roundedClasses[rounded]],
         ]"
         :transition="{ type: 'spring', stiffness: 400, damping: 35 }"
@@ -71,7 +74,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, useId } from 'vue'
+import { computed, nextTick, ref, useId, watch } from 'vue'
 import { motion } from 'motion-v'
 import type { TabItem, TabsProps } from '../types'
 
@@ -178,6 +181,38 @@ function isDisabled(tab: TabItem) {
 
 // Per-instance layout id so multiple PUTabs on the same page don't share one indicator
 const layoutId = `tab-indicator-${useId()}`
+
+// Horizontal tabs that don't fit scroll sideways with the scrollbar hidden.
+// The root itself scrolls (no extra wrapper) so classes passed to PUTabs keep
+// styling the same element
+const scrollClasses
+  = 'overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'
+
+const scroller = ref<HTMLElement | null>(null)
+
+// When the tabs overflow, bring a partly hidden active tab into view. Only the
+// tab strip scrolls (scrollIntoView could also scroll the page)
+watch(
+  () => props.modelValue,
+  async (value) => {
+    if (props.isVertical || !scroller.value) return
+    await nextTick()
+
+    const tab = [
+      ...scroller.value.querySelectorAll<HTMLElement>('[data-tab]'),
+    ].find(el => el.dataset.tab === value)
+    if (!tab) return
+
+    const strip = scroller.value.getBoundingClientRect()
+    const rect = tab.getBoundingClientRect()
+    if (rect.left < strip.left) {
+      scroller.value.scrollBy({ left: rect.left - strip.left, behavior: 'smooth' })
+    }
+    else if (rect.right > strip.right) {
+      scroller.value.scrollBy({ left: rect.right - strip.right, behavior: 'smooth' })
+    }
+  },
+)
 </script>
 
 <style scoped></style>
