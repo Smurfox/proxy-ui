@@ -950,7 +950,7 @@ A compact component for displaying small pieces of information.
 | ------------- | ----------------------------------------------------------------------------------- | ----------- | ----------------------------------------------- |
 | `label`       | `string`                                                                            | —           | Text displayed in the chip.                     |
 | `size`        | `'sm' \| 'md' \| 'lg'`                                                              | `'md'`      | Chip size.                                      |
-| `variant`     | `'default' \| 'secondary' \| 'outline' \| 'flat'`                                   | `'default'` | Visual style of the chip.                       |
+| `variant`     | `'default' \| 'secondary' \| 'outline' \| 'flat' \| 'soft'`                         | `'default'` | Visual style of the chip.                       |
 | `color`       | `'default' \| 'ios' \| 'primary' \| 'danger' \| 'success' \| 'warning' \| 'custom'` | `'default'` | Color scheme.                                   |
 | `rounded`     | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| 'full'`                         | `'full'`    | Border radius.                                  |
 | `startIcon`   | `string`                                                                            | —           | Iconify icon name at the start.                 |
@@ -968,6 +968,13 @@ A compact component for displaying small pieces of information.
 <PUChip variant="secondary" label="Secondary" />
 <PUChip variant="outline" label="Outline" />
 <PUChip variant="flat" label="Flat" />
+
+<!-- Soft: tinted background + semibold text in a darker shade of the color (lighter in dark mode).
+     Both are derived from your theme tokens, so they follow any --color-* override. -->
+<PUChip variant="soft" color="success" label="Active" />
+
+<!-- Soft status chip: the start icon inherits the text color -->
+<PUChip variant="soft" color="danger" start-icon="material-symbols-light:circle" label="Inactive" />
 
 <!-- Colors -->
 <PUChip color="primary" label="Primary" />
