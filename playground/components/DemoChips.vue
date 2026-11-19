@@ -77,7 +77,22 @@ const chipSections: Section[] = [
       { label: 'secondary', props: { variant: 'secondary', color: 'primary' } },
       { label: 'outline', props: { variant: 'outline', color: 'primary' } },
       { label: 'flat', props: { variant: 'flat', color: 'primary' } },
+      { label: 'soft', props: { variant: 'soft', color: 'primary' } },
     ],
+  },
+  {
+    title: 'Soft',
+    items: (
+      ['primary', 'default', 'success', 'danger', 'warning', 'ios'] as const
+    ).map(color => ({
+      label: color,
+      props: {
+        variant: 'soft',
+        color,
+        label: 'Active',
+        startIcon: 'material-symbols-light:circle',
+      },
+    })),
   },
   {
     title: 'Disabled',

@@ -17,7 +17,7 @@
     <slot v-if="!label" />
     <span
       v-else
-      class="font-medium"
+      :class="{ 'font-medium': variant !== 'soft' }"
     >{{ label }}</span>
     <Icon
       v-if="endIcon"
@@ -43,6 +43,7 @@ const variantClasses = {
   outline: '',
   ghost: '',
   flat: '',
+  soft: '',
 } as const
 
 const roundedClasses = {
@@ -112,6 +113,17 @@ const flatColorClasses = {
   warning: 'bg-warning/15 text-warning',
 } as const
 
+// Text is a darker (light mode) / lighter (dark mode) shade of the same token,
+// so it stays readable and still follows the consumer's theme.
+const softColorClasses = {
+  default: 'bg-default text-black dark:text-white font-semibold',
+  ios: 'bg-blue-500/15 dark:bg-blue-500/20 text-[color-mix(in_oklab,var(--color-blue-500)_55%,black)] dark:text-[color-mix(in_oklab,var(--color-blue-500)_70%,white)] font-semibold',
+  primary: 'bg-primary/15 dark:bg-primary/20 text-[color-mix(in_oklab,var(--color-primary)_55%,black)] dark:text-[color-mix(in_oklab,var(--color-primary)_70%,white)] font-semibold',
+  danger: 'bg-danger/15 dark:bg-danger/20 text-[color-mix(in_oklab,var(--color-danger)_55%,black)] dark:text-[color-mix(in_oklab,var(--color-danger)_70%,white)] font-semibold',
+  success: 'bg-success/15 dark:bg-success/20 text-[color-mix(in_oklab,var(--color-success)_55%,black)] dark:text-[color-mix(in_oklab,var(--color-success)_70%,white)] font-semibold',
+  warning: 'bg-warning/15 dark:bg-warning/20 text-[color-mix(in_oklab,var(--color-warning)_55%,black)] dark:text-[color-mix(in_oklab,var(--color-warning)_70%,white)] font-semibold',
+} as const
+
 function getColorBtn(variant: ChipVariant, color: ChipColor) {
   if (color === 'custom') return props.customClass ?? ''
   switch (variant) {
@@ -121,6 +133,8 @@ function getColorBtn(variant: ChipVariant, color: ChipColor) {
       return outlineColorClasses[color]
     case 'flat':
       return flatColorClasses[color]
+    case 'soft':
+      return softColorClasses[color]
     default:
       return defaultColorClasses[color]
   }

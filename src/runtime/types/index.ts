@@ -51,7 +51,7 @@ export interface ButtonProps {
 }
 
 export type ChipSize = 'sm' | 'md' | 'lg'
-export type ChipVariant = 'default' | 'secondary' | 'outline' | 'flat'
+export type ChipVariant = 'default' | 'secondary' | 'outline' | 'flat' | 'soft'
 export type ChipColor
   = | 'default'
     | 'ios'
